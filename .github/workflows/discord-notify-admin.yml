@@ -14,21 +14,13 @@ jobs:
       - name: Prepare message
         id: prep
         run: |
-          # 최근 커밋 메시지
           COMMIT_MSG=$(git log -1 --pretty=format:"%s")
-
-          # 브랜치 이름 (refs/heads/ 부분 제거)
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
-
-          # 변경된 파일 목록 (최대 5개 표시)
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | head -5 | sed 's/^/- /')
-
-          # 파일이 5개 이상이면 요약 추가
           TOTAL_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | wc -l)
           if [ $TOTAL_FILES -gt 5 ]; then
             CHANGED_FILES="${CHANGED_FILES}\n- ... (${TOTAL_FILES} files total)"
           fi
-
           echo "commit_msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
           echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
@@ -36,14 +28,15 @@ jobs:
       - name: Send Discord notification
         run: |
           COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-          MESSAGE="📢 **chiselbot_admin** 폴더에 push 발생!\n\
-🌿 브랜치: **${{ steps.prep.outputs.branch_name }}**\n\
-  👤 by ${GITHUB_ACTOR}\n\
-  📝 [${{ steps.prep.outputs.commit_msg }}](${COMMIT_URL})\n\n\
-  **변경된 파일:**\n${{ steps.prep.outputs.changed_files }}"
-
+          MESSAGE=$(cat <<EOF
+  📢 **chiselbot_admin** 폴더에 push 발생!
+🌿 브랜치: **${{ steps.prep.outputs.branch_name }}**
+  👤 by ${GITHUB_ACTOR}
+  📝 [${{ steps.prep.outputs.commit_msg }}](${COMMIT_URL})
+  
+  **변경된 파일:**
+  ${{ steps.prep.outputs.changed_files }}
+  EOF
+  )
 PAYLOAD=$(jq -n --arg content "$MESSAGE" '{content: $content}')
-
-curl -H "Content-Type: application/json" \
-  -d "$PAYLOAD" \
-  ${{ secrets.DISCORD_WEBHOOK_ADMIN }}
+curl -H "Content-Type: application/json" -d "$PAYLOAD" ${{ secrets.DISCORD_WEBHOOK_ADMIN }}
