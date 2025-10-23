@@ -26,17 +26,20 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Send Discord notification
+        shell: bash
         run: |
           COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-          MESSAGE=$(cat <<EOF
-  📢 **chiselbot_flutter** 폴더에 push 발생!
-🌿 브랜치: **${{ steps.prep.outputs.branch_name }}**
-         👤 by ${GITHUB_ACTOR}
-         📝 [${{ steps.prep.outputs.commit_msg }}](${COMMIT_URL})
-         
-         **변경된 파일:**
-         ${{ steps.prep.outputs.changed_files }}
-         EOF
-         )
-PAYLOAD=$(jq -n --arg content "$MESSAGE" '{content: $content}')
-curl -H "Content-Type: application/json" -d "$PAYLOAD" ${{ secrets.DISCORD_WEBHOOK_ADMIN }}
+          {
+            echo "📢 **chiselbot_flutter** 폴더에 push 발생!"
+            echo "🌿 브랜치: **${{ steps.prep.outputs.branch_name }}**"
+            echo "👤 by ${GITHUB_ACTOR}"
+            echo "📝 [${{ steps.prep.outputs.commit_msg }}](${COMMIT_URL})"
+            echo ""
+            echo "**변경된 파일:**"
+            echo -e "${{ steps.prep.outputs.changed_files }}"
+          } > message.txt
+
+          PAYLOAD=$(jq -n --rawfile content message.txt '{content: $content}')
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               ${{ secrets.DISCORD_WEBHOOK_API }}
