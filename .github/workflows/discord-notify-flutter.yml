@@ -42,4 +42,4 @@ jobs:
           PAYLOAD=$(jq -n --rawfile content message.txt '{content: $content}')
           curl -H "Content-Type: application/json" \
                -d "$PAYLOAD" \
-               ${{ secrets.DISCORD_WEBHOOK_API }}
+               ${{ secrets.DISCORD_WEBHOOK_FLUTTER }}
