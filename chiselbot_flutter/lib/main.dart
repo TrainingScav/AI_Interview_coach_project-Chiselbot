@@ -1,3 +1,4 @@
+import 'package:ai_interview/screens/home/debug_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: Colors.black,
         useMaterial3: true,
       ),
-      home: Placeholder(),
+      home: const DebugHome(),
     );
   }
 }
