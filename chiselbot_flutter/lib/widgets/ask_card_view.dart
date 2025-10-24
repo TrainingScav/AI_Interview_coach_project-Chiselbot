@@ -12,7 +12,7 @@ class AskCardView extends StatefulWidget {
 }
 
 class _AskCardViewState extends State<AskCardView> {
-  List<AskCards> pageItems = generateData();
+  List<AskCards> pageItems = generateAsk();
   PageController? pageController;
   var viewPortFraction = .3;
   double? pageOffset = 0;
@@ -67,11 +67,9 @@ class _AskCardViewState extends State<AskCardView> {
                 // 탭 가능 영역 추가
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ChatScreen()),
-                  );
                   Navigator.pushNamed(context, '/chat');
+                  // 라우트가 없다면 위 한 줄 대신 아래 사용:
+                  // Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatScreen()));
                 },
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -84,15 +82,11 @@ class _AskCardViewState extends State<AskCardView> {
                           color: Colors.grey.withAlpha(80),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      Center(
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.network(
-                            pageItems[index].img!,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.fitHeight,
-                          ),
+                          width: 72,
+                          height: 72,
+                          child: FittedBox(child: pageItems[index].icon),
                         ),
                       ),
                       Positioned(
@@ -105,7 +99,7 @@ class _AskCardViewState extends State<AskCardView> {
                           child: Column(
                             children: [
                               Text(
-                                pageItems[index].title!,
+                                pageItems[index].title,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
