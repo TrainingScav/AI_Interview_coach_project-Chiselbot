@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:ai_interview/screens/main_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ai_interview/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_logo.dart';
@@ -17,9 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(
-          context, CupertinoPageRoute(builder: (context) => MainScreen()));
+          context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
     });
   }
 
@@ -30,9 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomLogo(),
-          ],
+          children: [CustomLogo()],
         ),
       ),
     );

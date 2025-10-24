@@ -1,30 +1,31 @@
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class AskCards {
-  String? title, img;
+  String title;
+  Icon icon;
   AskCards({
     required this.title,
-    required this.img,
+    required this.icon,
   });
 }
 
-List<AskCards> generateData() {
+List<AskCards> generateAsk() {
   List<String> titles = [
-    "Java",
-    "Python",
-    "Flutter",
+    "기술",
+    "인성",
+    "경험",
   ];
 
-  List<String> imgUrl = [
-    "https://img.icons8.com/color/48/java-coffee-cup-logo--v1.png",
-    "https://img.icons8.com/color/48/python--v1.png",
-    "https://img.icons8.com/color/48/flutter.png",
+  List<Icon> icons = [
+    const Icon(FontAwesomeIcons.layerGroup),
+    const Icon(FontAwesomeIcons.circleQuestion),
+    const Icon(FontAwesomeIcons.comments),
   ];
 
   List<AskCards> list = List.generate(
-    3,
-    (index) => AskCards(
-      title: titles[index],
-      img: imgUrl[index],
-    ),
+    titles.length,
+    (index) => AskCards(title: titles[index], icon: icons[index]),
   );
 
   return list;

@@ -14,6 +14,17 @@ spring:
         format_sql: true
     show-sql: true
     open-in-view: false
+  
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:default-key-or-empty}
+      chat:
+        options:
+          model: gpt-5-nano
+          temperature: 1.0
+      embedding:
+        options:
+          model: text-embedding-3-small
 
   application:
     name: chiselbot
