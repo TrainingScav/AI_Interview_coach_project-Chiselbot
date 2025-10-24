@@ -1,15 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/chat_message.dart';
+import '../strategies/next_question_strategy.dart';
 
-// 면접 채팅의 상태머신
-
-final chatMessagesProvider =
-    StateNotifierProvider<ChatMessagesNotifier, List<ChatMessage>>(
-  (ref) => ChatMessagesNotifier()..startFirstQuestion(),
+// 1) 전략 Provider
+final nextQuestionStrategyProvider = Provider<NextQuestionStrategy>(
+  (ref) => ScriptedNextQuestion(), // 추후 ApiNextQuestionStrategy 로 교체 가능
 );
 
+// 2) ChatMessagesNotifier 에 전략을 주입
+final chatMessagesProvider =
+    StateNotifierProvider<ChatMessagesNotifier, List<ChatMessage>>((ref) {
+  final strategy = ref.watch(nextQuestionStrategyProvider);
+  return ChatMessagesNotifier(strategy)..startFirstQuestion();
+});
+
 class ChatMessagesNotifier extends StateNotifier<List<ChatMessage>> {
-  ChatMessagesNotifier() : super(const []);
+  final NextQuestionStrategy _strategy;
+  ChatMessagesNotifier(this._strategy) : super(const []);
 
   // 데모용 첫 질문
   void startFirstQuestion() {
@@ -40,11 +47,11 @@ class ChatMessagesNotifier extends StateNotifier<List<ChatMessage>> {
     state = newList;
   }
 
-  // 데모용: 다음 질문 세그먼트
-  List<String> buildNextQuestionSegments() => const [
-        '좋습니다. 두 번째 질문입니다.',
-        '최근에 해결했던 기술적 문제 하나를 설명해 주세요.',
-      ];
-  String buildNextQuestionFinal() =>
-      '좋습니다. 두 번째 질문입니다.\n최근에 해결했던 기술적 문제 하나를 설명해 주세요.';
+  // 전략을 사용해 "다음 질문" 생성
+  void askNextByStrategy() {
+    askTyping(
+      segments: _strategy.segments(),
+      finalText: _strategy.finalText(),
+    );
+  }
 }
