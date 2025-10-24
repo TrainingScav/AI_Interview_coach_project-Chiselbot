@@ -25,3 +25,14 @@ spring:
         format_sql: true # SQL 쿼리를 보기 좋게 줄바꿈하여 포맷팅
     show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
     open-in-view: false
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:default-key-or-empty}
+      chat:
+        options:
+          model: gpt-5-nano
+          temperature: 1.0
+      embedding:
+        options:
+          model: text-embedding-3-small
