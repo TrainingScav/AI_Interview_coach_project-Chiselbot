@@ -1,9 +1,9 @@
 enum MessageKind { user, aiText, aiTyping }
 
 class ChatMessage {
-  final MessageKind kind;
-  final String text; // aiTyping에서도 “완료 후 남길 문장(text)”으로 사용
-  final List<String>? segments; // aiTyping일 때만 사용(타이핑용 문장 리스트)
+  final MessageKind kind; // 메시지의 종류 (위의 enum 참고)
+  final String text; // 메시지의 실제 텍스트 (완성된 문장)
+  final List<String>? segments; // 애니메이션용 텍스트
 
   const ChatMessage.user(this.text)
       : kind = MessageKind.user,

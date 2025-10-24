@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/chat_message.dart';
 
+// 면접 채팅의 상태머신
+
 final chatMessagesProvider =
     StateNotifierProvider<ChatMessagesNotifier, List<ChatMessage>>(
   (ref) => ChatMessagesNotifier()..startFirstQuestion(),

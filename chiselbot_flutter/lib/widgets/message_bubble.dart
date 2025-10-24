@@ -1,28 +1,18 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-/// 사용법
-/// 1) 일반 텍스트 말풍선:
-///    MessageBubble(isUser: true, text: '안녕하세요')
-///
-/// 2) 타자(순차) 효과 말풍선:
-///    MessageBubble(
-///      isUser: false,
-///      animatedSegments: ['안녕하세요.', '첫 번째 질문입니다.', '자기소개를 1분 이내로 해주세요.'],
-///      speed: Duration(milliseconds: 60),
-///      pauseBetweenSegments: Duration(milliseconds: 800),
-///      onCompleted: () { /* 애니메이션 끝났을 때 */ },
-///    )
+// AI 면접 질문이나 사용자의 대답을 말풍선 형태로 보여주는 위젯
 class MessageBubble extends StatelessWidget {
+  // 누가 말했는지 구분
   final bool isUser;
 
   // 일반 텍스트
   final String? text;
 
-  // 타자 효과용 문장 리스트
+  // 타자 효과 문장 리스트
   final List<String>? animatedSegments;
 
-  // 타자 효과 옵션
+  // 타이핑 속도와 문장 사이의 간격
   final Duration speed;
   final Duration pauseBetweenSegments;
 
