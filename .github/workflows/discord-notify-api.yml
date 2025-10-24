@@ -1,0 +1,45 @@
+name: Discord Notify - API
+
+on:
+  push:
+    paths:
+      - "chiselbot_api_server/**"
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare message
+        id: prep
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | head -5 | sed 's/^/- /')
+          TOTAL_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | wc -l)
+          if [ $TOTAL_FILES -gt 5 ]; then
+            CHANGED_FILES="${CHANGED_FILES}\n- ... (${TOTAL_FILES} files total)"
+          fi
+          echo "commit_msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Send Discord notification
+        shell: bash
+        run: |
+          COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          {
+            echo "📢 **chiselbot_api_server** 폴더에 push 발생!"
+            echo "🌿 브랜치: **${{ steps.prep.outputs.branch_name }}**"
+            echo "👤 by ${GITHUB_ACTOR}"
+            echo "📝 [${{ steps.prep.outputs.commit_msg }}](${COMMIT_URL})"
+            echo ""
+            echo "**변경된 파일:**"
+            echo -e "${{ steps.prep.outputs.changed_files }}"
+          } > message.txt
+
+          PAYLOAD=$(jq -n --rawfile content message.txt '{content: $content}')
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               ${{ secrets.DISCORD_WEBHOOK_API }}
