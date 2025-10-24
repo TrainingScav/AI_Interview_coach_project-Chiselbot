@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomLogo extends StatelessWidget {
   const CustomLogo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final logoAddress =
-        "https://img.icons8.com/external-creatype-flat-colourcreatype/64/external-carpenter-creatype-tool-and-construction-flat-creatype-flat-colourcreatype-2.png";
+    final logoAddress = 'assets/images/chisel.png';
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.network(logoAddress),
+        Image.asset(logoAddress),
         SizedBox(height: 16),
         const Text(
-          "AI Interview Coach,\nChiselBot",
+          "ChiselBot",
           textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 32),
         ),
       ],
     );
