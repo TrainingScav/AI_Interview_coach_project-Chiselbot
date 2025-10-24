@@ -2,7 +2,7 @@ package com.coach.chiselbot.domain.user.login;
 
 import com.coach.chiselbot.domain.user.User;
 import com.coach.chiselbot.domain.user.UserJpaRepository;
-import com.coach.chiselbot.domain.user.service.dto.UserRequestDTO;
+import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

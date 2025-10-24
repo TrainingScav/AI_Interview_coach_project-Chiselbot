@@ -1,22 +1,16 @@
 package com.coach.chiselbot.domain.user;
 
+import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import com.coach.chiselbot.domain.user.login.LoginStrategy;
 import com.coach.chiselbot.domain.user.login.LoginStrategyFactory;
-import com.coach.chiselbot.domain.user.service.dto.UserRequestDTO;
-import com.coach.chiselbot.domain.user.service.dto.UserResponseDTO;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

@@ -2,13 +2,11 @@ package com.coach.chiselbot.domain.user;
 
 import com.coach._global.config.jwt.JwtTokenProvider;
 import com.coach._global.dto.CommonResponseDto;
-import com.coach.chiselbot.domain.user.service.dto.UserRequestDTO;
+import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequestMapping("/api/users")
 @RestController
