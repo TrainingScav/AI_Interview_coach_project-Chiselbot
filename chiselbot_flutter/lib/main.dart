@@ -3,6 +3,8 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ai_interview/screens/chat/chat_screen.dart';
+import 'package:ai_interview/screens/main_screen.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -23,7 +25,11 @@ class MyApp extends StatelessWidget {
           scheme: FlexScheme.deepBlue,
           fontFamily: GoogleFonts.poppins().fontFamily),
       themeMode: ThemeMode.system,
-      home: const SplashScreen(),
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/main': (context) => const MainScreen(),
+        '/chat': (context) => const ChatScreen(),
+      },
     );
   }
 }
