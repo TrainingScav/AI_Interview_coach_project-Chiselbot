@@ -1,4 +1,4 @@
-package com.coach.chiselAdmin.admin;
+package com.coach.chiselAdmin.domain.admin;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

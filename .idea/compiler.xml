@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
@@ -13,6 +14,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chiselAdmin" options="-parameters" />
+      <module name="chiselAdmin.main" options="-parameters" />
+      <module name="chiselAdmin.test" options="-parameters" />
       <module name="chiselbot" options="-parameters" />
       <module name="chiselbot.main" options="-parameters" />
       <module name="chiselbot.test" options="-parameters" />
