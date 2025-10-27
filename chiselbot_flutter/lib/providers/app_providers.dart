@@ -1,8 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/api_service.dart';
 import '../models/api_models.dart';
+import '../services/mock_api_service.dart';
 
-final apiProvider = Provider((ref) => ApiService('http://10.0.2.2:8080'));
+// final apiProvider = Provider((ref) => ApiService('http://10.0.2.2:8080'));
+
+// 임시 데이터 확인용 provider
+const bool USE_MOCK = true;
+
+final apiProvider = Provider<ApiService>((ref) {
+  if (USE_MOCK) {
+    return MockApiService();
+  }
+  // 실제 백엔드 주소
+  return ApiService('http://10.0.2.2:8080');
+});
+//==============================
 
 final categoriesProvider = FutureProvider<List<InterviewCategory>>((ref) async {
   return ref.read(apiProvider).fetchCategories();

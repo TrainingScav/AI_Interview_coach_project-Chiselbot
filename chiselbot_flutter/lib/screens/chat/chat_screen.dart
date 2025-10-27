@@ -4,6 +4,8 @@ import '../../models/chat_message.dart';
 import '../../providers/chat_provider.dart';
 import '../../widgets/message_bubble.dart';
 
+import '../../providers/app_providers.dart';
+
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
   @override
@@ -14,8 +16,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollCtrl = ScrollController();
   final _focusNode = FocusNode();
+
   bool _isFeedbackPhase = false; // 피드백 중인지
   bool _awaitingNext = false; // 다음 질문 대기 중인지
+
+  // 현재 질문 ID를 로컬로 보관 (postAnswer에 필요)
+  int? _currentQuestionId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 화면 진입 시 "실제 질문" 불러와서 첫 메시지로 출력
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        // 카테고리가 아직 선택되지 않았다면 기본값(1: 기술) 지정
+        final cat = ref.read(selectedCategoryIdProvider);
+        if (cat == null) {
+          ref.read(selectedCategoryIdProvider.notifier).state = 1;
+        }
+
+        final q = await ref.read(oneQuestionProvider.future);
+        _currentQuestionId = q.id;
+
+        ref.read(chatMessagesProvider.notifier).askTyping(
+          segments: [q.questionText],
+          finalText: q.questionText,
+        );
+        _scrollToBottom(instant: true);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('문제 불러오기 실패: $e')),
+          );
+        }
+      }
+    });
+  }
 
   void _scrollToBottom({bool instant = false}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -117,12 +154,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.skip_next),
                       label: const Text('다음 질문'),
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() => _awaitingNext = false);
-                        final n = ref.read(chatMessagesProvider.notifier);
-                        n.askNextByStrategy(); // 전략 패턴 적용된 다음 질문
-                        _focusNode.requestFocus();
-                        _scrollToBottom();
+
+                        try {
+                          // 카테고리가 비어 있으면 기본값(1) 보정
+                          final cat = ref.read(selectedCategoryIdProvider);
+                          if (cat == null) {
+                            ref
+                                .read(selectedCategoryIdProvider.notifier)
+                                .state = 1;
+                          }
+
+                          final q = await ref.read(oneQuestionProvider.future);
+                          _currentQuestionId = q.id;
+
+                          ref.read(chatMessagesProvider.notifier).askTyping(
+                            segments: [q.questionText],
+                            finalText: q.questionText,
+                          );
+                          _focusNode.requestFocus();
+                          _scrollToBottom();
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('다음 질문 불러오기 실패: $e')),
+                            );
+                          }
+                        }
                       },
                     ),
                   )
@@ -166,24 +225,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final text = value.trim();
     if (text.isEmpty) return;
 
-    // 1. 내 답변 추가
+    // 1) 내 답변 추가
     ref.read(chatMessagesProvider.notifier).addUser(text);
     _controller.clear();
     _scrollToBottom();
 
-    // 2. 피드백 세그먼트 (임시 또는 서버 응답)
-    final feedbackSegments = const [
-      '좋아요. 핵심 개념은 잘 짚었습니다.',
-      '조금 더 구체적 예시를 들면 완성도가 올라가요.'
-    ];
+    // 현재 질문이 있어야 피드백 가능
+    if (_currentQuestionId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('현재 질문이 없습니다. 다시 시도해 주세요.')),
+      );
+      return;
+    }
 
-    // 3. 피드백 출력
-    _isFeedbackPhase = true;
-    ref.read(chatMessagesProvider.notifier).askTyping(
-          segments: feedbackSegments,
-          finalText: feedbackSegments.join('\n'),
+    // 2) 서버/Mock에 피드백 요청
+    try {
+      _isFeedbackPhase = true;
+
+      final api = ref.read(apiProvider);
+      final resp = await api.postAnswer(
+        questionId: _currentQuestionId!,
+        answerText: text,
+      );
+
+      // 3) 피드백 말풍선(타자 효과) 출력
+      final segs = resp.segments;
+      ref.read(chatMessagesProvider.notifier).askTyping(
+            segments: segs,
+            finalText: segs.join('\n'),
+          );
+      _scrollToBottom();
+      FocusScope.of(context).unfocus(); // 입력창 닫기
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('피드백 요청 실패: $e')),
         );
-    _scrollToBottom();
-    FocusScope.of(context).unfocus(); // 입력창 닫기
+      }
+    }
   }
 }
