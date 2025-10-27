@@ -1,23 +1,31 @@
-package com.coach.chiselAdmin.domain.admin;
-import jakarta.persistence.*;
-import lombok.*;
+package com.coach.chiselAdmin.admin;
 
-@Getter
-@Setter
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
+
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "admin_info")
+@Builder
 public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    private String adminName;
     private String email;
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    // private String imagePath;
+    @CreationTimestamp
+    @Column(nullable = false,updatable = false)
+    private Timestamp createdAt;
 
 }

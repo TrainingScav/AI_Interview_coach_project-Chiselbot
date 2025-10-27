@@ -11,4 +11,11 @@
       </profile>
     </annotationProcessing>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chiselbot" options="-parameters" />
+      <module name="chiselbot.main" options="-parameters" />
+      <module name="chiselbot.test" options="-parameters" />
+    </option>
+  </component>
 </project>
