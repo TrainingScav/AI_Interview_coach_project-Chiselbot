@@ -45,4 +45,8 @@ public class AdminController {
         return "index";
     }
 
+    @GetMapping("/inquiry")
+    public String inquiryForm() {
+        return "inquiry";
+    }
 }
