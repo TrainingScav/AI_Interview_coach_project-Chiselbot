@@ -1,5 +1,6 @@
 import 'package:ai_interview/models/cards.dart';
 import 'package:ai_interview/widgets/card_view.dart';
+import 'package:ai_interview/widgets/qna_quick_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -96,6 +97,8 @@ class _MainViewState extends State<MainView> {
             },
             child: shouldShowSecondList ? secondCardList : hiddenCardList,
           ),
+          // QNA 카드 진입
+          const QnaQuickCard(),
         ],
       ],
     );
