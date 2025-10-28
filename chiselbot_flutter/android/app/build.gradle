@@ -5,6 +5,13 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+// local.properties 읽기 코드 추가
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace = "com.example.ai_interview"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +35,12 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // manifestPlaceholders 추가
+        manifestPlaceholders = [
+                KAKAO_NATIVE_APP_KEY: localProperties.getProperty('KAKAO_NATIVE_APP_KEY')
+        ]
+
     }
 
     buildTypes {
