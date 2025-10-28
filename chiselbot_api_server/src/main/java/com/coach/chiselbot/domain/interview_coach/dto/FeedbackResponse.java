@@ -1,12 +1,9 @@
 package com.coach.chiselbot.domain.interview_coach.dto;
 
-import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 public class FeedbackResponse {
 
@@ -29,29 +26,6 @@ public class FeedbackResponse {
         private String hint;
         private String userAnswer;
         private String questionAnswer;
-    }
-
-    @Getter
-    public static class FindById{
-        private final Long questionId;
-        private final String categoryName;
-        private final String interviewLevel;
-        private final String adminId;
-        private final String questionText;
-        private final String answerText;
-        private final LocalDateTime createdAt;
-        private final LocalDateTime modifiedAt;
-
-        public FindById(InterviewQuestion question) {
-            this.questionId = question.getQuestionId();
-            this.categoryName = question.getCategoryId().getName(); // InterviewCategory 엔티티의 필드명에 맞게 변경
-            this.interviewLevel = question.getInterviewLevel().name();
-            this.adminId = question.getAdminId();
-            this.questionText = question.getQuestionText();
-            this.answerText = question.getAnswerText();
-            this.createdAt = question.getCreatedAt();
-            this.modifiedAt = question.getModifiedAt();
-        }
     }
 
 }

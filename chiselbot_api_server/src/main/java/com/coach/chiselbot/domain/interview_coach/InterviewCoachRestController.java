@@ -3,6 +3,8 @@ package com.coach.chiselbot.domain.interview_coach;
 import com.coach._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackRequest;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
+import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
+import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,8 +52,10 @@ public class InterviewCoachRestController {
         return ResponseEntity.ok(CommonResponseDto.success(result));
     }
 
-//    @PostMapping("/createQuestion")
-//    public ResponseEntity<?> createQuestion(@RequestBody FeedbackRequest.CreateQuestion question){
-//
-//    }
+    @PostMapping("/createQuestion")
+    public ResponseEntity<?> createQuestion(@RequestBody QuestionRequest.CreateQuestion request){
+        QuestionResponse.FindById createdQuestion = interviewCoachService.createQuestion(request);
+
+        return ResponseEntity.ok(CommonResponseDto.success(createdQuestion, "Question 저장 성공"));
+    }
 }
