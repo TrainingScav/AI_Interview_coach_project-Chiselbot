@@ -63,10 +63,13 @@ spring:
       chat:
         options:
           model: gpt-5-nano
+          max-token: 150
           temperature: 1.0
       embedding:
         options:
           model: text-embedding-3-small
+      cache:
+        enabled: false
 
 jwt:
   secret: "VGhpc0lzQVNlY3JldEtleUZvckpXVFQxMjM0NTZBUElLRVkzNDQzMjE="

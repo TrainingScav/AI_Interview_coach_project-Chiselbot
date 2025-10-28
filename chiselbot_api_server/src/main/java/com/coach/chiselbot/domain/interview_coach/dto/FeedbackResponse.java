@@ -27,7 +27,8 @@ public class FeedbackResponse {
         private double similarity;
         private String feedback;
         private String hint;
-        private String answer;
+        private String userAnswer;
+        private String questionAnswer;
     }
 
     @Getter
