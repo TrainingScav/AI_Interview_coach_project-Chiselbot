@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+//import 'package:form_builder_validators/form_builder_validators.dart';
 
 class FindIdPwScreen extends StatefulWidget {
   const FindIdPwScreen({super.key});
@@ -70,13 +70,35 @@ class _FindIdPwScreenState extends State<FindIdPwScreen>
     return Column(
       children: [
         const SizedBox(height: 32),
-        FormBuilderTextField(
-          name: 'findId',
-          decoration: const InputDecoration(
-            hintText: '휴대폰번호를 입력해주세요',
-            prefixIcon: Icon(FontAwesomeIcons.phone),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: FormBuilderTextField(
+                name: 'findId',
+                decoration: const InputDecoration(
+                  hintText: '휴대폰번호',
+                  prefixIcon: Icon(FontAwesomeIcons.phone),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(color: Colors.grey),
+                ),
+                onPressed: () {
+                  // 랜덤 인증번호 생성 > 휴대폰 SMS 전송
+                  final verifyCode = "123456";
+                  debugPrint("인증번호 : $verifyCode");
+                },
+                child: const Text(
+                  "인증",
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
         ),
+        const SizedBox(height: 16),
+        _buildVerifyCode(),
         const SizedBox(height: 40),
         ElevatedButton(
           onPressed: () {},
@@ -98,13 +120,31 @@ class _FindIdPwScreenState extends State<FindIdPwScreen>
     return Column(
       children: [
         const SizedBox(height: 32),
-        FormBuilderTextField(
-          name: 'email',
-          decoration: const InputDecoration(
-            hintText: '이메일을 입력해주세요',
-            prefixIcon: Icon(FontAwesomeIcons.envelope),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: FormBuilderTextField(
+                name: 'email',
+                decoration: const InputDecoration(
+                  hintText: '이메일',
+                  prefixIcon: Icon(FontAwesomeIcons.envelope),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(color: Colors.grey),
+                ),
+                onPressed: () {},
+                child: const Text(
+                  "인증",
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
         ),
+        const SizedBox(height: 16),
+        _buildVerifyCode(),
         const SizedBox(height: 40),
         ElevatedButton(
           onPressed: () {},
@@ -119,6 +159,69 @@ class _FindIdPwScreenState extends State<FindIdPwScreen>
               )),
         )
       ],
+    );
+  }
+
+  Widget _buildVerifyCode() {
+    return Row(
+      children: [
+        Expanded(
+          child: FormBuilderTextField(
+            name: 'verify_code',
+            decoration: InputDecoration(
+              hintText: '인증번호',
+              prefixIcon: Icon(
+                FontAwesomeIcons.circleCheck,
+              ),
+            ),
+            // validator: _validateVerifyCode,
+          ),
+        ),
+        const SizedBox(width: 16),
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              side: const BorderSide(color: Colors.grey),
+            ),
+            onPressed: () {
+              // 인증번호가 맞는지 확인하고 아이디(**표시) 보여주기 또는 비밀번호 변경 화면으로 이동
+              final userEmail = "test@test.com";
+              _showSimpleDialog(context, userEmail);
+            },
+            child: const Text(
+              "확인",
+              style: TextStyle(color: Colors.white),
+            ))
+      ],
+    );
+  }
+
+  void _showSimpleDialog(BuildContext context, String userEmail) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          // 모달의 내용물
+          title: Row(
+            children: [
+              const Icon(FontAwesomeIcons.check, color: Colors.green),
+              const SizedBox(width: 16),
+              const Text('아이디 확인'),
+            ],
+          ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(userEmail),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext), // 모달 닫기
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

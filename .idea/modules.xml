@@ -3,6 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ChiselBot.iml" filepath="$PROJECT_DIR$/.idea/ChiselBot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselAdmin.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselAdmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselAdmin.test.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselAdmin.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselbot.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselbot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselbot.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselbot.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselbot.test.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselbot.test.iml" />
     </modules>
   </component>
 </project>
