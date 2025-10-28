@@ -1,4 +1,4 @@
-package com.coach.chiselbot.domain.interview_coach;
+package com.coach.chiselbot.domain.interview_coach.feedback;
 
 import com.coach.chiselbot.domain.interview_question.InterviewLevel;
 import lombok.RequiredArgsConstructor;
