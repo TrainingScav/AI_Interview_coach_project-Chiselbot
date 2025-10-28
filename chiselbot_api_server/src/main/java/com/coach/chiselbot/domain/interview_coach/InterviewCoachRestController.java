@@ -33,7 +33,8 @@ public class InterviewCoachRestController {
      *   "data": {
      *     "feedback": "핵심은 잘 짚었지만 TCP의 신뢰성 보장 부분을 보충하세요.",
      *     "hint": "TCP는 데이터 전송 순서를 보장한다는 점을 떠올려보세요.", -- 힌트는 유사도값 0.8이하만 출력 됨
-     *     "answer": ""
+     *     "userAnswer": "" -- 사용자가 입력한 정답
+     *     "questionAnswer": "" -- db에 저장된 질문의 답(LEVEL 1만 해당)
      *     "questionId":  -- 출력용 X, 보관함 저장용
      *     "similarity" :  -- 필요할수도있어서 넣음 아직은 출력용 X
      *   }
