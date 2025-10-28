@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AI_Interview_coach_project-Chiselbot.iml" filepath="$PROJECT_DIR$/.idea/AI_Interview_coach_project-Chiselbot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chiselbot.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chiselbot.main.iml" />
     </modules>
   </component>

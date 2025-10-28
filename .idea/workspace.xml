@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc8e024c-af4c-47be-b093-38c7e9c9dbba" name="Changes" comment="">
+    <list default="true" id="512e3c9f-2ef3-4783-84b0-0c2d79850b67" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/FeedbackStrategyFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/FeedbackStrategyFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/Level2FeedbackStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/Level2FeedbackStrategy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +38,7 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="chiselAdmin" type="f1a62948:ProjectNode" />
+                <item name="chiselbot" type="f1a62948:ProjectNode" />
               </path>
             </expand>
             <select />
@@ -43,67 +47,42 @@
       </state>
     </system>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Enum" />
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;suuu1021&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "suuu1021"
   }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/TrainingScav/AI_Interview_coach_project-Chiselbot.git&quot;,
-    &quot;accountId&quot;: &quot;b28b1b21-178a-4695-babc-c1c558b0d3ae&quot;
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/TrainingScav/AI_Interview_coach_project-Chiselbot.git",
+    "accountId": "b28b1b21-178a-4695-babc-c1c558b0d3ae"
   }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 2
-}</component>
-  <component name="ProjectId" id="34dcLuNpSo923tnzU76pioujv45" />
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="34gfBXa9KOllv4SY1Cu308voxd8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ChiselAdminApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.chiselbot_admin [:com.coach.chiselAdmin.ChiselAdminApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.chiselbot_api_server [:com.coach.chiselbot.ChiselbotApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;jibaek&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.chiselbot_api_server [:com.coach.chiselbot.ChiselbotApplication.main()].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "jibaek",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors"
   }
-}</component>
-  <component name="RunManager" selected="Application.ChiselbotApplication">
-    <configuration name="ChiselAdminApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.coach.chiselAdmin.ChiselAdminApplication" />
-      <module name="chiselAdmin.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.coach.chiselAdmin.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}]]></component>
+  <component name="RunManager">
     <configuration name="ChiselbotApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.coach.chiselbot.ChiselbotApplication" />
       <module name="chiselbot.main" />
@@ -120,16 +99,12 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.ChiselbotApplication" />
-        <item itemvalue="Application.ChiselAdminApplication" />
       </list>
     </recent_temporary>
   </component>
-  <component name="StructureViewState">
-    <option name="selectedTab" value="Handlebars" />
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="fc8e024c-af4c-47be-b093-38c7e9c9dbba" name="Changes" comment="" />
+      <changelist id="512e3c9f-2ef3-4783-84b0-0c2d79850b67" name="Changes" comment="" />
       <created>1759364431999</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
