@@ -2,23 +2,15 @@ package com.coach.chiselbot.domain.interview_coach.feedback;
 
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
-import org.springframework.ai.openai.api.OpenAiApi;
 
+@RequiredArgsConstructor
 public abstract class AbstractFeedbackStrategy implements FeedbackStrategy{
 
     //private final OpenAiChatModel chatModel;
 
-    private static final OpenAiEmbeddingModel embeddingModel = createModel();
-
-    private static OpenAiEmbeddingModel createModel() {
-        String apiKey = System.getenv("OPENAI_API_KEY");
-        if (apiKey == null) {
-            throw new IllegalStateException("OPENAI_API_KEY가 존재하지 않습니다");
-        }
-        OpenAiApi api = OpenAiApi.builder().apiKey(apiKey).build();
-        return new OpenAiEmbeddingModel(api);
-    }
+    protected final OpenAiEmbeddingModel embeddingModel;
 
     // 텍스트 임베딩
     protected float[] embed(String text){
