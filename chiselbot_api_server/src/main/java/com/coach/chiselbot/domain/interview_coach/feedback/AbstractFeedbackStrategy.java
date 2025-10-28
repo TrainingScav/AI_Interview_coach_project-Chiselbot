@@ -1,12 +1,11 @@
-package com.coach.chiselbot.domain.interview_coach;
+package com.coach.chiselbot.domain.interview_coach.feedback;
 
-import com.coach.chiselbot.domain.interview_coach.dto.SimilarityResult;
+import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.api.OpenAiApi;
 
 public abstract class AbstractFeedbackStrategy implements FeedbackStrategy{
-
 
     //private final OpenAiChatModel chatModel;
 
@@ -15,7 +14,7 @@ public abstract class AbstractFeedbackStrategy implements FeedbackStrategy{
     private static OpenAiEmbeddingModel createModel() {
         String apiKey = System.getenv("OPENAI_API_KEY");
         if (apiKey == null) {
-            throw new IllegalStateException("OPENAI_API_KEY is not set");
+            throw new IllegalStateException("OPENAI_API_KEY가 존재하지 않습니다");
         }
         OpenAiApi api = OpenAiApi.builder().apiKey(apiKey).build();
         return new OpenAiEmbeddingModel(api);
@@ -38,6 +37,6 @@ public abstract class AbstractFeedbackStrategy implements FeedbackStrategy{
     }
 
     // 추상메서드로 그대로 하위클래스에 넘겨줌
-    public abstract SimilarityResult calculateSimilarity(String userAnswer, InterviewQuestion question);
+    public abstract FeedbackResponse.SimilarityResult calculateSimilarity(String userAnswer, InterviewQuestion question);
 
 }
