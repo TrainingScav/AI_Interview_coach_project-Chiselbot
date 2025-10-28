@@ -45,7 +45,7 @@ public class InterviewCoachService {
         /**
          * 임시 값 대입
          * */
-        FeedbackResponse.SimilarityResult similarityResult = new FeedbackResponse.SimilarityResult(0.93, 0.0);
+        FeedbackResponse.SimilarityResult similarityResult = new FeedbackResponse.SimilarityResult(0.15, 0.0);
 
         // 2. 프롬프트 생성
         String prompt = promptFactory.createPrompt(question, feedbackRequest.getUserAnswer(), similarityResult);
@@ -61,14 +61,20 @@ public class InterviewCoachService {
         System.out.println("================================");
 
         // 3. AI 모델 호출 - 응답 받기
+        long startTime = System.currentTimeMillis();
         String aiAnswer = chatModel.call(prompt);
-        System.out.println("ai답변:" + aiAnswer);
+        long endTime = System.currentTimeMillis();
+
+        // System.out.println("ai답변:" + aiAnswer);
+        System.out.println("ChatGPT 응답 소요 시간: " + (endTime - startTime) + "ms"); // 네트워크 + AI응답속도
 
         // 4. JSON 문자열 형태 응답 -> DTO 변환
         FeedbackResponse.FeedbackResult result = null;
         try {
             result = objectMapper.readValue(aiAnswer, FeedbackResponse.FeedbackResult.class);
-            result.setAnswer(feedbackRequest.getUserAnswer());
+            result.setUserAnswer(feedbackRequest.getUserAnswer());
+            result.setQuestionAnswer(question.getAnswerText());
+            result.setQuestionId(question.getQuestionId());
             System.out.println("ai답변 파싱 result: " + result.toString());
         }catch (JsonProcessingException e){
             throw new RuntimeException("AI 응답 변환 실패: " + aiAnswer, e);
