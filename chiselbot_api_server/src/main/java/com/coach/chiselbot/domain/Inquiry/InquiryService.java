@@ -21,7 +21,15 @@ public class InquiryService {
 
 
     /**
-     * 사용자 1:1 문의 상세 조회 처리
+     * 사용자 문의 삭제 처리
+     */
+
+    /**
+     * 사용자 문의 수정 처리
+     */
+
+    /**
+     * 사용자 문의 상세 조회 처리
      */
     public InquiryResponseDTO.DetailDTO finById (Long id) {
         Inquiry inquiry = inquiryJpaRepository.findById(id)
@@ -30,7 +38,7 @@ public class InquiryService {
     }
 
     /**
-     * 사용자 1:1 문의 목록 조회 처리
+     * 사용자 문의 목록 조회 처리
      */
     public Page<InquiryResponseDTO.ListDTO> findInquiries(Pageable pageable) {
         Page<Inquiry> inquiries = inquiryJpaRepository.findAll(pageable);
@@ -38,7 +46,7 @@ public class InquiryService {
     }
 
     /**
-     * 사용자 1:1 문의 생성 처리
+     * 사용자 문의 생성 처리
      */
     public Inquiry createInquiry(InquiryRequestDTO.Create dto) {
 

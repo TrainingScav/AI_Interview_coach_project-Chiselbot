@@ -21,8 +21,24 @@ public class InquiryController {
 
 
     /**
+     * 사용자 문의 삭제 API
+     */
+
+    /**
+     * 사용자 문의 수정 API
+     */
+
+    /**
      * 사용자 문의 상세 조회 API
      */
+    @GetMapping("/{inquiryId}")
+    public ResponseEntity<CommonResponseDto<InquiryResponseDTO.DetailDTO>> detail(
+            @PathVariable Long inquiryId
+    ) {
+        InquiryResponseDTO.DetailDTO inquiry = inquiryService.finById(inquiryId);
+
+        return ResponseEntity.ok(CommonResponseDto.success(inquiry));
+    }
 
     /**
      * 사용자 문의 목록 조회 API
@@ -49,6 +65,5 @@ public class InquiryController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonResponseDto.success(createdInquiry));
     }
-
 
 }

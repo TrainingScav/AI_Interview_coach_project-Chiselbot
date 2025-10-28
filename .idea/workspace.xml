@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="512e3c9f-2ef3-4783-84b0-0c2d79850b67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/chiselAdmin.main.iml" afterDir="false" />
+    <list default="true" id="34bf3556-a57f-43e7-b609-0b59096dfae8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/Level2FeedbackStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/interview_coach/Level2FeedbackStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/notification/EmailNotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/chiselbot_api_server/src/main/java/com/coach/chiselbot/domain/notification/EmailNotificationSender.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +34,7 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="chiselbot" type="f1a62948:ProjectNode" />
+                <item name="chiselAdmin" type="f1a62948:ProjectNode" />
               </path>
             </expand>
             <select />
@@ -66,7 +62,7 @@
   "customColor": "",
   "associatedIndex": 2
 }]]></component>
-  <component name="ProjectId" id="34gfBXa9KOllv4SY1Cu308voxd8" />
+  <component name="ProjectId" id="34gjsriC3fJDzzJl6RU85ckiH7e" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -77,7 +73,6 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "jibaek",
     "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors"
   }
@@ -104,7 +99,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="512e3c9f-2ef3-4783-84b0-0c2d79850b67" name="Changes" comment="" />
+      <changelist id="34bf3556-a57f-43e7-b609-0b59096dfae8" name="Changes" comment="" />
       <created>1759364431999</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
