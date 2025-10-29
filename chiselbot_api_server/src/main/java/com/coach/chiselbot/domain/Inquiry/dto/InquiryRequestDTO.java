@@ -1,7 +1,10 @@
 package com.coach.chiselbot.domain.Inquiry.dto;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class InquiryRequestDTO {
 
@@ -12,7 +15,6 @@ public class InquiryRequestDTO {
     public static class Create {
         private String title;
         private String content;
-        private Long authorId;
     }
 
     @Getter

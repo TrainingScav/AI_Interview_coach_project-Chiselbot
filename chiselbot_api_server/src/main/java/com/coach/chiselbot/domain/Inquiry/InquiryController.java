@@ -23,6 +23,14 @@ public class InquiryController {
     /**
      * 사용자 문의 삭제 API
      */
+    @DeleteMapping("/{inquiryId}")
+    public ResponseEntity<?> deleteInquiry(
+            @PathVariable Long inquiryId,
+            @RequestAttribute("userEmail") String email
+    ) {
+        inquiryService.deleteInquiry(inquiryId, email);
+        return ResponseEntity.ok(CommonResponseDto.success(null, "문의가 삭제 되었습니다."));
+    }
 
     /**
      * 사용자 문의 수정 API
@@ -34,7 +42,7 @@ public class InquiryController {
             @RequestAttribute("userEmail") String email
     ) {
         Inquiry updated = inquiryService.updateInquiry(inquiryId, dto, email);
-        return ResponseEntity.ok(CommonResponseDto.success(updated, "문의 수정 성공"));
+        return ResponseEntity.ok(CommonResponseDto.success(updated, "문의가 수정 되었습니다."));
     }
 
 
@@ -68,11 +76,13 @@ public class InquiryController {
      */
     @PostMapping
     public ResponseEntity<?> createInquiry(
-            @RequestBody InquiryRequestDTO.Create dto) {
+            @RequestBody InquiryRequestDTO.Create dto,
+            @RequestAttribute("userEmail") String email
+    ) {
 
-        Inquiry createdInquiry = inquiryService.createInquiry(dto);
+        Inquiry createdInquiry = inquiryService.createInquiry(dto, email);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponseDto.success(createdInquiry));
+                .body(CommonResponseDto.success(createdInquiry, "문의 등록이 완료되었습니다"));
     }
 }

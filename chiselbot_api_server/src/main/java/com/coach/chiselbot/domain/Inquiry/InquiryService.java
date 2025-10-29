@@ -25,6 +25,24 @@ public class InquiryService {
     /**
      * 사용자 문의 삭제 처리
      */
+    public void deleteInquiry(Long inquiryId, String userEmail) {
+        User user = userJpaRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new Exception404("사용자를 찾을 수 업습니다."));
+
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
+
+        if (!inquiry.getUser().equals(user)) {
+            throw new Exception403("본인만 문의를 삭제할 수 있습니다.");
+        }
+
+        if (inquiry.getStatus() != InquiryStatus.WAITING) {
+            throw new Exception400("대기 상태의 문의만 삭제할 수 있습니다.");
+        }
+
+        inquiryRepository.delete(inquiry);
+    }
+
 
     /**
      * 사용자 문의 수정 처리
@@ -70,15 +88,14 @@ public class InquiryService {
     /**
      * 사용자 문의 생성 처리
      */
-    public Inquiry createInquiry(InquiryRequestDTO.Create dto) {
+    public Inquiry createInquiry(InquiryRequestDTO.Create dto, String userEmail) {
 
-        User author = userJpaRepository.findById(dto.getAuthorId())
+        User author = userJpaRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new Exception404("존재하지 않는 사용자입니다"));
 
         Inquiry newInquiry = new Inquiry();
         newInquiry.setTitle(dto.getTitle());
         newInquiry.setContent(dto.getContent());
-        newInquiry.setUser(author);
         newInquiry.setStatus(InquiryStatus.WAITING);
         return inquiryRepository.save(newInquiry);
     }

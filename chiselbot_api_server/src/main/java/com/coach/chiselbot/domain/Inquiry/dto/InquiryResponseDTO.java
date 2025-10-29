@@ -2,7 +2,10 @@ package com.coach.chiselbot.domain.Inquiry.dto;
 
 import com.coach.chiselbot.domain.Inquiry.Inquiry;
 import com.coach.chiselbot.domain.Inquiry.InquiryStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
