@@ -60,5 +60,4 @@ public class UserRestController {
         return ResponseEntity.ok(CommonResponseDto.success(userService.findOne(userEmail), "조회되었습니다."));
     }
 
-
 }

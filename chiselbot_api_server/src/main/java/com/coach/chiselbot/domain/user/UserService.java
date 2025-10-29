@@ -1,5 +1,7 @@
 package com.coach.chiselbot.domain.user;
 
+import com.coach.chiselbot.domain.emailverification.EmailVerificationJpaRepository;
+import com.coach.chiselbot.domain.emailverification.EmailVerificationService;
 import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import com.coach.chiselbot.domain.user.login.LoginStrategy;
 import com.coach.chiselbot.domain.user.login.LoginStrategyFactory;
@@ -20,21 +22,33 @@ public class UserService {
     private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder passwordEncoder;
     private final LoginStrategyFactory loginStrategyFactory;
+    private final EmailVerificationService emailVerificationService;
 
     public User signUp(UserRequestDTO.SignUp dto) {
 
-        if (userJpaRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+        String email = dto.getEmail().trim().toLowerCase();
 
+
+        if (userJpaRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
+
+
+        boolean verified = emailVerificationService.isRecentlyVerified(email);
+        if (!verified) {
+            throw new IllegalArgumentException("이메일 인증이 필요합니다.");
+        }
+
+
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         User newUser = new User();
         newUser.setName(dto.getName());
-        newUser.setEmail(dto.getEmail());
+        newUser.setEmail(email);
         newUser.setPassword(encodedPassword);
 
         Timestamp now = Timestamp.from(Instant.now());
         newUser.setCreatedAt(now);
+        newUser.setUpdatedAt(now);
 
         return userJpaRepository.save(newUser);
     }

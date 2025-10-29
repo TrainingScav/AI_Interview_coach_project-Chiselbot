@@ -16,15 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/users/signup", "/api/users/login/**", "/api/interview/coach/**");
+                .excludePathPatterns("/api/users/signup", "/api/users/login/**", "/api/interview/coach/**",
+                        "/api/auth/email/**");
     }
 }
-
-
-
-
-
-
-
-
-
