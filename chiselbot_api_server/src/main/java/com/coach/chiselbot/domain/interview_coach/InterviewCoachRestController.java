@@ -23,13 +23,14 @@ public class InterviewCoachRestController {
     /**
      * <p>사용자의 답변을 입력받아 AI 피드백을 생성.</p>
      *
-     * 요청 예시:
      * <pre><code class="json">
+     * 요청 예시:
      * {
      *   "questionId": 1,
      *   "userAnswer": "TCP는 연결 기반의 통신 프로토콜입니다."
      * }
-     *
+     * </code></pre>
+     * <pre><code class="json">
      * 응답 예시:
      * {
      *   "success": true,
