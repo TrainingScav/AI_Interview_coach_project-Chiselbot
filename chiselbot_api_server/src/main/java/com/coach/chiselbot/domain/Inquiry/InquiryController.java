@@ -27,6 +27,16 @@ public class InquiryController {
     /**
      * 사용자 문의 수정 API
      */
+    @PutMapping("/{inquiryId}")
+    public ResponseEntity<?> updateInquiry(
+            @PathVariable Long inquiryId,
+            @RequestBody InquiryRequestDTO.Update dto,
+            @RequestAttribute("userEmail") String email
+    ) {
+        Inquiry updated = inquiryService.updateInquiry(inquiryId, dto, email);
+        return ResponseEntity.ok(CommonResponseDto.success(updated, "문의 수정 성공"));
+    }
+
 
     /**
      * 사용자 문의 상세 조회 API
@@ -57,7 +67,7 @@ public class InquiryController {
      * 사용자 문의 생성 API
      */
     @PostMapping
-    public ResponseEntity<CommonResponseDto<Inquiry>> createInquiry(
+    public ResponseEntity<?> createInquiry(
             @RequestBody InquiryRequestDTO.Create dto) {
 
         Inquiry createdInquiry = inquiryService.createInquiry(dto);
@@ -65,5 +75,4 @@ public class InquiryController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonResponseDto.success(createdInquiry));
     }
-
 }

@@ -1,5 +1,7 @@
 package com.coach.chiselbot.domain.Inquiry;
 
+import com.coach._global.errors.exception.Exception400;
+import com.coach._global.errors.exception.Exception403;
 import com.coach._global.errors.exception.Exception404;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryRequestDTO;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
@@ -16,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class InquiryService {
 
-    private final InquiryJpaRepository inquiryJpaRepository;
+    private final InquiryRepository inquiryRepository;
     private final UserJpaRepository userJpaRepository;
 
 
@@ -27,12 +29,32 @@ public class InquiryService {
     /**
      * 사용자 문의 수정 처리
      */
+    public Inquiry updateInquiry(Long inquiryId, InquiryRequestDTO.Update dto, String userEmail) {
+        User user = userJpaRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
+
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
+
+        if (!inquiry.getUser().equals(user)) {
+            throw new Exception403("본인만 문의를 수정할 수 있습니다.");
+        }
+
+        if (inquiry.getStatus() != InquiryStatus.WAITING) {
+            throw new Exception400("대기 상태의 문의만 수정할 수 있습니다.");
+        }
+
+        inquiry.setTitle(dto.getTitle());
+        inquiry.setContent(dto.getContent());
+
+        return inquiryRepository.save(inquiry);
+    }
 
     /**
      * 사용자 문의 상세 조회 처리
      */
-    public InquiryResponseDTO.DetailDTO finById (Long id) {
-        Inquiry inquiry = inquiryJpaRepository.findById(id)
+    public InquiryResponseDTO.DetailDTO finById(Long id) {
+        Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
         return InquiryResponseDTO.DetailDTO.from(inquiry);
     }
@@ -41,7 +63,7 @@ public class InquiryService {
      * 사용자 문의 목록 조회 처리
      */
     public Page<InquiryResponseDTO.ListDTO> findInquiries(Pageable pageable) {
-        Page<Inquiry> inquiries = inquiryJpaRepository.findAll(pageable);
+        Page<Inquiry> inquiries = inquiryRepository.findAll(pageable);
         return inquiries.map(InquiryResponseDTO.ListDTO::from);
     }
 
@@ -58,6 +80,6 @@ public class InquiryService {
         newInquiry.setContent(dto.getContent());
         newInquiry.setUser(author);
         newInquiry.setStatus(InquiryStatus.WAITING);
-        return inquiryJpaRepository.save(newInquiry);
+        return inquiryRepository.save(newInquiry);
     }
 }

@@ -14,4 +14,14 @@ public class InquiryRequestDTO {
         private String content;
         private Long authorId;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Update {
+        private String title;
+        private String content;
+    }
+
 }
