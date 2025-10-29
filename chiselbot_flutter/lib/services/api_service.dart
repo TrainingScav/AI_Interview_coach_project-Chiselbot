@@ -1,4 +1,3 @@
-// lib/services/api_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/api_models.dart';
@@ -6,117 +5,152 @@ import '../models/inquiry.dart';
 
 class ApiService {
   final String baseUrl;
-  final http.Client _client = http.Client();
+  String? _jwt; // 로그인 후 저장
+
   ApiService(this.baseUrl);
 
-  // URL 조립
-  Uri _build(String path, [Map<String, String>? qp]) {
-    assert(baseUrl.startsWith('http'), 'Invalid baseUrl: $baseUrl');
-    final root = baseUrl.endsWith('/')
-        ? baseUrl.substring(0, baseUrl.length - 1)
-        : baseUrl;
-    final p = path.startsWith('/') ? path : '/$path';
-    return Uri.parse('$root$p').replace(queryParameters: qp);
+  void setToken(String? token) => _jwt = token;
+
+  Map<String, String> _headers({bool jsonBody = true}) {
+    final h = <String, String>{};
+    if (jsonBody) h['Content-Type'] = 'application/json; charset=utf-8';
+    if (_jwt != null && _jwt!.isNotEmpty) h['Authorization'] = 'Bearer $_jwt';
+    return h;
   }
 
-  // 공용 GET/POST (타임아웃 + 상태코드 체크 + JSON 보장)
-  Future<dynamic> _get(String path, {Map<String, String>? qp}) async {
-    final res = await _client.get(_build(path, qp), headers: {
-      'Accept': 'application/json'
-    }).timeout(const Duration(seconds: 10));
-    if (res.statusCode < 200 || res.statusCode >= 300) {
-      throw 'HTTP ${res.statusCode} ${res.reasonPhrase} - $path';
+  // (선택) 로그인 – 백엔드 /api/users/login 응답 형태에 맞춰 수정하세요.
+  Future<String> login(String email, String password) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/api/users/login'),
+      headers: _headers(),
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200 && m['success'] == true) {
+      final token = m['data']['token'] as String;
+      setToken(token);
+      return token;
     }
-    return jsonDecode(res.body);
+    throw Exception(m['error'] ?? '로그인 실패');
   }
 
-  Future<dynamic> _post(String path, Map<String, dynamic> body) async {
-    final res = await _client
-        .post(
-          _build(path),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: jsonEncode(body),
-        )
-        .timeout(const Duration(seconds: 10));
-    if (res.statusCode < 200 || res.statusCode >= 300) {
-      throw 'HTTP ${res.statusCode} ${res.reasonPhrase} - $path';
-    }
-    return jsonDecode(res.body);
-  }
-
-  // ------------ Interview ------------
+  // 카테고리 목록
   Future<List<InterviewCategory>> fetchCategories() async {
-    final body = await _get('/api/interview/categories');
-    return (body as List).map((e) => InterviewCategory.fromJson(e)).toList();
+    final res = await http.get(
+      Uri.parse('$baseUrl/api/interview/categories'),
+      headers: _headers(jsonBody: false),
+    );
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      // 백에서 success 래퍼 안 쓰면 바로 List 처리
+      if (m is List) {
+        return m
+            .map<InterviewCategory>((e) => InterviewCategory.fromJson(e))
+            .toList();
+      }
+      // CommonResponseDto.success 사용 시
+      final env = ApiEnvelope.fromJson(m, (obj) => obj);
+      final list =
+          (env.data as List).map((e) => InterviewCategory.fromJson(e)).toList();
+      return list;
+    }
+    throw Exception('카테고리 조회 실패');
   }
 
+  // 카테고리/레벨로 질문 1개 가져오기 (백엔드에서 하나 골라 내려주는 API 필요)
+  // 예: GET /api/interview/questions/one?categoryId=1&level=LEVEL_1
   Future<InterviewQuestion> fetchOneQuestion({
     required int categoryId,
-    int? levelId,
+    required String level,
   }) async {
-    final body = await _get('/api/interview/question', qp: {
-      'categoryId': '$categoryId',
-      if (levelId != null) 'levelId': '$levelId',
-    });
-    return InterviewQuestion.fromJson(body);
-  }
-
-  Future<FeedbackResponse> postAnswer({
-    required int questionId,
-    required String answerText,
-  }) async {
-    final body = await _post('/api/interview/feedback', {
-      'questionId': questionId,
-      'answerText': answerText,
-    });
-    return FeedbackResponse.fromJson(body);
-  }
-
-  // ------------ QnA ------------
-  Future<List<Inquiry>> fetchInquiries({int page = 0, int size = 20}) async {
-    final body = await _get('/api/qna/inquiries', qp: {
-      'page': '$page',
-      'size': '$size',
-    });
-
-    // 서버가 배열로 주는 경우/페이징 객체로 주는 경우 모두 대응
-    final list = body is List ? body : body['content'];
-    if (list is! List) {
-      throw 'Unexpected response shape for /api/qna/inquiries';
+    final uri = Uri.parse('$baseUrl/api/interview/questions/one').replace(
+        queryParameters: {'categoryId': '$categoryId', 'level': level});
+    final res = await http.get(uri, headers: _headers(jsonBody: false));
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      if (m is Map && m['success'] == true) {
+        return InterviewQuestion.fromJson(m['data']);
+      }
+      return InterviewQuestion.fromJson(m);
     }
-    return list.map((e) => Inquiry.fromJson(e)).toList();
+    throw Exception('질문 조회 실패');
   }
 
-  Future<Inquiry> fetchInquiry(int inquiryId) async {
-    final body = await _get('/api/qna/inquiries/$inquiryId');
-    return Inquiry.fromJson(body);
+  // 코칭 받기: POST /api/interview/coach
+  Future<CoachFeedback> coach(
+      {required int questionId, required String userAnswer}) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/api/interview/coach'),
+      headers: _headers(),
+      body: jsonEncode({'questionId': questionId, 'userAnswer': userAnswer}),
+    );
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      // CommonResponseDto.success 래퍼
+      if (m is Map && m['success'] == true) {
+        return CoachFeedback.fromJson(m['data']);
+      }
+      // 래퍼가 없다면 바로 파싱
+      return CoachFeedback.fromJson(m);
+    }
+    throw Exception(m['error'] ?? '코칭 요청 실패');
+  }
+  // ==== QnA (1:1 문의) ====
+
+  // 목록 조회: GET /api/inquiries
+  Future<List<Inquiry>> fetchInquiries() async {
+    final res = await http.get(
+      Uri.parse('$baseUrl/api/inquiries'),
+      headers: _headers(jsonBody: false),
+    );
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      // CommonResponseDto.success 래퍼/비래퍼 모두 호환
+      final list = (m is Map && m['success'] == true) ? m['data'] : m;
+      return (list as List).map((e) => Inquiry.fromJson(e)).toList();
+    }
+    throw Exception(m is Map ? (m['error'] ?? '문의 목록 조회 실패') : '문의 목록 조회 실패');
   }
 
-  Future<Inquiry> createInquiry({
-    required int userId,
-    required String title,
-    required String content,
-  }) async {
-    final body = await _post('/api/qna/inquiries', {
-      'userId': userId,
-      'title': title,
-      'content': content,
-    });
-    return Inquiry.fromJson(body);
+  // 상세 조회: GET /api/inquiries/{id}
+  Future<Inquiry> fetchInquiryDetail(int id) async {
+    final res = await http.get(
+      Uri.parse('$baseUrl/api/inquiries/$id'),
+      headers: _headers(jsonBody: false),
+    );
+    final m = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      final data = (m is Map && m['success'] == true) ? m['data'] : m;
+      return Inquiry.fromJson(data as Map<String, dynamic>);
+    }
+    throw Exception(m is Map ? (m['error'] ?? '문의 상세 조회 실패') : '문의 상세 조회 실패');
   }
 
-  Future<Inquiry> answerInquiry({
-    required int inquiryId,
-    required int adminId,
-    required String answerContent,
-  }) async {
-    final body = await _post('/api/qna/inquiries/$inquiryId/answer', {
-      'adminId': adminId,
-      'answerContent': answerContent,
-    });
-    return Inquiry.fromJson(body);
+  // 사용자 문의 등록: POST /api/inquiries
+  Future<void> createInquiry(
+      {required String title, required String content}) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/api/inquiries'),
+      headers: _headers(),
+      body: jsonEncode({'title': title, 'content': content}),
+    );
+    if (res.statusCode != 200 && res.statusCode != 201) {
+      final m = jsonDecode(res.body);
+      throw Exception(m is Map ? (m['error'] ?? '문의 등록 실패') : '문의 등록 실패');
+    }
+  }
+
+  // 관리자 답변 등록: POST /api/inquiries/{id}/answer
+  Future<void> answerInquiry(
+      {required int inquiryId, required String answer}) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/api/inquiries/$inquiryId/answer'),
+      headers: _headers(),
+      body: jsonEncode({'answer': answer}),
+    );
+    if (res.statusCode != 200) {
+      final m = jsonDecode(res.body);
+      throw Exception(m is Map ? (m['error'] ?? '답변 등록 실패') : '답변 등록 실패');
+    }
   }
 }
