@@ -1,7 +1,8 @@
-package com.coach._global.errors;
+package com.coach.chiselbot._global.errors;
 
-import com.coach._global.dto.CommonResponseDto;
-import com.coach._global.errors.exception.*;
+import com.coach.chiselbot._global.dto.CommonResponseDto;
+import com.coach.chiselbot._global.errors.exception.Exception400;
+import com.coach.chiselbot._global.errors.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

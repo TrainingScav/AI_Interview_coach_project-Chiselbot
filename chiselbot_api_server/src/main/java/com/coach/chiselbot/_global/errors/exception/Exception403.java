@@ -1,4 +1,4 @@
-package com.coach._global.errors.exception;
+package com.coach.chiselbot._global.errors.exception;
 
 public class Exception403 extends RuntimeException {
     public Exception403(String message) {

@@ -1,4 +1,4 @@
-package com.coach._global.dto;
+package com.coach.chiselbot._global.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

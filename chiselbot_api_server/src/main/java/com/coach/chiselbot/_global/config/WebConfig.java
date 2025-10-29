@@ -1,6 +1,6 @@
-package com.coach._global.config;
+package com.coach.chiselbot._global.config;
 
-import com.coach._global.config.jwt.JwtInterceptor;
+import com.coach.chiselbot._global.config.jwt.JwtInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

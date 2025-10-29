@@ -1,6 +1,6 @@
 package com.coach.chiselbot.domain.Inquiry;
 
-import com.coach._global.dto.CommonResponseDto;
+import com.coach.chiselbot._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryRequestDTO;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
 import lombok.RequiredArgsConstructor;

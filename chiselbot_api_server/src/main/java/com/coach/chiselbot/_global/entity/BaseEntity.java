@@ -1,4 +1,4 @@
-package com.coach._global.entity;
+package com.coach.chiselbot._global.entity;
 
 
 import jakarta.persistence.Column;

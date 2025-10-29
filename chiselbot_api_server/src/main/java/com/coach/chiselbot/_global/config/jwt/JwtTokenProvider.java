@@ -1,4 +1,4 @@
-package com.coach._global.config.jwt;
+package com.coach.chiselbot._global.config.jwt;
 
 import com.coach.chiselbot.domain.user.User;
 import io.jsonwebtoken.*;

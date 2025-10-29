@@ -1,4 +1,4 @@
-package com.coach._global.config;
+package com.coach.chiselbot._global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

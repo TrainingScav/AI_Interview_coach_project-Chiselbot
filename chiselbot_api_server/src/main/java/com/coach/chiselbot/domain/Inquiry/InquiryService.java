@@ -1,8 +1,8 @@
 package com.coach.chiselbot.domain.Inquiry;
 
-import com.coach._global.errors.exception.Exception400;
-import com.coach._global.errors.exception.Exception403;
-import com.coach._global.errors.exception.Exception404;
+import com.coach.chiselbot._global.errors.exception.Exception400;
+import com.coach.chiselbot._global.errors.exception.Exception403;
+import com.coach.chiselbot._global.errors.exception.Exception404;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryRequestDTO;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
 import com.coach.chiselbot.domain.user.User;

@@ -1,4 +1,4 @@
-package com.coach._global.config.jwt;
+package com.coach.chiselbot._global.config.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.management.relation.Role;
 
 @Component
 @RequiredArgsConstructor
