@@ -1,10 +1,10 @@
-package com.coach.chiselbot.domain.interview_coach;
+package com.coach.chiselAdmin.domain.interview_coach;
 
-import com.coach._global.dto.CommonResponseDto;
-import com.coach.chiselbot.domain.interview_coach.dto.FeedbackRequest;
-import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
+import com.coach.chiselAdmin._global.dto.CommonResponseDto;
+import com.coach.chiselAdmin.domain.interview_coach.dto.FeedbackRequest;
+import com.coach.chiselAdmin.domain.interview_coach.dto.FeedbackResponse;
+import com.coach.chiselAdmin.domain.interview_question.dto.QuestionRequest;
+import com.coach.chiselAdmin.domain.interview_question.dto.QuestionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

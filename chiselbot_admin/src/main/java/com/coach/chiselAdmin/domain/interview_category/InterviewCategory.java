@@ -1,4 +1,4 @@
-package com.coach.chiselbot.domain.interview_category;
+package com.coach.chiselAdmin.domain.interview_category;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

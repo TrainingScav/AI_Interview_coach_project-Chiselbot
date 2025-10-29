@@ -55,4 +55,22 @@ spring:
         default_batch_fetch_size: 10
         format_sql: true # SQL 쿼리를 보기 좋게 줄바꿈하여 포맷팅
     show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
-    open-in-view: true
+    open-in-view: false
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-5-nano
+          max-token: 150
+          temperature: 1.0
+      embedding:
+        options:
+          model: text-embedding-3-small
+      cache:
+        enabled: false
+
+jwt:
+  secret: "VGhpc0lzQVNlY3JldEtleUZvckpXVFQxMjM0NTZBUElLRVkzNDQzMjE="
+  expiration-in-ms: 3600000 # 1시간

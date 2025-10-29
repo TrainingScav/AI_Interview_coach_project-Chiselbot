@@ -1,4 +1,4 @@
-package com.coach.chiselbot.domain.interview_coach;
+package com.coach.chiselAdmin.domain.interview_coach;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;

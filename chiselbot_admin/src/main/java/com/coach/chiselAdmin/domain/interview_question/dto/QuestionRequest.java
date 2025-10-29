@@ -1,6 +1,7 @@
-package com.coach.chiselbot.domain.interview_question.dto;
+package com.coach.chiselAdmin.domain.interview_question.dto;
 
-import com.coach.chiselbot.domain.interview_question.InterviewLevel;
+
+import com.coach.chiselAdmin.domain.interview_question.InterviewLevel;
 import lombok.Getter;
 import lombok.Setter;
 

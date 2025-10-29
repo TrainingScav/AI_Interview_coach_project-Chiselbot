@@ -1,4 +1,4 @@
-package com.coach.chiselbot.domain.interview_coach.dto;
+package com.coach.chiselAdmin.domain.interview_coach.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

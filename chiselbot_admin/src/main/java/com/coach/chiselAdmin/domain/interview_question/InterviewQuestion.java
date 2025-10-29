@@ -1,7 +1,8 @@
-package com.coach.chiselbot.domain.interview_question;
+package com.coach.chiselAdmin.domain.interview_question;
 
-import com.coach._global.entity.BaseEntity;
-import com.coach.chiselbot.domain.interview_category.InterviewCategory;
+
+import com.coach.chiselAdmin._global.entity.BaseEntity;
+import com.coach.chiselAdmin.domain.interview_category.InterviewCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
