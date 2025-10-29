@@ -1,4 +1,4 @@
-package com.coach.chiselbot.domain.interview_question;
+package com.coach.chiselAdmin.domain.interview_question;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

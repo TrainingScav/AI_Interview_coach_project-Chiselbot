@@ -1,6 +1,6 @@
-package com.coach.chiselbot.domain.interview_question.dto;
+package com.coach.chiselAdmin.domain.interview_question.dto;
 
-import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
+import com.coach.chiselAdmin.domain.interview_question.InterviewQuestion;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

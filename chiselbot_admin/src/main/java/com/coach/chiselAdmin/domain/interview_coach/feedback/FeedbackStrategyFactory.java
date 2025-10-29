@@ -1,6 +1,6 @@
-package com.coach.chiselbot.domain.interview_coach.feedback;
+package com.coach.chiselAdmin.domain.interview_coach.feedback;
 
-import com.coach.chiselbot.domain.interview_question.InterviewLevel;
+import com.coach.chiselAdmin.domain.interview_question.InterviewLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

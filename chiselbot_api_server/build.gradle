@@ -45,11 +45,11 @@ dependencies {
 	// 3. jjwt-jackson: JSON 파서
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
-	// OpenAI 연결
-	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+//	// OpenAI 연결
+//	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 
-	// DB에 저장된 vector(String) 값을 float[]로 간편하게 변환하기 위해 사용
-	implementation("com.google.code.gson:gson:2.10.1")
+//	// DB에 저장된 vector(String) 값을 float[]로 간편하게 변환하기 위해 사용
+//	implementation("com.google.code.gson:gson:2.10.1")
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

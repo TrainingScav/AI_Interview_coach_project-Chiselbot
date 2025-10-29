@@ -1,7 +1,8 @@
-package com.coach.chiselbot.domain.interview_coach.prompt;
+package com.coach.chiselAdmin.domain.interview_coach.prompt;
 
-import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
-import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
+
+import com.coach.chiselAdmin.domain.interview_coach.dto.FeedbackResponse;
+import com.coach.chiselAdmin.domain.interview_question.InterviewQuestion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,8 @@ public class PromptFactory {
     private final List<PromptStrategy> promptStrategies;
 
     public String createPrompt(InterviewQuestion question,
-                                            String userAnswer,
-                                            FeedbackResponse.SimilarityResult similarity){
+                               String userAnswer,
+                               FeedbackResponse.SimilarityResult similarity){
 
         PromptStrategy matchedStrategy = null;
 
