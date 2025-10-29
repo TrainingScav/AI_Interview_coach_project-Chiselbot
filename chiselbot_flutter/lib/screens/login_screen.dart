@@ -1,8 +1,6 @@
 import 'package:ai_interview/screens/email_login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -17,48 +15,9 @@ class LoginScreen extends StatelessWidget {
           children: [
             _buildKakaoLoginButton(),
             const SizedBox(height: 16),
-            // _buildGoogleLoginButton(),
-            //const SizedBox(height: 16),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EmailLoginScreen()));
-              },
-              child: Container(
-                height: 40,
-                width: 185,
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(210),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Center(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Icon(
-                          FontAwesomeIcons.envelope,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          "이메일 로그인",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13.5),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            _buildGoogleLoginButton(),
+            const SizedBox(height: 16),
+            _buildEmailLoginButton(context),
           ],
         ),
       ),
@@ -66,44 +25,108 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildKakaoLoginButton() {
+    final imgAddress = 'assets/images/kakao_login_black.png';
     return InkWell(
-      onTap: _loginWithKakao,
-      child: Image.asset(
-        'assets/images/kakao_login.png',
+      onTap: () {
+        //
+      },
+      child: Container(
+        height: 42,
+        width: 185,
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image.asset(
+                imgAddress,
+                height: 28,
+              ),
+              Text(
+                "카카오 로그인",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Future<void> _loginWithKakao() async {
-    // 카카오톡 실행 가능 여부 확인
-    // 카카오톡 실행이 가능하면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-    if (await isKakaoTalkInstalled()) {
-      try {
-        await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공');
-      } catch (error) {
-        print('카카오톡으로 로그인 실패 $error');
+  Widget _buildGoogleLoginButton() {
+    return InkWell(
+      onTap: () {
+        //
+      },
+      child: Container(
+        height: 42,
+        width: 185,
+        decoration: BoxDecoration(
+          color: Colors.blue.shade400,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(
+                FontAwesomeIcons.google,
+                color: Colors.black,
+                size: 20,
+              ),
+              Text(
+                "  구글 로그인 ",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-        if (error is PlatformException && error.code == 'CANCELED') {
-          return;
-        }
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
-        try {
-          await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공');
-        } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
-        }
-      }
-    } else {
-      try {
-        await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공');
-      } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
-      }
-    }
+  Widget _buildEmailLoginButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EmailLoginScreen()));
+      },
+      child: Container(
+        height: 40,
+        width: 185,
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(210),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(
+                FontAwesomeIcons.envelope,
+                color: Colors.black,
+                size: 20,
+              ),
+              Text(
+                "이메일 로그인",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

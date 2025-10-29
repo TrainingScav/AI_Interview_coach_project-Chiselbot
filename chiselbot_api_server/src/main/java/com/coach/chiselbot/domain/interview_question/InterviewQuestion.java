@@ -4,10 +4,7 @@ import com.coach._global.entity.BaseEntity;
 import com.coach.chiselbot.domain.interview_category.InterviewCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -15,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "interview_question_meta")
+@Builder
 public class InterviewQuestion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

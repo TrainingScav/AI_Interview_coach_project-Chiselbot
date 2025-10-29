@@ -1,6 +1,6 @@
-package com.coach.chiselbot.domain.interview_coach;
+package com.coach.chiselbot.domain.interview_coach.feedback;
 
-import com.coach.chiselbot.domain.interview_coach.dto.SimilarityResult;
+import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class Level1FeedbackStrategy extends AbstractFeedbackStrategy{
 
     @Override
-    public SimilarityResult calculateSimilarity(String userAnswer, InterviewQuestion question) {
+    public FeedbackResponse.SimilarityResult calculateSimilarity(String userAnswer, InterviewQuestion question) {
         Gson gson = new Gson();
 
         float[] userVec = embed(userAnswer);
@@ -18,7 +18,7 @@ public class Level1FeedbackStrategy extends AbstractFeedbackStrategy{
 
         double similarity = cosineSimilarity(userVec, answerVec);
 
-        return new SimilarityResult(similarity, 0.0);
+        return new FeedbackResponse.SimilarityResult(similarity, 0.0);
     }
 
 
