@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +22,23 @@ public class InterviewQuestionService {
 
     /**
      * <p>전체 QuestionList 1p당 10개 게시물</p>
-     */
+     * */
     @Transactional(readOnly = true)
-    public Page<QuestionResponse.FindAll> getQuestionList(int page) {
+    public Page<QuestionResponse.FindAll> getQuestionList(int page){
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize);
 
         return interviewQuestionRepository.findAll(pageable).map(QuestionResponse.FindAll::new);
     }
 
-    public List<InterviewCategory> getAllCategories() {
+    public List<InterviewCategory> getAllCategories(){
         return interviewCategoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public QuestionResponse.FindById getQuestionDetail(Long questionId){
+        InterviewQuestion interviewQuestion = interviewQuestionRepository.findById(questionId)
+                .orElseThrow(()-> new NoSuchElementException(" 해당 질문이 없습니다"));
+        return new QuestionResponse.FindById(interviewQuestion);
     }
 }

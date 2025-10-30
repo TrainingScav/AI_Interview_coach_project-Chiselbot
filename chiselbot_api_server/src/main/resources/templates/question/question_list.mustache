@@ -57,7 +57,7 @@
             </thead>
             <tbody>
             {{#questions}}
-                <tr>
+                <tr onclick="location.href='/admin/questions/detail/{{questionId}}'" style="cursor:pointer;">
                     <td>{{questionId}}</td>
                     <td>{{questionText}}</td>
                     <td>{{categoryName}}</td>

@@ -48,6 +48,7 @@ public class QuestionResponse {
     public static class FindAll{
         private final Long questionId;
         private final String categoryName;
+        private final Long categoryId;
         private final String interviewLevel;
         private final String adminName;
         private final String questionText;
@@ -59,6 +60,7 @@ public class QuestionResponse {
 
         public FindAll(InterviewQuestion question) {
             this.questionId = question.getQuestionId();
+            this.categoryId = question.getCategoryId().getCategoryId();
             this.categoryName = question.getCategoryId().getName(); // InterviewCategory 엔티티의 필드명에 맞게 변경
             this.interviewLevel = question.getInterviewLevel().name();
             this.adminName = question.getAdminId().getAdminName();

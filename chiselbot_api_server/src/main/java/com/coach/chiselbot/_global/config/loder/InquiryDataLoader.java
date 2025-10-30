@@ -36,7 +36,7 @@ public class InquiryDataLoader implements CommandLineRunner {
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(0))
-                        .adminName(null)
+                        .admin(null)
                         .title("결제 환불 요청")
                         .content("결제 후 사용하지 않아 환불 요청드립니다.")
                         .answerContent(null)
@@ -49,7 +49,7 @@ public class InquiryDataLoader implements CommandLineRunner {
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(1))
-                        .adminName(null)
+                        .admin(null)
                         .title("기능 제안")
                         .content("AI 추천 기능에 이력서 분석 기능을 추가해주셨으면 합니다.")
                         .answerContent(null)
@@ -62,7 +62,7 @@ public class InquiryDataLoader implements CommandLineRunner {
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(2))
-                        .adminName(null)
+                        .admin(null)
                         .title("AI 답변 지연시간")
                         .content("답변 지연 시간이 긴 것 같습니다.저만 그런걸까요ㅠㅠ")
                         .answerContent(null)
