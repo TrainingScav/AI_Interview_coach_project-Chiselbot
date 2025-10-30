@@ -9,10 +9,13 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: MainAppbar(),
-      body: const MainView(),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: MainAppbar(),
+        body: const MainView(),
+      ),
     );
   }
 }

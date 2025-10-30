@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/find_auth_data.dart';
-import '../providers/auth_notifier.dart';
+import '../providers/find_auth_notifier.dart';
 import '../widgets/auth/find_id_form.dart';
 import '../widgets/auth/find_pw_form.dart';
 import '../widgets/auth/reset_password_form.dart';
@@ -132,9 +132,11 @@ class _FindIdPwScreenState extends ConsumerState<FindIdPwScreen>
   // ========================== 다이얼로그 ==========================
   void _showIdFoundDialog(BuildContext context, String foundId) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
+          backgroundColor: Colors.grey.shade900,
           title: const Row(
             children: [
               Icon(FontAwesomeIcons.check, color: Colors.green),
