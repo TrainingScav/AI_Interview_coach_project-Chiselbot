@@ -4,7 +4,6 @@ spring:
     username: chisel_admin
     password: ghkdlxld1234
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: create-drop  # 주의: 운영 DB엔 위험. 개발에서만.
@@ -40,3 +39,7 @@ jwt:
 notification:
   policy:
     on-status-done: EMAIL
+
+app:
+  auth:
+    require-email-verification: false
