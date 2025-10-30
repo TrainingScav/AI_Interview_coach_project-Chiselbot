@@ -134,16 +134,20 @@ class _MainViewState extends State<MainView> {
         if (_isLoading)
           SizedBox(
             height: mediaQuery.size.height * _cardRatio * 2,
-            child: const Center(
-              child: SpinKitCircle(color: Colors.grey),
+            child: Center(
+              child: SpinKitCircle(
+                color: Colors.grey,
+                duration: Duration(milliseconds: 500),
+              ),
             ),
           )
         else ...[
           SizedBox(
             height: mediaQuery.size.height * _cardRatio,
             child: CardView(
-              items: CardDataFactory.createAskCards(),
-              onCardTap: _onCardTap,
+              // items: CardDataFactory.createAskCards(),
+              items: CardDataFactory.createSkillCards(),
+              // onCardTap: _onCardTap,
               selectedIndex: _selectedIndex,
             ),
           ),

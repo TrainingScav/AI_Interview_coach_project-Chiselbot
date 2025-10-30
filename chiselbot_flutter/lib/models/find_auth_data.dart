@@ -4,7 +4,7 @@ part 'find_auth_data.freezed.dart';
 part 'find_auth_data.g.dart';
 
 @JsonEnum()
-enum AuthType { findId, findPw }
+enum AuthType { findId, findPw, signUp }
 
 @freezed
 class FindAuthState with _$FindAuthState {

@@ -1,8 +1,11 @@
 package com.coach.chiselAdmin.domain.interview_question;
 
+import com.coach.chiselAdmin._global.common.Define;
+import com.coach.chiselAdmin.domain.admin.Admin;
 import com.coach.chiselAdmin.domain.interview_coach.InterviewCoachService;
 import com.coach.chiselAdmin.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselAdmin.domain.interview_question.dto.QuestionResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -42,7 +45,7 @@ public class InterviewQuestionController {
         return "question/question_list";
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping("detail/{questionId}")
     public String questionDetail(@PathVariable(name = "questionId") Long questionId){
 
         return "question/question_detail";
@@ -54,18 +57,25 @@ public class InterviewQuestionController {
     @PostMapping("/create")
     public String createQuestion(
             @ModelAttribute("question") QuestionRequest.CreateQuestion request,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
+        Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
+        System.out.println("세션 유저: " + session.getAttribute(Define.SESSION_USER));
+        request.setAdminId(admin.getId());
         QuestionResponse.FindById createdQuestion = interviewCoachService.createQuestion(request);
 
         model.addAttribute("question", createdQuestion);
         model.addAttribute("message", "Question 저장 성공");
 
-        return "question/create-result";
+        return "redirect:/admin/questions";
     }
 
     @GetMapping("/create")
-    public String createQuestionPg(){
-       return "question_create";
+    public String createQuestionPg(Model model){
+        model.addAttribute("categories", interviewQuestionService.getAllCategories());
+        model.addAttribute("levels", InterviewLevel.values()); // enum 전체
+        model.addAttribute("question", new QuestionRequest.CreateQuestion());
+        return "question/question_create";
     }
 }
