@@ -69,7 +69,7 @@ class _MainViewState extends State<MainView> {
             child: Center(
               child: SpinKitCircle(
                 color: Colors.grey,
-                duration: Duration(milliseconds: 1000),
+                duration: Duration(milliseconds: 500),
               ),
             ),
           )
@@ -77,8 +77,9 @@ class _MainViewState extends State<MainView> {
           SizedBox(
             height: mediaQuery.size.height * _cardRatio,
             child: CardView(
-              items: CardDataFactory.createAskCards(),
-              onCardTap: _onCardTap,
+              // items: CardDataFactory.createAskCards(),
+              items: CardDataFactory.createSkillCards(),
+              // onCardTap: _onCardTap,
               selectedIndex: _selectedIndex,
             ),
           ),

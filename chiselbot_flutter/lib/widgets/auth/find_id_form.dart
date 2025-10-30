@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../models/find_auth_data.dart';
-import '../../providers/auth_notifier.dart';
+import '../../providers/find_auth_notifier.dart';
 
 class FindIdForm extends ConsumerStatefulWidget {
   const FindIdForm({super.key});
@@ -62,9 +62,8 @@ class _FindIdFormState extends ConsumerState<FindIdForm> {
           // 휴대전화번호 입력 필드
           FormBuilderTextField(
             name: 'phoneNumber',
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '휴대전화번호',
-              hintText: '010-XXXX-XXXX',
             ),
             keyboardType: TextInputType.phone,
             enabled: !isLoading && !state.isCodeSent, // 로딩 중이거나 이미 전송했으면 비활성화

@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../models/find_auth_data.dart';
-import '../../providers/auth_notifier.dart';
+import '../../providers/find_auth_notifier.dart';
 
 class FindPwForm extends ConsumerStatefulWidget {
   const FindPwForm({super.key});
@@ -63,7 +63,6 @@ class _FindPwFormState extends ConsumerState<FindPwForm> {
             name: 'email',
             decoration: const InputDecoration(
               labelText: '아이디(이메일)',
-              hintText: 'example@email.com',
             ),
             keyboardType: TextInputType.emailAddress,
             enabled: !isLoading,
