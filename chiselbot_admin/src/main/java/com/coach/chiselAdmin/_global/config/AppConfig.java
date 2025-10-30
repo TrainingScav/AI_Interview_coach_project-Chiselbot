@@ -2,6 +2,7 @@ package com.coach.chiselAdmin._global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * WebConfig -> 웹 설정과 관련딘 부분으로 만들 예정
  */
 @Configuration // IoC 대상
+@EnableJpaAuditing
 public class AppConfig {
 
     @Bean //IoC

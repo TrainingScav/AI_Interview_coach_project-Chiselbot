@@ -24,15 +24,15 @@ public class DataLoader implements CommandLineRunner {
         // --- 메뉴 더미 데이터 추가 ---
         if (menuInfoRepository.count() == 0) {
             MenuInfo dashboard = menuInfoRepository.save(MenuInfo.builder()
-                    .menuName("대시보드")
-                    .menuCode("ADMIN_DASHBOARD")
-                    .urlPath("/admin/dashboard")
+                    .menuName("메뉴관리")
+                    .menuCode("ADMIN_MENU_INFO")
+                    .urlPath("/admin/menus")
                     .menuOrder(1)
-                    .description("관리자 대시보드")
+                    .description("관리자 메뉴관리")
                     .build());
 
             MenuInfo questionMenu = menuInfoRepository.save(MenuInfo.builder()
-                    .menuName("질문 관리")
+                    .menuName("질문관리")
                     .menuCode("ADMIN_QUESTION")
                     .urlPath("/admin/questions")
                     .menuOrder(2)

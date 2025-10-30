@@ -2,6 +2,8 @@ package com.coach.chiselAdmin.domain.menuInfo;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -44,7 +46,9 @@ public class MenuInfo {
     @Column(length = 255)
     private String description; // 설명
 
+    @CreatedDate
     private LocalDateTime createdAt;
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @PrePersist
