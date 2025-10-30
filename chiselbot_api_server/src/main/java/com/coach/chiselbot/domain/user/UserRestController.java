@@ -1,7 +1,7 @@
 package com.coach.chiselbot.domain.user;
 
-import com.coach._global.config.jwt.JwtTokenProvider;
-import com.coach._global.dto.CommonResponseDto;
+import com.coach.chiselbot._global.config.jwt.JwtTokenProvider;
+import com.coach.chiselbot._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
