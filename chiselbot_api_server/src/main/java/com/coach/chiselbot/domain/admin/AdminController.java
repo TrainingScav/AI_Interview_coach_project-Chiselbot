@@ -40,14 +40,4 @@ public class AdminController {
         adminService.logout(session);
         return "redirect:/login-form";
     }
-
-    @GetMapping("/index")
-    public String index() {
-        return "index";
-    }
-
-    @GetMapping("/inquiry")
-    public String inquiryForm() {
-        return "inquiry";
-    }
 }
