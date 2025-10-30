@@ -1,6 +1,6 @@
 enum InquiryStatus { WAITING, ANSWERED, CLOSED }
 
-InquiryStatus statusFromString(String s) {
+InquiryStatus statusFromString(String? s) {
   switch (s) {
     case 'WAITING':
       return InquiryStatus.WAITING;
@@ -26,7 +26,7 @@ String statusToString(InquiryStatus st) {
 
 class Inquiry {
   final int inquiryId;
-  final int userId;
+  final int? userId;
   final int? adminId;
   final String title;
   final String content;
@@ -39,28 +39,38 @@ class Inquiry {
   Inquiry({
     required this.inquiryId,
     required this.userId,
-    this.adminId,
+    required this.adminId,
     required this.title,
     required this.content,
-    this.answerContent,
+    required this.answerContent,
     required this.status,
     required this.createdAt,
-    this.answeredAt,
-    this.updatedAt,
+    required this.answeredAt,
+    required this.updatedAt,
   });
 
-  factory Inquiry.fromJson(Map<String, dynamic> j) => Inquiry(
-        inquiryId: j['inquiryId'],
-        userId: j['userId'],
-        adminId: j['adminId'],
-        title: j['title'],
-        content: j['content'],
-        answerContent: j['answerContent'],
-        status: statusFromString(j['status']),
-        createdAt: DateTime.parse(j['createdAt']),
-        answeredAt:
-            j['answeredAt'] != null ? DateTime.parse(j['answeredAt']) : null,
-        updatedAt:
-            j['updatedAt'] != null ? DateTime.parse(j['updatedAt']) : null,
-      );
+  static DateTime? _parseDT(dynamic v) {
+    if (v == null) return null;
+    if (v is String) return DateTime.tryParse(v);
+    // Timestamp를 직렬화해서 내려올 수 있으므로 문자열 변환 기대
+    return DateTime.tryParse(v.toString());
+  }
+
+  factory Inquiry.fromJson(Map<String, dynamic> j) {
+    // 백이 키를 'id'로 보낼 수도, 'inquiryId'로 보낼 수도 있어 방어
+    final id = j['inquiryId'] ?? j['id'];
+    return Inquiry(
+      inquiryId: (id is int) ? id : int.parse(id.toString()),
+      userId: j['userId'] == null ? null : int.tryParse(j['userId'].toString()),
+      adminId:
+          j['adminId'] == null ? null : int.tryParse(j['adminId'].toString()),
+      title: j['title'] ?? '',
+      content: j['content'] ?? '',
+      answerContent: j['answerContent'],
+      status: statusFromString(j['status']?.toString()),
+      createdAt: _parseDT(j['createdAt']) ?? DateTime.now(),
+      answeredAt: _parseDT(j['answeredAt']),
+      updatedAt: _parseDT(j['updatedAt']),
+    );
+  }
 }

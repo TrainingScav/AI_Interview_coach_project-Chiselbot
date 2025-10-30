@@ -77,8 +77,8 @@ class QnaProvider extends ChangeNotifier {
 const String _kBaseUrl = 'http://10.0.2.2:8080'; // 에뮬레이터 기준. 실기기는 PC IP로.
 final apiServiceProvider = Provider<ApiService>((ref) => ApiService(_kBaseUrl));
 
-/// 현재 로그인한 관리자 ID (없으면 null)
-final currentAdminIdProvider = StateProvider<int?>((ref) => null);
+/// 현재 로그인한 관리자 ID (없으면 null, 있을때 1)
+final currentAdminIdProvider = StateProvider<int?>((ref) => 1);
 
 /// 문의 목록
 final inquiriesProvider = FutureProvider<List<Inquiry>>((ref) async {

@@ -1,4 +1,3 @@
-// lib/screens/qna/qna_detail_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/qna_provider.dart';
@@ -33,6 +32,7 @@ class _QnaDetailScreenState extends ConsumerState<QnaDetailScreen> {
           final canAnswer = isAdmin &&
               inq.status == InquiryStatus.WAITING &&
               (inq.answerContent == null || inq.answerContent!.isEmpty);
+
           return Padding(
             padding: const EdgeInsets.all(14),
             child: ListView(
@@ -42,7 +42,9 @@ class _QnaDetailScreenState extends ConsumerState<QnaDetailScreen> {
                         fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Text(
-                    '작성일: ${inq.createdAt.year}-${inq.createdAt.month.toString().padLeft(2, '0')}-${inq.createdAt.day.toString().padLeft(2, '0')}  (ID: ${inq.inquiryId})'),
+                  '작성일: ${inq.createdAt.year}-${inq.createdAt.month.toString().padLeft(2, '0')}-${inq.createdAt.day.toString().padLeft(2, '0')}'
+                  '  (ID: ${inq.inquiryId})',
+                ),
                 const SizedBox(height: 14),
                 const Text('문의 내용',
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -59,13 +61,23 @@ class _QnaDetailScreenState extends ConsumerState<QnaDetailScreen> {
                       color: Theme.of(context).colorScheme.surfaceVariant,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(inq.answerContent!),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(inq.answerContent!),
+                        const SizedBox(height: 6),
+                        if (inq.answeredAt != null)
+                          Text(
+                            '답변일: ${inq.answeredAt!.year}-${inq.answeredAt!.month.toString().padLeft(2, '0')}-${inq.answeredAt!.day.toString().padLeft(2, '0')}',
+                            style: TextStyle(
+                                color: Colors.grey.shade700, fontSize: 12),
+                          ),
+                      ],
+                    ),
                   )
                 else
-                  Text(
-                    '아직 답변이 없습니다.',
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
+                  Text('아직 답변이 없습니다.',
+                      style: TextStyle(color: Colors.grey.shade600)),
                 const SizedBox(height: 16),
                 if (canAnswer) _buildAnswerBox(context, inq),
               ],
@@ -97,7 +109,6 @@ class _QnaDetailScreenState extends ConsumerState<QnaDetailScreen> {
             .showSnackBar(SnackBar(content: Text('등록 실패: ${st.error}')));
       } else {
         _answerCtrl.clear();
-        // 상세/목록 갱신
         ref.invalidate(inquiryDetailProvider(inq.inquiryId));
         ref.invalidate(inquiriesProvider);
         ScaffoldMessenger.of(context)
