@@ -55,7 +55,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(errorText: "휴대전화번호를 입력해주세요."),
-                  // 2. 정규식 패턴 체크 (010-XXXX-XXXX 또는 010XXXXXXXX)
                   FormBuilderValidators.match(
                     RegExp(r'^010-?([0-9]{4})-?([0-9]{4})$'),
                     errorText: "올바른 휴대전화번호 형식인지 확인해주세요.",
