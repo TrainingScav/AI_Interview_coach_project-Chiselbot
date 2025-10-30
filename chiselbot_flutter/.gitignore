@@ -460,6 +460,7 @@ gen-external-apklibs
 obj/
 
 # IntelliJ IDEA
+.idea/
 *.iml
 /out/
 

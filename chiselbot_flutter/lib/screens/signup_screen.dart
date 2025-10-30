@@ -47,6 +47,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 validator: _validateName,
               ),
               const SizedBox(height: 16),
+              FormBuilderTextField(
+                name: 'phoneNumber',
+                decoration: InputDecoration(
+                  hintText: '휴대전화번호',
+                  prefixIcon: Icon(FontAwesomeIcons.phone),
+                ),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(errorText: "휴대전화번호를 입력해주세요."),
+                  FormBuilderValidators.match(
+                    RegExp(r'^010-?([0-9]{4})-?([0-9]{4})$'),
+                    errorText: "올바른 휴대전화번호 형식인지 확인해주세요.",
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -89,7 +104,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: _verifyCodeIconColor,
                         ),
                       ),
-                      // validator: _validateVerifyCode,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: '인증번호를 입력해주세요.'),
+                        FormBuilderValidators.numeric(
+                            errorText: '인증번호는 숫자만 입력 가능해요.'),
+                      ]),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -177,10 +197,9 @@ class _SignupScreenState extends State<SignupScreen> {
     return error;
   }
 
-  // 실제 인증번호 확인 함수 (예시)
   Future<bool> _checkVerificationCode(String code) async {
     // TODO: 실제 API 호출
-    await Future.delayed(const Duration(seconds: 1)); // 로딩 시뮬레이션
+    await Future.delayed(const Duration(milliseconds: 150));
     return code == "123456"; // 임시 검증 로직
   }
 

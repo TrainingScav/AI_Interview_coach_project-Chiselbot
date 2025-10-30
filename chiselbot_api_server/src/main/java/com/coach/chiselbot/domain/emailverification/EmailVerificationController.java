@@ -1,6 +1,6 @@
 package com.coach.chiselbot.domain.emailverification;
 
-import com.coach._global.dto.CommonResponseDto;
+import com.coach.chiselbot._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
