@@ -24,6 +24,8 @@ public class InquiryRequestDTO {
     public static class Update {
         private String title;
         private String content;
+        // 관리자 답변용 (임시)
+        private String answerContent;
     }
 
 }

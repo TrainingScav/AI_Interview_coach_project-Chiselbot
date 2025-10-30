@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../providers/auth_notifier.dart';
+import '../../providers/find_auth_notifier.dart';
 
 class ResetPasswordForm extends ConsumerStatefulWidget {
   const ResetPasswordForm({super.key});
@@ -63,9 +63,11 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
+          backgroundColor: Colors.grey.shade900,
           title: Row(
             children: [
               Icon(FontAwesomeIcons.check, color: Colors.green),
+              SizedBox(width: 8),
               const Text('비밀번호 변경 완료'),
             ],
           ),
@@ -76,7 +78,10 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
                 Navigator.pop(dialogContext);
                 Navigator.pop(context);
               },
-              child: const Text('확인'),
+              child: const Text(
+                '확인',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -98,9 +103,9 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
             name: 'newPassword',
             decoration: const InputDecoration(
               labelText: '새 비밀번호',
-              hintText: '8자 이상, 대/소문자, 특수문자 포함',
             ),
             obscureText: true,
+            autofocus: true,
             enabled: !isLoading,
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: '비밀번호를 입력해주세요.'),
@@ -117,7 +122,6 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
             name: 'confirmPassword',
             decoration: const InputDecoration(
               labelText: '비밀번호 확인',
-              hintText: '비밀번호를 다시 입력해주세요',
             ),
             obscureText: true,
             enabled: !isLoading,

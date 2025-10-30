@@ -55,7 +55,34 @@ spring:
         default_batch_fetch_size: 10
         format_sql: true # SQL 쿼리를 보기 좋게 줄바꿈하여 포맷팅
     show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
-    open-in-view: false
+    open-in-view: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: oseungun311@gmail.com
+    password: "xbef nfaq puie tclp"
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-5-nano
+          max-token: 150
+          temperature: 1.0
+      embedding:
+        options:
+          model: text-embedding-3-small
+      cache:
+        enabled: false
 
 jwt:
   secret: "VGhpc0lzQVNlY3JldEtleUZvckpXVFQxMjM0NTZBUElLRVkzNDQzMjE="

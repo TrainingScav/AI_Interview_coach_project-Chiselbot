@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../providers/auth_notifier.dart';
+import '../../providers/find_auth_notifier.dart';
 
 class VerifyInput extends ConsumerStatefulWidget {
   // 💡 [추후 작업] 이 위젯은 Id 찾기와 Pw 찾기 모두에서 재사용됩니다.
@@ -75,7 +75,6 @@ class _VerifyInputState extends ConsumerState<VerifyInput> {
           const SizedBox(height: 10),
 
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. 인증번호 입력 필드
               Expanded(
@@ -105,7 +104,6 @@ class _VerifyInputState extends ConsumerState<VerifyInput> {
                 onPressed: isLoading || state.isVerified ? null : _verifyCode,
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(color: Colors.grey),
-                  minimumSize: const Size(100, 56), // 텍스트 필드와 높이 맞추기
                 ),
                 child: isLoading
                     ? const SizedBox(
