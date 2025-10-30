@@ -6,6 +6,7 @@ import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import com.coach.chiselbot.domain.user.login.LoginStrategy;
 import com.coach.chiselbot.domain.user.login.LoginStrategyFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,9 @@ public class UserService {
     private final LoginStrategyFactory loginStrategyFactory;
     private final EmailVerificationService emailVerificationService;
 
+    @Value("${app.auth.require-email-verification}")
+    private boolean requireEmailVerification;
+
     public User signUp(UserRequestDTO.SignUp dto) {
 
         String email = dto.getEmail().trim().toLowerCase();
@@ -33,10 +37,11 @@ public class UserService {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-
-        boolean verified = emailVerificationService.isRecentlyVerified(email);
-        if (!verified) {
-            throw new IllegalArgumentException("이메일 인증이 필요합니다.");
+        if (requireEmailVerification) {
+            boolean verified = emailVerificationService.isRecentlyVerified(email);
+            if (!verified) {
+                throw new IllegalArgumentException("이메일 인증이 필요합니다.");
+            }
         }
 
 

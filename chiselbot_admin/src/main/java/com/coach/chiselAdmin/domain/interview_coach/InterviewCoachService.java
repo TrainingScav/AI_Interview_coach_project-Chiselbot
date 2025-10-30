@@ -1,5 +1,7 @@
 package com.coach.chiselAdmin.domain.interview_coach;
 
+import com.coach.chiselAdmin.domain.admin.Admin;
+import com.coach.chiselAdmin.domain.admin.AdminRepository;
 import com.coach.chiselAdmin.domain.interview_category.InterviewCategory;
 import com.coach.chiselAdmin.domain.interview_category.InterviewCategoryRepository;
 import com.coach.chiselAdmin.domain.interview_coach.dto.FeedbackRequest;
@@ -32,6 +34,7 @@ public class InterviewCoachService {
     private final InterviewQuestionRepository questionRepository;
     private final InterviewCategoryRepository interviewCategoryRepository;
     private final EmbeddingService embeddingService;
+    private final AdminRepository adminRepository;
 
     private final Gson gson = new Gson();
 
@@ -105,10 +108,14 @@ public class InterviewCoachService {
         InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리를 찾을 수 없습니다"));
         // admin Entity 생성 시 admin 검증 로직 추가 예정
+
+        Admin admin = adminRepository.findById(request.getAdminId())
+                .orElseThrow(() -> new NoSuchElementException("해당 ID의 관리자를 찾을 수 없습니다"));
+
         InterviewQuestion newQuestion = new InterviewQuestion();
 
         newQuestion.setCategoryId(category);
-        newQuestion.setAdminId(null);
+        newQuestion.setAdminId(admin);
         newQuestion.setQuestionText(request.getQuestionText());
         newQuestion.setInterviewLevel(request.getInterviewLevel());
 
