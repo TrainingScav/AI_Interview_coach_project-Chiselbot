@@ -1,9 +1,8 @@
-package com.coach.chiselbot._global.config;
+package com.coach.chiselbot._global.config.loder;
 
 import com.coach.chiselbot.domain.user.User;
 import com.coach.chiselbot.domain.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Insert;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -12,13 +11,12 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
 @Profile("dev")
 @Order(1)
-public class DataLoader implements CommandLineRunner {
+public class UserDataLoader implements CommandLineRunner {
 
     private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder passwordEncoder;
