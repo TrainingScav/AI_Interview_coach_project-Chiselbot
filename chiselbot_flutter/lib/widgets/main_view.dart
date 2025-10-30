@@ -12,7 +12,6 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   bool _isLoading = true;
-  int _selectedIndex = -1;
   final double _cardRatio = .15;
 
   @override
@@ -30,32 +29,9 @@ class _MainViewState extends State<MainView> {
     }
   }
 
-  void _onCardTap(int newIndex) {
-    setState(() {
-      if (_selectedIndex == newIndex) {
-        _selectedIndex = -1;
-      } else {
-        _selectedIndex = newIndex;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
-    final bool shouldShowSecondList = _selectedIndex == 0;
-
-    final Widget secondCardList = SizedBox(
-      key: const ValueKey('skillCardView'),
-      height: mediaQuery.size.height * _cardRatio,
-      child: CardView(items: CardDataFactory.createSkillCards()),
-    );
-
-    // 숨겨진 상태일 때 표시할 위젯 (빈 컨테이너)
-    final Widget hiddenCardList = SizedBox(
-      key: const ValueKey('hidden'),
-      height: 0,
-    );
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -65,39 +41,69 @@ class _MainViewState extends State<MainView> {
         _buildTitles(context, mediaQuery),
         if (_isLoading)
           SizedBox(
-            height: mediaQuery.size.height * _cardRatio * 2,
-            child: Center(
+            height: mediaQuery.size.height * _cardRatio * 3,
+            child: const Center(
               child: SpinKitCircle(
                 color: Colors.grey,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 300),
               ),
             ),
           )
         else ...[
-          SizedBox(
-            height: mediaQuery.size.height * _cardRatio,
-            child: CardView(
-              // items: CardDataFactory.createAskCards(),
-              items: CardDataFactory.createSkillCards(),
-              // onCardTap: _onCardTap,
-              selectedIndex: _selectedIndex,
-            ),
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "백엔드",
+            CardDataFactory.createBackendCards(),
           ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 400),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return SizeTransition(
-                sizeFactor: animation,
-                axisAlignment: -3,
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
-              );
-            },
-            child: shouldShowSecondList ? secondCardList : hiddenCardList,
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "프론트엔드",
+            CardDataFactory.createFrontendCards(),
+          ),
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "데이터베이스",
+            CardDataFactory.createDatabaseCards(),
           ),
         ],
+      ],
+    );
+  }
+
+  Widget _buildCategorySection(
+    BuildContext context,
+    MediaQueryData mediaQuery,
+    String categoryTitle,
+    List<CardData> cards,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: mediaQuery.size.width * .1,
+            top: 32,
+            bottom: 1,
+          ),
+          child: Text(
+            categoryTitle,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white70,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: mediaQuery.size.height * _cardRatio,
+          child: CardView(
+            items: cards,
+            selectedIndex: -1,
+          ),
+        ),
       ],
     );
   }
@@ -111,20 +117,24 @@ class _MainViewState extends State<MainView> {
             top: mediaQuery.padding.top,
             left: mediaQuery.size.width * .1,
           ),
-          child: const Text("WELCOME BACK,",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              )),
+          child: const Text(
+            "WELCOME BACK,",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(left: mediaQuery.size.width * .1),
-          child: const Text("(USERNAME)",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
-        )
+          child: const Text(
+            "(USERNAME)",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }

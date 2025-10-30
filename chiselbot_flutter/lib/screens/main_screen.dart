@@ -1,4 +1,5 @@
 import 'package:ai_interview/widgets/main_appbar.dart';
+import 'package:ai_interview/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +14,8 @@ class MainScreen extends ConsumerWidget {
       canPop: false,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: MainAppbar(),
+        appBar: const MainAppbar(),
+        drawer: const MainDrawer(),
         body: const MainView(),
       ),
     );
