@@ -1,3 +1,7 @@
+app:
+  auth:
+    require-email-verification: false # 기본값: 개발에 우호적
+
 spring:
   profiles:
     active: dev
