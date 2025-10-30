@@ -4,7 +4,7 @@ app:
 
 spring:
   profiles:
-    active: dev
+    active: local
 
 server:
   port: 8080
