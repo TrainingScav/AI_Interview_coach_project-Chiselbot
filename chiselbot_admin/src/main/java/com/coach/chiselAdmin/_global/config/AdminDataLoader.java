@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,14 +23,18 @@ public class AdminDataLoader implements CommandLineRunner {
     private final AdminRepository adminRepository;
     private final InterviewCategoryRepository categoryRepository;
     private final InterviewQuestionRepository questionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
+
+        String password = passwordEncoder.encode("1234");
+
         if (adminRepository.count() == 0) {
             Admin admin = Admin.builder()
                     .adminName("관리자")
                     .email("admin@chisel.com")
-                    .password("1234")
+                    .password(password)
                     .build();
 
             adminRepository.save(admin);
