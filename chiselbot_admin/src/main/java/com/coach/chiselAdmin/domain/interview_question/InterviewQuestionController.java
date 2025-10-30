@@ -45,8 +45,15 @@ public class InterviewQuestionController {
         return "question/question_list";
     }
 
+
     @GetMapping("detail/{questionId}")
-    public String questionDetail(@PathVariable(name = "questionId") Long questionId){
+    public String questionDetail(@PathVariable(name = "questionId") Long questionId,
+                                 Model model){
+
+        QuestionResponse.FindById question = interviewQuestionService.getQuestionDetail(questionId);
+
+        model.addAttribute("categories", interviewQuestionService.getAllCategories());
+        model.addAttribute("question", question);
 
         return "question/question_detail";
     }
