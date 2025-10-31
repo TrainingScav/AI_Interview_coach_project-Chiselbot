@@ -13,4 +13,11 @@ public class AnswerRequestDTO {
         private String content;
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Update {
+        private String content;
+    }
+
 }
