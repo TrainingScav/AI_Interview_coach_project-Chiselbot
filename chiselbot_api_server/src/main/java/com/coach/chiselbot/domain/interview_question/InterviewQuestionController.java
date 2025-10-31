@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -62,21 +63,20 @@ public class InterviewQuestionController {
     @PostMapping("/create")
     public String createQuestion(
             @ModelAttribute("question") QuestionRequest.CreateQuestion request,
-            Model model,
+            RedirectAttributes rttr,
             HttpSession session) {
 
         Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
         request.setAdminId(admin.getId());
         QuestionResponse.FindById createdQuestion = interviewQuestionService.createQuestion(request);
 
-        model.addAttribute("question", createdQuestion);
-        model.addAttribute("message", "Question 저장 성공");
+        rttr.addFlashAttribute("message", "질문이 생성 되었습니다");
 
         return "redirect:/admin/questions";
     }
 
     /**
-     * <p>질문 등록 페이지 이동</p>
+     * <p>Question 등록 페이지 이동</p>
      * */
     @GetMapping("/create")
     public String createQuestionPg(Model model){
@@ -85,4 +85,33 @@ public class InterviewQuestionController {
         model.addAttribute("question", new QuestionRequest.CreateQuestion());
         return "question/question_create";
     }
+
+    /**
+     * <p>Question 수정</p>
+     * */
+    @PostMapping("/update")
+    public String updateQuestion(RedirectAttributes rttr,
+                                 HttpSession session,
+                                 @ModelAttribute("question") QuestionRequest.UpdateQuestion request){
+        Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
+        request.setAdminId(admin.getId());
+        QuestionResponse.FindById updateQuestion = interviewQuestionService.updateQuestion(request);
+
+        rttr.addFlashAttribute("message", "수정이 완료되었습니다");
+
+        return "redirect:/admin/questions";
+    }
+
+    /**
+     * <p>Question 삭제</p>
+     * */
+
+    @PostMapping("/{questionId}/delete")
+    public String deleteQuestion(RedirectAttributes rttr,
+                                 @PathVariable("questionId") Long questionId){
+        interviewQuestionService.deleteQuestion(questionId);
+        rttr.addFlashAttribute("message", "삭제가 완료되었습니다");
+        return "redirect:/admin/questions";
+    }
+
 }
