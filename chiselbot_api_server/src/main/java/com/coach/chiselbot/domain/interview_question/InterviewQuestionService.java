@@ -107,13 +107,67 @@ public class InterviewQuestionService {
     }
 
     // Admin - 질문 수정 기능
+    @Transactional
+    public QuestionResponse.FindById updateQuestion(QuestionRequest.UpdateQuestion request){
+        InterviewQuestion newQuestion = questionRepository.findById(request.getQuestionId())
+                .orElseThrow(() -> new NoSuchElementException("해당 질문을 찾을 수 없습니다"));
+
+        Admin newAdmin = adminRepository.findById(request.getAdminId())
+                .orElseThrow(() -> new NoSuchElementException("해당 관리자를 찾을 수 없습니다"));
+
+        InterviewCategory newCategory = interviewCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리를 찾을 수 없습니다"));
+
+        boolean intentChanged = isTextChanged(newQuestion.getIntentText(), request.getIntentText());
+        boolean pointChanged = isTextChanged(newQuestion.getPointText(), request.getPointText());
+        boolean answerChanged = isTextChanged(newQuestion.getAnswerText(), request.getAnswerText());
 
 
+        // 바뀐 값으로 수정
+        newQuestion.setQuestionText(request.getQuestionText());
+        newQuestion.setInterviewLevel(request.getInterviewLevel());
+        newQuestion.setAdminId(newAdmin);
+        newQuestion.setCategoryId(newCategory);
+
+        // Level1 이고 입력값이 바뀌었을 때
+        if(request.getInterviewLevel() == InterviewLevel.LEVEL_1 && answerChanged){
+            newQuestion.setAnswerText(request.getAnswerText());
+            float[] answerVector = embeddingService.embed(request.getAnswerText());
+            newQuestion.setAnswerVector(gson.toJson(answerVector));
+        }
+        else if(request.getInterviewLevel() != InterviewLevel.LEVEL_1){ // Level이 1이 아닐 때
+            newQuestion.setIntentText(request.getIntentText());
+            newQuestion.setPointText(request.getPointText());
+
+            // 값들이 바뀌었을 때만 다시 임베딩
+            if(intentChanged){
+                float[] intentVector = embeddingService.embed(request.getIntentText());
+                newQuestion.setIntentVector(gson.toJson(intentVector));
+            }
+            if(pointChanged){
+                float[] pointVector = embeddingService.embed(request.getPointText());
+                newQuestion.setPointVector(gson.toJson(pointVector));
+            }
+        }
+
+        questionRepository.save(newQuestion);
+        return new QuestionResponse.FindById(newQuestion);
+    }
+
+    public void deleteQuestion(Long questionId){
+
+        // delete는 조회 없어도 오류 안떠서 question 조회 생략
+        // admin 인지 확인하는 절차 추후 추가??
+        questionRepository.deleteById(questionId);
+    }
+
+
+    // 기존 값과 같으면 false, 다르면 true 반환
     private boolean isTextChanged(String oldText, String newText){
         if(oldText == null && newText == null) return false;
         if(oldText == null || newText == null) return true;
         // 공백, 탭, 줄바꿈 제거 후 비교
-        String normalizedOld = oldText.replaceAll("\\s+", "");
+        String normalizedOld = oldText.replaceAll("\\s+", ""); // `\s+` 모든 공백 제거 정규식
         String normalizedNew = newText.replaceAll("\\s+", "");
         return !normalizedOld.equals(normalizedNew);
     }
