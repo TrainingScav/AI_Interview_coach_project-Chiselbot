@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,12 @@ public class InterviewQuestionService {
 
     public List<InterviewCategory> getAllCategories(){
         return interviewCategoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public QuestionResponse.FindById getQuestionDetail(Long questionId){
+        InterviewQuestion interviewQuestion = interviewQuestionRepository.findById(questionId)
+                .orElseThrow(()-> new NoSuchElementException(" 해당 질문이 없습니다"));
+        return new QuestionResponse.FindById(interviewQuestion);
     }
 }

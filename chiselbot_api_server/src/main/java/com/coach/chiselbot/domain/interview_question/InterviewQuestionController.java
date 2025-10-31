@@ -24,10 +24,10 @@ public class InterviewQuestionController {
 
     /**
      * <p>Question List 화면으로 이동</p>
-     */
+     * */
     @GetMapping
     public String getQuestionList(@RequestParam(defaultValue = "0") int page,
-                                  Model model) {
+                                  Model model){
         Page<QuestionResponse.FindAll> questionPage = interviewQuestionService.getQuestionList(page);
         List<QuestionResponse.FindAll> questionList = questionPage.getContent();
 
@@ -45,15 +45,22 @@ public class InterviewQuestionController {
         return "question/question_list";
     }
 
+
     @GetMapping("detail/{questionId}")
-    public String questionDetail(@PathVariable(name = "questionId") Long questionId) {
+    public String questionDetail(@PathVariable(name = "questionId") Long questionId,
+                                 Model model){
+
+        QuestionResponse.FindById question = interviewQuestionService.getQuestionDetail(questionId);
+
+        model.addAttribute("categories", interviewQuestionService.getAllCategories());
+        model.addAttribute("question", question);
 
         return "question/question_detail";
     }
 
     /**
      * <p>Question 등록</p>
-     */
+     * */
     @PostMapping("/create")
     public String createQuestion(
             @ModelAttribute("question") QuestionRequest.CreateQuestion request,
@@ -72,7 +79,7 @@ public class InterviewQuestionController {
     }
 
     @GetMapping("/create")
-    public String createQuestionPg(Model model) {
+    public String createQuestionPg(Model model){
         model.addAttribute("categories", interviewQuestionService.getAllCategories());
         model.addAttribute("levels", InterviewLevel.values()); // enum 전체
         model.addAttribute("question", new QuestionRequest.CreateQuestion());

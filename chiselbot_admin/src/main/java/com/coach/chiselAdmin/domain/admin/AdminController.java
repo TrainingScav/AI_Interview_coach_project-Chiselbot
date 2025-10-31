@@ -18,7 +18,7 @@ public class AdminController {
      */
     @GetMapping("/login-form")
     public String loginForm() {
-        return "login";
+        return "auth/login";
     }
 
     /**

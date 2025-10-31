@@ -45,6 +45,12 @@ public class InquiryResponseDTO {
         private String author;
         private String adminName;
         private Timestamp createdAt;
+        // 추가
+        private Long userId;
+        private Long adminId;
+        private String answerContent;
+        private Timestamp answeredAt;
+        private Timestamp updatedAt;
 
         public static DetailDTO from(Inquiry inquiry) {
             return DetailDTO.builder()
@@ -52,9 +58,15 @@ public class InquiryResponseDTO {
                     .title(inquiry.getTitle())
                     .content(inquiry.getContent())
                     .status(inquiry.getStatus())
-                    .author(inquiry.getUser().getName())
-                    .adminName(inquiry.getAdminName())
                     .createdAt(inquiry.getCreatedAt())
+                    // 추가
+                    .userId(inquiry.getUser() != null ? inquiry.getUser().getId() : null)
+                    .adminId(inquiry.getAdmin() != null ? inquiry.getAdmin().getId() : null)
+                    .answerContent(inquiry.getAnswerContent())
+                    .answeredAt(inquiry.getAnsweredAt())
+                    .updatedAt(inquiry.getUpdatedAt())
+                    .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)
+                    .adminName(inquiry.getAdmin() != null ? inquiry.getAdmin().getName() : null)
                     .build();
         }
     }

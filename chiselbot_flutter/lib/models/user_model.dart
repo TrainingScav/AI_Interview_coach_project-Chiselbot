@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
+// 사용자 정보 Data
 @freezed
 class UserModel with _$UserModel {
   const factory UserModel({

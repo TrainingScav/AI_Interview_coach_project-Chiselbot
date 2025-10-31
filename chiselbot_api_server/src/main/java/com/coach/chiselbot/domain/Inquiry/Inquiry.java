@@ -23,12 +23,19 @@ public class Inquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 작성자
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 답변자(관리자) 임시 컬럼
-    private String adminName;
+    //private String adminName;
+
+    // 답변자(관리자) - 답변 전엔 null 가능
+    // admin 만들어지기 전에 연결 확인용
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "admin_id")
+    private User admin;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -40,16 +47,20 @@ public class Inquiry {
     private String answerContent;
 
     @Enumerated(EnumType.STRING)
-    private InquiryStatus status;
+    @Column(nullable = false)
+    private InquiryStatus status = InquiryStatus.WAITING;
 
     @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
 
     // 문의 등록 시간 임시 컬럼
-    private String answeredAt;
+    @Column(name = "answered_at") // nullable
+    private Timestamp answeredAt;
 
     @UpdateTimestamp
-    private Timestamp updateAt;
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
 
 
 }

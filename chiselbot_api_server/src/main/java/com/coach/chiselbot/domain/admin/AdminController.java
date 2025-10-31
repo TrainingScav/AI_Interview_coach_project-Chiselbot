@@ -29,7 +29,7 @@ public class AdminController {
         Admin admin = adminService.login(request);
         session.setAttribute(Define.SESSION_USER, admin);
         System.out.println("세션 ID: " + session.getId());
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     /**

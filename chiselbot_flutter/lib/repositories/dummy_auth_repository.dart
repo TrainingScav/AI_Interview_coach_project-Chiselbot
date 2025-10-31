@@ -9,7 +9,7 @@ import 'i_auth_repository.dart';
 class DummyAuthRepository implements IAuthRepository {
   static const Duration _delay = Duration(seconds: 1); // 응답 지연 시간 시뮬레이션
   static const String _dummyCode = "123456"; // 테스트용 인증번호
-  static const String _dummyUserId = "test1234@gmail.com"; // 찾은 아이디
+  static const String _dummyUserId = "test123@naver.com"; // 찾은 아이디
 
   // ========================== 1. 로그인 ==========================
   @override
@@ -40,7 +40,11 @@ class DummyAuthRepository implements IAuthRepository {
     required AuthType type,
   }) async {
     await Future.delayed(_delay);
-    final typeName = type == AuthType.findId ? "휴대폰(ID)" : "이메일(PW)";
+    final typeName = type == AuthType.findId
+        ? "휴대폰(ID)"
+        : type == AuthType.findPw
+            ? "이메일(PW)"
+            : "회원가입 이메일";
     debugPrint(
         "[DUMMY REPO] $typeName 인증 요청 ($contact): 인증번호 $_dummyCode 전송 가정");
     // 서버가 인증번호 전송에 성공했다고 가정하고 true 반환
@@ -62,9 +66,10 @@ class DummyAuthRepository implements IAuthRepository {
       if (type == AuthType.findId) {
         // 아이디 찾기 성공: foundId를 담아 반환
         return const AuthResultModel(foundId: _dummyUserId);
-      } else {
-        // 비밀번호 찾기 성공: 재설정 토큰을 담아 반환
+      } else if (type == AuthType.findPw) {
         return const AuthResultModel(resetToken: 'dummy_reset_token_0987');
+      } else {
+        return const AuthResultModel();
       }
     } else {
       debugPrint("[DUMMY REPO] 인증번호 불일치.");

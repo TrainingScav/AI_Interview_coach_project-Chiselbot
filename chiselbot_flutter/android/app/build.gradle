@@ -37,9 +37,9 @@ android {
         versionName = flutter.versionName
 
         // manifestPlaceholders 추가
-        manifestPlaceholders = [
-                KAKAO_NATIVE_APP_KEY: localProperties.getProperty('KAKAO_NATIVE_APP_KEY')
-        ]
+//        manifestPlaceholders = [
+//                KAKAO_NATIVE_APP_KEY: localProperties.getProperty('KAKAO_NATIVE_APP_KEY')
+//        ]
 
     }
 
