@@ -67,7 +67,7 @@ public class InquiryService {
         inquiry.setTitle(dto.getTitle());
         inquiry.setContent(dto.getContent());
 
-        return inquiryRepository.save(inquiry);
+        return inquiry;
     }
 
     /**
