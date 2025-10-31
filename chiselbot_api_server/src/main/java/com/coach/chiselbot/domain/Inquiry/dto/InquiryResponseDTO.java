@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class InquiryResponseDTO {
 
@@ -20,7 +20,7 @@ public class InquiryResponseDTO {
         private String title;
         private InquiryStatus status;
         private String author;
-        private Timestamp createdAt;
+        private LocalDateTime createdAt;
 
         public static ListDTO from(Inquiry inquiry) {
             return ListDTO.builder()
@@ -43,12 +43,12 @@ public class InquiryResponseDTO {
         private String content;
         private InquiryStatus status;
         private String author;
-        private Timestamp createdAt;
+        private LocalDateTime createdAt;
         // 추가
         private Long userId;
         private String answerContent;
-        private Timestamp answeredAt;
-        private Timestamp updatedAt;
+        private LocalDateTime answeredAt;
+        private LocalDateTime updatedAt;
 
         public static DetailDTO from(Inquiry inquiry) {
             return DetailDTO.builder()
@@ -61,7 +61,7 @@ public class InquiryResponseDTO {
                     .userId(inquiry.getUser() != null ? inquiry.getUser().getId() : null)
                     .answerContent(inquiry.getAnswerContent())
                     .answeredAt(inquiry.getAnswer().getCreatedAt())
-                    .updatedAt(inquiry.getUpdatedAt())
+                    .updatedAt(inquiry.getModifiedAt())
                     .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)
                     .build();
         }
