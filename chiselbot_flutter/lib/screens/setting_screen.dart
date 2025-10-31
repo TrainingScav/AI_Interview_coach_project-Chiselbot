@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../providers/auth_notifier.dart'; // 로그아웃 처리를 위해 필요
+import '../providers/auth_notifier.dart';
+import '../widgets/theme_select_dialog.dart';
 
 class SettingsScreen extends ConsumerWidget {
   static const String routeName = '/settings';
@@ -10,57 +12,61 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 테마 색상 제거하고 기본 Scaffold 색상 사용
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('설정'),
-        // 색상 관련 설정 제거
-      ),
+      appBar: AppBar(),
       body: ListView(
         children: [
-          // 1. 프로필 수정
+          // 프로필 수정
           ListTile(
+            leading: const Icon(FontAwesomeIcons.circleUser, size: 16),
             title: const Text('프로필 수정'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
               // TODO: 프로필 수정 화면으로 이동
             },
           ),
-          const Divider(),
-
-          // 2. 화면 테마
+          Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+          // 화면 테마
           ListTile(
+            leading: const Icon(FontAwesomeIcons.circleHalfStroke, size: 16),
             title: const Text('화면 테마'),
-            subtitle: const Text('현재 테마: 시스템 기본'), // 현재 상태 표시
+            subtitle: const Text('현재 테마: 다크',
+                style: TextStyle(fontSize: 12)), // 현재 상태 표시
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              // TODO: 테마 변경 다이얼로그 또는 화면 띄우기
+              showDialog(
+                context: context,
+                builder: (context) => const ThemeSelectDialog(),
+              );
             },
           ),
-          const Divider(),
-
-          // 3. 문의하기 (Q&A)
+          Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+          // 문의하기 (Q&A)
           ListTile(
-            title: const Text('Q&A / 문의하기'),
-            trailing: const Icon(Icons.launch, size: 16),
+            leading: const Icon(FontAwesomeIcons.circleQuestion, size: 16),
+            title: const Text('문의하기(Q&A)'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              // TODO: 이메일 앱 실행 또는 문의 페이지로 이동
+              Navigator.of(context).pushNamed(
+                '/qna',
+              );
             },
           ),
-          const Divider(),
-
-          // 4. 로그아웃 (맨 아래 배치)
+          Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+          const SizedBox(height: 440),
+          // 로그아웃
           ListTile(
+            leading: const Icon(
+              FontAwesomeIcons.rightFromBracket,
+              size: 16,
+              color: Colors.red,
+            ),
             title: const Text('로그아웃', style: TextStyle(color: Colors.red)),
             onTap: () async {
-              // 로그아웃 로직 호출 및 화면 전환
               await ref.read(authNotifierProvider.notifier).logout();
-
               if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login',
-                  (route) => false,
-                );
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login', (route) => false);
               }
             },
           ),

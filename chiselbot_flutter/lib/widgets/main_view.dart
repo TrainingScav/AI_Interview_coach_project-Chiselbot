@@ -1,12 +1,10 @@
-import 'package:ai_interview/models/cards.dart';
-import 'package:ai_interview/widgets/card_view.dart';
-import 'package:ai_interview/widgets/qna_quick_card.dart';
-import 'package:ai_interview/widgets/notice_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:ai_interview/providers/app_providers.dart';
 
 import '../core/constants.dart';
+import '../models/cards.dart';
+import 'card_view.dart';
+import 'notice_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -119,7 +117,7 @@ class _MainViewState extends State<MainView> {
         Padding(
           padding: EdgeInsets.only(
             top: mediaQuery.padding.top,
-            left: mediaQuery.size.width * .1,
+            left: mediaQuery.size.width * .05,
           ),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,

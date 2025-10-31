@@ -1,9 +1,9 @@
-import 'package:ai_interview/screens/find_id_pw_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+import '../core/app_router.dart';
 import '../providers/auth_notifier.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
@@ -169,11 +169,9 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   const Text(" | "),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const FindIdPwScreen(),
-                        ),
+                        RoutePaths.findIdPw, // AppRouter에 정의된 경로 사용
                       );
                     },
                     child: const Text(
