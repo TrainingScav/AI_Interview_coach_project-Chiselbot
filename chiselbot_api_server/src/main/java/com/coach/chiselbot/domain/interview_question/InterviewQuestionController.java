@@ -70,7 +70,7 @@ public class InterviewQuestionController {
         request.setAdminId(admin.getId());
         QuestionResponse.FindById createdQuestion = interviewQuestionService.createQuestion(request);
 
-        rttr.addFlashAttribute("message", "질문이 생성 되었습니다");
+        rttr.addFlashAttribute("message", Define.SUCCESS);
 
         return "redirect:/admin/questions";
     }
@@ -97,7 +97,7 @@ public class InterviewQuestionController {
         request.setAdminId(admin.getId());
         QuestionResponse.FindById updateQuestion = interviewQuestionService.updateQuestion(request);
 
-        rttr.addFlashAttribute("message", "수정이 완료되었습니다");
+        rttr.addFlashAttribute("message", Define.SUCCESS);
 
         return "redirect:/admin/questions";
     }
@@ -110,7 +110,7 @@ public class InterviewQuestionController {
     public String deleteQuestion(RedirectAttributes rttr,
                                  @PathVariable("questionId") Long questionId){
         interviewQuestionService.deleteQuestion(questionId);
-        rttr.addFlashAttribute("message", "삭제가 완료되었습니다");
+        rttr.addFlashAttribute("message", Define.SUCCESS);
         return "redirect:/admin/questions";
     }
 
