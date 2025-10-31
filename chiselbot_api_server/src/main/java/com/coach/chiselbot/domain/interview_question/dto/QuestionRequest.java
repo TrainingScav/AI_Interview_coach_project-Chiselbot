@@ -20,4 +20,17 @@ public class QuestionRequest {
         private String answerText;
         private String answerVector;
     }
+
+    @Getter
+    @Setter
+    public static class UpdateQuestion{
+        private Long questionId;
+        private Long categoryId;
+        private Long adminId;
+        private InterviewLevel interviewLevel;
+        private String questionText;
+        private String intentText;
+        private String pointText;
+        private String answerText;
+    }
 }
