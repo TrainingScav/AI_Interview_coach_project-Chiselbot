@@ -1,27 +1,17 @@
 package com.coach.chiselbot.domain.interview_coach;
 
-import com.coach.chiselbot.domain.admin.Admin;
-import com.coach.chiselbot.domain.admin.AdminRepository;
-import com.coach.chiselbot.domain.interview_category.InterviewCategory;
-import com.coach.chiselbot.domain.interview_category.InterviewCategoryRepository;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackRequest;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
 import com.coach.chiselbot.domain.interview_coach.feedback.FeedbackStrategy;
 import com.coach.chiselbot.domain.interview_coach.feedback.FeedbackStrategyFactory;
 import com.coach.chiselbot.domain.interview_coach.prompt.PromptFactory;
-import com.coach.chiselbot.domain.interview_question.InterviewLevel;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestionRepository;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +22,6 @@ public class InterviewCoachService {
     private final ChatModel chatModel;
     private final ObjectMapper objectMapper; // json 변환용
     private final InterviewQuestionRepository questionRepository;
-    private final InterviewCategoryRepository interviewCategoryRepository;
-    private final EmbeddingService embeddingService;
-    private final AdminRepository adminRepository;
-
-    private final Gson gson = new Gson();
 
     public FeedbackResponse.FeedbackResult getFeedback(FeedbackRequest.AnswerRequest feedbackRequest) {
 
@@ -100,63 +85,6 @@ public class InterviewCoachService {
         }
 
         return result;
-    }
-
-    // Admin - 질문등록 기능
-    public QuestionResponse.FindById createQuestion(QuestionRequest.CreateQuestion request) {
-
-        InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리를 찾을 수 없습니다"));
-        // admin Entity 생성 시 admin 검증 로직 추가 예정
-
-        Admin admin = adminRepository.findById(request.getAdminId())
-                .orElseThrow(() -> new NoSuchElementException("해당 ID의 관리자를 찾을 수 없습니다"));
-
-        InterviewQuestion newQuestion = new InterviewQuestion();
-
-        newQuestion.setCategoryId(category);
-        newQuestion.setAdminId(admin);
-        newQuestion.setQuestionText(request.getQuestionText());
-        newQuestion.setInterviewLevel(request.getInterviewLevel());
-
-        // Level 1 문제일 때, answer과 answerVector 저장
-        if (request.getInterviewLevel() == InterviewLevel.LEVEL_1) {
-            newQuestion.setAnswerText(request.getAnswerText());
-
-            if (request.getAnswerText() != null && !request.getAnswerText().isBlank()) {
-                // 정답데이터 임베딩 후 gson 를 사용하여 Json 형태로 변환한 후 저장
-                // 1. 임베딩
-                float[] answerVector = embeddingService.embed(request.getAnswerText());
-                // 2. gson 으로 String 형태의 Json 으로 변환
-                String answerVectorJson = gson.toJson(answerVector);
-                // 3. 저장
-                newQuestion.setAnswerVector(answerVectorJson);
-                questionRepository.save(newQuestion);
-            }
-        }
-        // Level 2 이상일 때, intent, point와 각각의 Vector 값을 저장
-        else {
-            newQuestion.setIntentText(request.getIntentText());
-            newQuestion.setPointText(request.getPointText());
-
-            if (request.getIntentText() != null && !request.getIntentText().isBlank() &&
-                    request.getPointText() != null && !request.getPointText().isBlank()) {
-                // intentVector 임베딩 후 저장
-                float[] intentVector = embeddingService.embed(request.getIntentText());
-                String intentVectorJson = gson.toJson(intentVector);
-                newQuestion.setIntentVector(intentVectorJson);
-
-                // pointVector 임베딩 후 저장
-                float[] pointVector = embeddingService.embed(request.getPointText());
-                String pointVectorJson = gson.toJson(pointVector);
-                newQuestion.setPointVector(pointVectorJson);
-                questionRepository.save(newQuestion);
-            }
-        }
-
-        // 디버깅
-        System.out.println("저장된 Question 객체 : " + newQuestion);
-        return new QuestionResponse.FindById(newQuestion);
     }
 
 }

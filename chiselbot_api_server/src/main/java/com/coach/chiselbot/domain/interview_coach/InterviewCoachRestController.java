@@ -3,6 +3,7 @@ package com.coach.chiselbot.domain.interview_coach;
 import com.coach.chiselbot._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackRequest;
 import com.coach.chiselbot.domain.interview_coach.dto.FeedbackResponse;
+import com.coach.chiselbot.domain.interview_question.InterviewQuestionService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class InterviewCoachRestController {
 
     private final InterviewCoachService interviewCoachService;
+    private final InterviewQuestionService interviewQuestionService;
 
 
     /**
@@ -95,7 +97,7 @@ public class InterviewCoachRestController {
      */
     @PostMapping("/createQuestion")
     public ResponseEntity<?> createQuestion(@RequestBody QuestionRequest.CreateQuestion request) {
-        QuestionResponse.FindById createdQuestion = interviewCoachService.createQuestion(request);
+        QuestionResponse.FindById createdQuestion = interviewQuestionService.createQuestion(request);
 
         return ResponseEntity.ok(CommonResponseDto.success(createdQuestion, "Question 저장 성공"));
     }
