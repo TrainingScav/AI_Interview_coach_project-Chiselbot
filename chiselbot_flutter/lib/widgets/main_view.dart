@@ -1,7 +1,10 @@
 import 'package:ai_interview/models/cards.dart';
 import 'package:ai_interview/widgets/card_view.dart';
+import 'package:ai_interview/widgets/notice_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../core/constants.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -39,6 +42,8 @@ class _MainViewState extends State<MainView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTitles(context, mediaQuery),
+        Divider(color: Colors.grey.shade800),
+        NoticeView(),
         if (_isLoading)
           SizedBox(
             height: mediaQuery.size.height * _cardRatio * 3,
@@ -82,10 +87,11 @@ class _MainViewState extends State<MainView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Divider(color: Colors.grey.shade800, height: 32),
         Padding(
           padding: EdgeInsets.only(
             left: mediaQuery.size.width * .1,
-            top: 32,
+            top: 1,
             bottom: 1,
           ),
           child: Text(
@@ -117,22 +123,29 @@ class _MainViewState extends State<MainView> {
             top: mediaQuery.padding.top,
             left: mediaQuery.size.width * .1,
           ),
-          child: const Text(
-            "WELCOME BACK,",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: mediaQuery.size.width * .1),
-          child: const Text(
-            "(USERNAME)",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                Constants.logoAddress,
+                height: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                "안녕하세요, ",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "개발자님",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ],

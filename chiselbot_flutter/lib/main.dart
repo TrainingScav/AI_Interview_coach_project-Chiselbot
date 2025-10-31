@@ -4,25 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'screens/login_screen.dart';
+import 'screens/setting_screen.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: ".env");
-  // KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'] ?? '');
-  //
-  // await printKeyHash();
-
   runApp(ProviderScope(child: MyApp()));
 }
 
-// Future<void> printKeyHash() async {
-//   try {
-//     final keyHash = await KakaoSdk.origin;
-//     print("현재 사용 중인 키 해시: $keyHash");
-//   } catch (e) {
-//     print("키 해시를 가져오는 중 오류 발생: $e");
-//   }
-// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,6 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "AI Interview Coach",
       theme: ThemeData(
+          dialogBackgroundColor: Colors.black,
           fontFamily: GoogleFonts.poppins().fontFamily,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.black,
@@ -61,6 +49,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
+        '/settings': (ctx) => const SettingsScreen(),
       },
       initialRoute: '/',
     );

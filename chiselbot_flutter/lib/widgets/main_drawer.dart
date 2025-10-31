@@ -8,80 +8,113 @@ class MainDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      backgroundColor: Colors.grey[900],
+      width: screenWidth * .85,
+      child: Column(
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.grey[900],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: [
-                const CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage('https://picsum.photos/60'),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  '(USERNAME)',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.black,
+                        ),
+                        SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '개발자',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'test1@naver.com',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const Text(
-                  'user@example.com',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('프로필'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // TODO: 프로필 화면 이동
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: const Text('면접 보관함'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // TODO: 기록 화면 이동
+                  },
                 ),
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('프로필'),
-            onTap: () {
-              Navigator.pop(context);
-              // TODO: 프로필 화면 이동
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: const Text('면접 기록'),
-            onTap: () {
-              Navigator.pop(context);
-              // TODO: 기록 화면 이동
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('설정'),
-            onTap: () {
-              Navigator.pop(context);
-              // TODO: 설정 화면 이동
-            },
-          ),
-          const Divider(),
-          ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text('로그아웃', style: TextStyle(color: Colors.red)),
-              onTap: () async {
-                // 로그아웃 처리
-                await ref.read(authNotifierProvider.notifier).logout();
+          Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+          Row(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ListTile(
+                    leading: const Icon(Icons.logout, color: Colors.red),
+                    title:
+                        const Text('로그아웃', style: TextStyle(color: Colors.red)),
+                    onTap: () async {
+                      // 로그아웃 처리
+                      await ref.read(authNotifierProvider.notifier).logout();
 
-                if (context.mounted) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login',
-                    (route) => false,
-                  );
-                }
-              }),
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/login',
+                          (route) => false,
+                        );
+                      }
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).pushNamed(
+                        '/settings',
+                      );
+                    },
+                    child: const Icon(Icons.settings),
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom),
         ],
       ),
     );
