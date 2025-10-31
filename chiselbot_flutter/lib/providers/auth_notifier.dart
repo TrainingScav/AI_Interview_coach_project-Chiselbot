@@ -33,9 +33,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String password,
   }) async {
     // 1. 로딩 상태 시작
-    state = state.copyWith(
-      isLoading: true,
-      errorMessage: null,
+    state = state.when(
+      (isLoading, isLoggedIn, user, token, errorMessage) => AuthState(
+        isLoading: true,
+        isLoggedIn: isLoggedIn,
+        user: user,
+        token: token,
+        errorMessage: null,
+      ),
+      unauthenticated: () => const AuthState(
+        isLoading: true,
+        errorMessage: null,
+      ),
     );
 
     try {
@@ -55,7 +64,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       // 4. 상태 업데이트 (성공)
-      state = state.copyWith(
+      state = AuthState(
         isLoading: false,
         isLoggedIn: true,
         user: user,
@@ -65,9 +74,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
       debugPrint('[AUTH] 로그인 성공: ${result.userId}');
     } catch (e) {
       // 5. 에러 처리
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.',
+      state = state.when(
+        (isLoading, isLoggedIn, user, token, errorMessage) => AuthState(
+          isLoading: false,
+          isLoggedIn: isLoggedIn,
+          user: user,
+          token: token,
+          errorMessage: '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.',
+        ),
+        unauthenticated: () => const AuthState(
+          isLoading: false,
+          errorMessage: '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.',
+        ),
       );
       debugPrint('[AUTH] 로그인 실패: $e');
       rethrow;
@@ -77,9 +95,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// 회원가입
   Future<void> signUp(UserModel user) async {
     // 1. 로딩 상태 시작
-    state = state.copyWith(
-      isLoading: true,
-      errorMessage: null,
+    state = state.when(
+      (isLoading, isLoggedIn, userModel, token, errorMessage) => AuthState(
+        isLoading: true,
+        isLoggedIn: isLoggedIn,
+        user: userModel,
+        token: token,
+        errorMessage: null,
+      ),
+      unauthenticated: () => const AuthState(
+        isLoading: true,
+        errorMessage: null,
+      ),
     );
 
     try {
@@ -87,14 +114,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _authRepository.signUp(user);
 
       // 3. 상태 업데이트 (성공)
-      state = state.copyWith(isLoading: false);
+      state = state.when(
+        (isLoading, isLoggedIn, userModel, token, errorMessage) => AuthState(
+          isLoading: false,
+          isLoggedIn: isLoggedIn,
+          user: userModel,
+          token: token,
+        ),
+        unauthenticated: () => const AuthState(isLoading: false),
+      );
 
       debugPrint('[AUTH] 회원가입 성공: ${user.email}');
     } catch (e) {
       // 4. 에러 처리
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: '회원가입에 실패했습니다. 다시 시도해주세요.',
+      state = state.when(
+        (isLoading, isLoggedIn, userModel, token, errorMessage) => AuthState(
+          isLoading: false,
+          isLoggedIn: isLoggedIn,
+          user: userModel,
+          token: token,
+          errorMessage: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        ),
+        unauthenticated: () => const AuthState(
+          isLoading: false,
+          errorMessage: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        ),
       );
       debugPrint('[AUTH] 회원가입 실패: $e');
       rethrow;
@@ -102,8 +146,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   /// 로그아웃
-  void logout() {
-    state = const AuthState();
+  Future<void> logout() async {
+    state = const AuthState.unauthenticated();
     debugPrint('[AUTH] 로그아웃');
   }
 
@@ -115,6 +159,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// 에러 메시지 초기화
   void clearError() {
-    state = state.copyWith(errorMessage: null);
+    state = state.when(
+      (isLoading, isLoggedIn, user, token, errorMessage) => AuthState(
+        isLoading: isLoading,
+        isLoggedIn: isLoggedIn,
+        user: user,
+        token: token,
+        errorMessage: null,
+      ),
+      unauthenticated: () => const AuthState.unauthenticated(),
+    );
   }
 }
