@@ -1,9 +1,6 @@
 package com.coach.chiselAdmin._global.config;//package com.coach._global.config;
 
-import com.coach.chiselAdmin.domain.interview_category.InterviewCategory;
 import com.coach.chiselAdmin.domain.interview_category.InterviewCategoryRepository;
-import com.coach.chiselAdmin.domain.interview_question.InterviewLevel;
-import com.coach.chiselAdmin.domain.interview_question.InterviewQuestion;
 import com.coach.chiselAdmin.domain.interview_question.InterviewQuestionRepository;
 import com.coach.chiselAdmin.domain.menuInfo.MenuInfo;
 import com.coach.chiselAdmin.domain.menuInfo.MenuInfoRepository;
@@ -20,8 +17,7 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements CommandLineRunner {
 
     private final MenuInfoRepository menuInfoRepository;
-    private final InterviewCategoryRepository categoryRepository;
-    private final InterviewQuestionRepository questionRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -43,28 +39,16 @@ public class DataLoader implements CommandLineRunner {
                     .description("면접 질문 관리")
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
+
+            // 추가하고자 하는 메뉴관리 추가 (위 코드 활용)
+            MenuInfo promptMenu = menuInfoRepository.save(MenuInfo.builder()
+                    .menuName("프롬프트 관리")
+                    .menuCode("ADMIN_PROMPT")
+                    .urlPath("/admin/prompts")
+                    .menuOrder(3)
+                    .description("코칭 AI 프롬프트 설정 관리 ")
+                    //.parent(dashboard) // 부모 연결 가능
+                    .build());
         }
-
-        // 1️. 카테고리 먼저 저장 (이미 있으면 생략)
-        InterviewCategory category = categoryRepository.findById(1L)
-                .orElseGet(() -> {
-                    InterviewCategory newCategory = new InterviewCategory(1L, "기술");
-                    return categoryRepository.save(newCategory);
-                });
-
-        // 2. InterviewQuestion 더미 데이터
-        InterviewQuestion question = new InterviewQuestion();
-        question.setCategoryId(category);
-        question.setInterviewLevel(InterviewLevel.LEVEL_1);
-        question.setAdminId(null);
-        question.setQuestionText("JDBC는 무엇인가요");
-        question.setAnswerText("자바에서 DB에 접근하여 데이터를 조회, 삽입, 수정, 삭제할 수 있도록 자바와 DB를 연결해 주는 인터페이스");
-        question.setAnswerVector("[0.0123, -0.0345, 0.0567, -0.0789, 0.0912, -0.0456, 0.0678, -0.0123, 0.0345, -0.0567]");
-
-        // 3️⃣ 저장
-        questionRepository.save(question);
-
-        System.out.println("✅ 더미 데이터 삽입 완료: InterviewCategory + InterviewQuestion");
-
     }
 }

@@ -32,4 +32,5 @@ Map<String, dynamic> _$$FindAuthStateImplToJson(_$FindAuthStateImpl instance) =>
 const _$AuthTypeEnumMap = {
   AuthType.findId: 'findId',
   AuthType.findPw: 'findPw',
+  AuthType.signUp: 'signUp',
 };

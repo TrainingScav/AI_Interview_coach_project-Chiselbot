@@ -2,6 +2,7 @@ package com.coach.chiselAdmin.domain.interview_question;
 
 
 import com.coach.chiselAdmin._global.entity.BaseEntity;
+import com.coach.chiselAdmin.domain.admin.Admin;
 import com.coach.chiselAdmin.domain.interview_category.InterviewCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +30,9 @@ public class InterviewQuestion extends BaseEntity {
     private InterviewLevel interviewLevel;
 
     // 관리자 Entity 생기면 연결
-    private String adminId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")  // FK
+    private Admin adminId;
 
     @NotNull
     @Column(length = 255)

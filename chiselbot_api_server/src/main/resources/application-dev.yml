@@ -12,7 +12,7 @@ spring:
         default_batch_fetch_size: 10
         format_sql: true
     show-sql: true
-    open-in-view: false
+    open-in-view: true
 
 
   application:
@@ -31,6 +31,20 @@ spring:
       mail.smtp.connectiontimeout: 5000
       mail.smtp.timeout: 5000
       mail.smtp.writetimeout: 5000
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-5-nano
+          max-token: 150
+          temperature: 1.0
+      embedding:
+        options:
+          model: text-embedding-3-small
+      cache:
+        enabled: false
 
 jwt:
   secret: "VGhpc0lzQVNlY3JldEtleUZvckpXVFQxMjM0NTZBUElLRVkzNDQzMjE="

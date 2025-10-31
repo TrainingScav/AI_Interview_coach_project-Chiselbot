@@ -18,7 +18,7 @@ public class AdminController {
      */
     @GetMapping("/login-form")
     public String loginForm() {
-        return "login";
+        return "auth/login";
     }
 
     /**
@@ -28,6 +28,7 @@ public class AdminController {
     public String login(AdminRequestDto.Login request, HttpSession session) {
         Admin admin = adminService.login(request);
         session.setAttribute(Define.SESSION_USER,admin);
+        System.out.println("세션 ID: " + session.getId());
         return "redirect:/index";
     }
 

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -88,15 +90,65 @@ public class InquiryService {
     /**
      * 사용자 문의 생성 처리
      */
+//    public Inquiry createInquiry(InquiryRequestDTO.Create dto, String userEmail) {
+//
+//        User author = userJpaRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new Exception404("존재하지 않는 사용자입니다"));
+//
+//        Inquiry newInquiry = new Inquiry();
+//        newInquiry.setTitle(dto.getTitle());
+//        newInquiry.setContent(dto.getContent());
+//        newInquiry.setStatus(InquiryStatus.WAITING);
+//        return inquiryRepository.save(newInquiry);
+//    }
+
+    // 위 메서드 테스트용
     public Inquiry createInquiry(InquiryRequestDTO.Create dto, String userEmail) {
+        if (dto.getTitle() == null || dto.getTitle().isBlank()
+                || dto.getContent() == null || dto.getContent().isBlank()) {
+            throw new Exception400("제목/내용을 입력하세요.");
+        }
 
-        User author = userJpaRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new Exception404("존재하지 않는 사용자입니다"));
+        User author = (userEmail == null)
+                ? userJpaRepository.findById(1L)
+                .orElseThrow(() -> new Exception404("테스트 사용자(id=1)가 없습니다."))
+                : userJpaRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new Exception404("존재하지 않는 사용자입니다."));
 
-        Inquiry newInquiry = new Inquiry();
-        newInquiry.setTitle(dto.getTitle());
-        newInquiry.setContent(dto.getContent());
-        newInquiry.setStatus(InquiryStatus.WAITING);
-        return inquiryRepository.save(newInquiry);
+        Inquiry inq = Inquiry.builder()
+                .user(author)
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .status(InquiryStatus.WAITING)
+                .build();
+
+        return inquiryRepository.save(inq);
+    }
+
+    // 관리자 답변 (임시)
+    public void answerInquiry(Long inquiryId, String answerContent, String adminEmail) {
+        if (answerContent == null || answerContent.isBlank()) {
+            throw new Exception400("답변 내용을 입력하세요.");
+        }
+        Inquiry inq = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
+
+        if (inq.getStatus() != InquiryStatus.WAITING) {
+            throw new Exception400("대기 상태의 문의만 답변할 수 있습니다.");
+        }
+
+        // 개발용: adminEmail 없으면 고정 유저(id=1) 사용 or 아예 admin 세팅 생략
+        User admin = null;
+        if (adminEmail != null) {
+            admin = userJpaRepository.findByEmail(adminEmail)
+                    .orElseThrow(() -> new Exception404("관리자를 찾을 수 없습니다."));
+        } else {
+            admin = userJpaRepository.findById(1L).orElse(null);
+        }
+
+        if (admin != null) inq.setAdmin(admin);
+        inq.setAnswerContent(answerContent);
+        inq.setAnsweredAt(new Timestamp(System.currentTimeMillis()));
+        inq.setStatus(InquiryStatus.ANSWERED);
     }
 }
