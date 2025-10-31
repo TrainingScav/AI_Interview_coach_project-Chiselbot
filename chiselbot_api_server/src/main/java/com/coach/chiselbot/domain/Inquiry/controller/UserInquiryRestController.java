@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/inquiries")
-public class UserInquiryController {
+public class UserInquiryRestController {
 
     private final InquiryService inquiryService;
 
