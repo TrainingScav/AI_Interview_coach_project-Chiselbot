@@ -9,6 +9,7 @@ import 'package:ai_interview/screens/main_screen.dart';
 import 'package:ai_interview/routes/app_router.dart';
 import 'package:ai_interview/providers/app_providers.dart';
 import 'package:ai_interview/screens/main_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "AI Interview Coach",
       theme: ThemeData(
+          fontFamily: GoogleFonts.poppins().fontFamily,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.black,
             brightness: Brightness.dark,
@@ -62,8 +64,11 @@ class MyApp extends StatelessWidget {
             focusedBorder:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
           )),
-      // home: const SplashScreen(),
-      home: const MainScreen(),
+      routes: {
+        '/': (context) => const MainScreen(),
+        '/login': (context) => const LoginScreen(),
+      },
+      initialRoute: '/',
     );
   }
 }

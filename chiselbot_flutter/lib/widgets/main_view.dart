@@ -14,7 +14,6 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   bool _isLoading = true;
-  int _selectedIndex = -1;
   final double _cardRatio = .15;
 
   @override
@@ -67,65 +66,9 @@ class _MainViewState extends State<MainView> {
     }
   }
 
-  Future<void> _onTapSkillSubCard(int subIndex) async {
-    if (_selectedIndex != 0) return; // 기술이 아닐 때 무시
-
-    // 기술 하위 스킬 → 카테고리 매핑
-    final techSkillToCategory = {
-      0: 11, // Java
-      1: 12, // Python
-      2: 13, // Flutter
-      3: 14, // C
-      4: 15, // JavaScript
-      5: 16, // PHP
-      6: 17, // Swift
-    };
-    final categoryId = techSkillToCategory[subIndex] ?? 11;
-
-    final qna = AppProviders.of(context).qna;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-
-    await qna.loadQuestion(categoryId: categoryId, level: 'LEVEL_1');
-
-    if (mounted) Navigator.pop(context);
-
-    if (qna.error != null) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('질문 불러오기 실패: ${qna.error}')));
-      return;
-    }
-
-    if (qna.currentQuestion != null && mounted) {
-      Navigator.pushNamed(context, '/chat');
-      // 선택 유지 or 초기화는 취향(초기화하려면 아래 주석 해제)
-      // setState(() => _selectedIndex = -1);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
-    final bool shouldShowSecondList = _selectedIndex == 0; // 오직 기술 선택 시만 노출
-
-    final Widget secondCardList = SizedBox(
-      key: const ValueKey('skillCardView'),
-      height: mediaQuery.size.height * _cardRatio,
-      child: CardView(
-        items: CardDataFactory.createSkillCards(),
-        onCardTap: _onTapSkillSubCard,
-      ),
-    );
-
-    final Widget hiddenCardList = const SizedBox(
-      key: ValueKey('hidden'),
-      height: 0,
-    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,27 +76,32 @@ class _MainViewState extends State<MainView> {
         _buildTitles(context, mediaQuery),
         if (_isLoading)
           SizedBox(
-            height: mediaQuery.size.height * _cardRatio * 2,
-            child: Center(
+            height: mediaQuery.size.height * _cardRatio * 3,
+            child: const Center(
               child: SpinKitCircle(
                 color: Colors.grey,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 300),
               ),
             ),
           )
         else ...[
-          SizedBox(
-            height: mediaQuery.size.height * _cardRatio,
-            child: CardView(
-              // items: CardDataFactory.createAskCards(),
-              items: CardDataFactory.createSkillCards(),
-              // onCardTap: _onCardTap,
-              selectedIndex: _selectedIndex,
-            ),
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "백엔드",
+            CardDataFactory.createBackendCards(),
           ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 400),
-            child: shouldShowSecondList ? secondCardList : hiddenCardList,
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "프론트엔드",
+            CardDataFactory.createFrontendCards(),
+          ),
+          _buildCategorySection(
+            context,
+            mediaQuery,
+            "데이터베이스",
+            CardDataFactory.createDatabaseCards(),
           ),
           const QnaQuickCard(),
         ],
@@ -161,21 +109,69 @@ class _MainViewState extends State<MainView> {
     );
   }
 
+  Widget _buildCategorySection(
+    BuildContext context,
+    MediaQueryData mediaQuery,
+    String categoryTitle,
+    List<CardData> cards,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: mediaQuery.size.width * .1,
+            top: 32,
+            bottom: 1,
+          ),
+          child: Text(
+            categoryTitle,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white70,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: mediaQuery.size.height * _cardRatio,
+          child: CardView(
+            items: cards,
+            selectedIndex: -1,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildTitles(BuildContext context, MediaQueryData mediaQuery) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: mediaQuery.padding.top,
-        left: mediaQuery.size.width * .1,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("WELCOME BACK,",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          Text("(USERNAME)",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: mediaQuery.padding.top,
+            left: mediaQuery.size.width * .1,
+          ),
+          child: const Text(
+            "WELCOME BACK,",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: mediaQuery.size.width * .1),
+          child: const Text(
+            "(USERNAME)",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

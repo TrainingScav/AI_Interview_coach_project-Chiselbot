@@ -73,7 +73,7 @@ class _CardViewState extends State<CardView> {
             padding: EdgeInsets.only(
               right: size!.width * .03,
               left: size!.width * .03,
-              top: 60 - scale * 20,
+              top: 40 - scale * 20,
               //bottom: size!.width * .2,
             ),
             child: Transform(
