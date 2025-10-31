@@ -1,7 +1,6 @@
 package com.coach.chiselbot.domain.answer;
 
 import com.coach.chiselbot._global.common.Define;
-import com.coach.chiselbot.domain.Inquiry.InquiryService;
 import com.coach.chiselbot.domain.answer.dto.AnswerRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,25 +13,30 @@ import org.springframework.web.bind.annotation.*;
 public class AnswerController {
 
     private final AnswerService answerService;
-    private final InquiryService inquiryService;
-
-
-    // 삭제
-
-
-    // 상세 조회
-
-    // 목록 조회
 
     /**
      * 문의 답변 수정 화면 이동 API
      * GET/admin/inquiry/1/update-form
      */
+    @GetMapping("/{answerId}/update-form")
+    public String updateForm(@PathVariable(name = "answerId") Long id,
+                             Model model) {
+        Answer answer = answerService.findByIdWithInquiry(id);
+        return "";
+    }
 
     /**
      * 문의 답변 수정 API
      * POST/admin/inquiry/1/update
      */
+    @PostMapping("/{answerId}/update")
+    public String updateAnswer(
+            @PathVariable(name = "answerId") Long id,
+            @ModelAttribute AnswerRequestDTO.Update dto,
+            @SessionAttribute(Define.SESSION_USER) String adminEmail) {
+        Long inquiryId = answerService.updateAnswer(id, adminEmail, dto);
+        return "redirect:/admin/inquiry/" + inquiryId;
+    }
 
     /**
      * 답변 등록 화면 이동 API

@@ -1,6 +1,8 @@
-package com.coach.chiselbot.domain.Inquiry;
+package com.coach.chiselbot.domain.Inquiry.controller;
 
 import com.coach.chiselbot._global.dto.CommonResponseDto;
+import com.coach.chiselbot.domain.Inquiry.Inquiry;
+import com.coach.chiselbot.domain.Inquiry.InquiryService;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryRequestDTO;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/inquiries")
-public class InquiryController {
+public class UserInquiryController {
 
     private final InquiryService inquiryService;
 
