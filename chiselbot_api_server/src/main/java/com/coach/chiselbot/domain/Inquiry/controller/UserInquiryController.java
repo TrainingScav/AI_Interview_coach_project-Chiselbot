@@ -24,6 +24,7 @@ public class UserInquiryController {
 
     /**
      * 사용자 문의 삭제 API
+     * DELETE/api/inquiries/1
      */
     @DeleteMapping("/{inquiryId}")
     public ResponseEntity<?> deleteInquiry(
@@ -36,6 +37,7 @@ public class UserInquiryController {
 
     /**
      * 사용자 문의 수정 API
+     * PUT/api/inquiries/1
      */
     @PutMapping("/{inquiryId}")
     public ResponseEntity<?> updateInquiry(
@@ -50,31 +52,34 @@ public class UserInquiryController {
 
     /**
      * 사용자 문의 상세 조회 API
+     * GET/api/inquiries/1
      */
     @GetMapping("/{inquiryId}")
-    public ResponseEntity<CommonResponseDto<InquiryResponseDTO.DetailDTO>> detail(
+    public ResponseEntity<CommonResponseDto<InquiryResponseDTO.UserInquiryDetail>> detail(
             @PathVariable Long inquiryId
     ) {
-        InquiryResponseDTO.DetailDTO inquiry = inquiryService.finById(inquiryId);
+        InquiryResponseDTO.UserInquiryDetail inquiry = inquiryService.finById(inquiryId);
 
         return ResponseEntity.ok(CommonResponseDto.success(inquiry));
     }
 
     /**
      * 사용자 문의 목록 조회 API
+     * GET/api/inquiries
      */
     @GetMapping
-    public ResponseEntity<CommonResponseDto<Page<InquiryResponseDTO.ListDTO>>> list(
+    public ResponseEntity<CommonResponseDto<Page<InquiryResponseDTO.UserInquiryList>>> list(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        Page<InquiryResponseDTO.ListDTO> inquiries = inquiryService.findInquiries(pageable);
+        Page<InquiryResponseDTO.UserInquiryList> inquiries = inquiryService.findInquiries(pageable);
         return ResponseEntity.ok(CommonResponseDto.success(inquiries));
     }
 
 
     /**
      * 사용자 문의 생성 API
+     * POST/api/inquiries
      */
     // 수정 : @RequestAttribute("userEmail") String email
     @PostMapping
