@@ -24,7 +24,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Profile("local")
-@Order(2)
+@Order(3)
 public class InquiryDataLoader implements CommandLineRunner {
 
     private final InquiryRepository inquiryRepository;
