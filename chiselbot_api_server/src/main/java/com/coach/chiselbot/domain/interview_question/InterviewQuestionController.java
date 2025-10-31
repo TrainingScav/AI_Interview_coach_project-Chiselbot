@@ -2,7 +2,6 @@ package com.coach.chiselbot.domain.interview_question;
 
 import com.coach.chiselbot._global.common.Define;
 import com.coach.chiselbot.domain.admin.Admin;
-import com.coach.chiselbot.domain.interview_coach.InterviewCoachService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import jakarta.servlet.http.HttpSession;
@@ -20,7 +19,6 @@ import java.util.List;
 public class InterviewQuestionController {
 
     private final InterviewQuestionService interviewQuestionService;
-    private final InterviewCoachService interviewCoachService;
 
     /**
      * <p>Question List 화면으로 이동</p>
@@ -68,9 +66,8 @@ public class InterviewQuestionController {
             HttpSession session) {
 
         Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
-        System.out.println("세션 유저: " + session.getAttribute(Define.SESSION_USER));
         request.setAdminId(admin.getId());
-        QuestionResponse.FindById createdQuestion = interviewCoachService.createQuestion(request);
+        QuestionResponse.FindById createdQuestion = interviewQuestionService.createQuestion(request);
 
         model.addAttribute("question", createdQuestion);
         model.addAttribute("message", "Question 저장 성공");
@@ -78,6 +75,9 @@ public class InterviewQuestionController {
         return "redirect:/admin/questions";
     }
 
+    /**
+     * <p>질문 등록 페이지 이동</p>
+     * */
     @GetMapping("/create")
     public String createQuestionPg(Model model){
         model.addAttribute("categories", interviewQuestionService.getAllCategories());
