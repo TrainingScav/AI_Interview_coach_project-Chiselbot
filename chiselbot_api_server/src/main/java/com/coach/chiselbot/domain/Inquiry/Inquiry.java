@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(name = "USER_INQUIRY")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -61,6 +60,5 @@ public class Inquiry {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
-
 
 }
