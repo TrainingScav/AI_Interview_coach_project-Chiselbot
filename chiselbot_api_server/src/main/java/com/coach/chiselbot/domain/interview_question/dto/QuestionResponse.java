@@ -42,6 +42,10 @@ public class QuestionResponse {
             return value != null ? value : "";
         }
 
+        public static FindById fromEntity(InterviewQuestion q) {
+            return new FindById(q); // 클래스는 생성자에서 엔티티 -> DTO 매핑을 이미 함
+        }
+
     }
 
     @Getter

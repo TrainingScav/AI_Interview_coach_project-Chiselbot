@@ -67,6 +67,14 @@ class QnaProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // 프론트 더미 질문을 직접 세팅할 때 사용
+  void setLocalQuestion(InterviewQuestion q) {
+    currentQuestion = q; // 코드의 필드명 유지
+    error = null; // 있다면 초기화
+    loading = false; // 있다면 초기화
+    notifyListeners();
+  }
 }
 
 /// ===============================

@@ -47,10 +47,20 @@ public class AdminDataLoader implements CommandLineRunner {
         }
 
 
-        // 1️. 카테고리 먼저 저장 (이미 있으면 생략)
+        // 1. 카테고리 먼저 저장 (이미 있으면 생략)
         InterviewCategory category = categoryRepository.findById(1L)
                 .orElseGet(() -> {
                     InterviewCategory newCategory = new InterviewCategory(1L, "Java");
+                    return categoryRepository.save(newCategory);
+                });
+        InterviewCategory category2 = categoryRepository.findById(2L)
+                .orElseGet(() -> {
+                    InterviewCategory newCategory = new InterviewCategory(2L, "Oracle");
+                    return categoryRepository.save(newCategory);
+                });
+        InterviewCategory category3 = categoryRepository.findById(3L)
+                .orElseGet(() -> {
+                    InterviewCategory newCategory = new InterviewCategory(3L, "CSS");
                     return categoryRepository.save(newCategory);
                 });
         Admin admin = adminRepository.findById(2L)

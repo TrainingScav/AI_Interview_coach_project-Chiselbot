@@ -1,3 +1,4 @@
+import 'package:ai_interview/screens/qna/qna_detail_screen.dart';
 import 'package:ai_interview/screens/qna/qna_form_screen.dart';
 import 'package:ai_interview/screens/qna/qna_list_screen.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -18,7 +19,12 @@ void main() async {
   //
   // await printKeyHash();
 
-  runApp(ProviderScope(child: MyApp()));
+  runApp(
+    AppProviders(
+      baseUrl: 'http://10.0.2.2:8080',
+      child: ProviderScope(child: MyApp()),
+    ),
+  );
 }
 
 // Future<void> printKeyHash() async {
@@ -67,8 +73,35 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
+        '/qna': (context) => const QnaListScreen(),
+        '/qna/new': (context) => const QnaFormScreen(),
+        '/chat': (context) => const ChatScreen(),
       },
       initialRoute: '/',
+      // 인자 필요 라우트만 generateRoute에서 처리
+      onGenerateRoute: (settings) {
+        if (settings.name == '/qna/detail') {
+          final args = settings.arguments;
+          if (args is int) {
+            return MaterialPageRoute(
+              builder: (_) => QnaDetailScreen(inquiryId: args),
+            );
+          } else {
+            return MaterialPageRoute(
+              builder: (_) => const Scaffold(
+                body: Center(child: Text('Invalid arguments for /qna/detail')),
+              ),
+            );
+          }
+        }
+        return null; // 나머지는 routes가 처리
+      },
+      // 알 수 없는 경로 처리
+      onUnknownRoute: (_) => MaterialPageRoute(
+        builder: (_) => const Scaffold(
+          body: Center(child: Text('Unknown route')),
+        ),
+      ),
     );
   }
 }
