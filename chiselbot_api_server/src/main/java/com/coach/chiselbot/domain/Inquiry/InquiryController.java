@@ -89,15 +89,15 @@ public class InquiryController {
                 .body(CommonResponseDto.success(createdInquiry, "문의 등록이 완료되었습니다"));
     }
 
-    // 임시 관리자 답변 API
-    @PostMapping("/{inquiryId}/answer")
-    public ResponseEntity<?> answerInquiry(
-            @PathVariable Long inquiryId,
-            @RequestBody Map<String, Object> body,// DTO 미스매치 방지
-            @RequestAttribute(value = "userEmail", required = false) String adminEmail // optional 지금은 관리자 이메일로 식별
-    ) {
-        String answerContent = body != null ? String.valueOf(body.getOrDefault("answerContent", "")).trim() : "";
-        inquiryService.answerInquiry(inquiryId, answerContent, adminEmail);
-        return ResponseEntity.ok(CommonResponseDto.success(null, "답변 등록 완료"));
-    }
+//    // 임시 관리자 답변 API
+//    @PostMapping("/{inquiryId}/answer")
+//    public ResponseEntity<?> answerInquiry(
+//            @PathVariable Long inquiryId,
+//            @RequestBody Map<String, Object> body,// DTO 미스매치 방지
+//            @RequestAttribute(value = "userEmail", required = false) String adminEmail // optional 지금은 관리자 이메일로 식별
+//    ) {
+//        String answerContent = body != null ? String.valueOf(body.getOrDefault("answerContent", "")).trim() : "";
+//        inquiryService.answerInquiry(inquiryId, answerContent, adminEmail);
+//        return ResponseEntity.ok(CommonResponseDto.success(null, "답변 등록 완료"));
+//    }
 }

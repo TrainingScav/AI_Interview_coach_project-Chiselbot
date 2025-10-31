@@ -43,11 +43,9 @@ public class InquiryResponseDTO {
         private String content;
         private InquiryStatus status;
         private String author;
-        private String adminName;
         private Timestamp createdAt;
         // 추가
         private Long userId;
-        private Long adminId;
         private String answerContent;
         private Timestamp answeredAt;
         private Timestamp updatedAt;
@@ -61,12 +59,10 @@ public class InquiryResponseDTO {
                     .createdAt(inquiry.getCreatedAt())
                     // 추가
                     .userId(inquiry.getUser() != null ? inquiry.getUser().getId() : null)
-                    .adminId(inquiry.getAdmin() != null ? inquiry.getAdmin().getId() : null)
                     .answerContent(inquiry.getAnswerContent())
-                    .answeredAt(inquiry.getAnsweredAt())
+                    .answeredAt(inquiry.getAnswer().getCreatedAt())
                     .updatedAt(inquiry.getUpdatedAt())
                     .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)
-                    .adminName(inquiry.getAdmin() != null ? inquiry.getAdmin().getName() : null)
                     .build();
         }
     }

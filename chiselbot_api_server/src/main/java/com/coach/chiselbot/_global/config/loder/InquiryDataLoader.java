@@ -36,39 +36,33 @@ public class InquiryDataLoader implements CommandLineRunner {
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(0))
-                        .admin(null)
                         .title("결제 환불 요청")
                         .content("결제 후 사용하지 않아 환불 요청드립니다.")
                         .answerContent(null)
                         .status(InquiryStatus.WAITING)
                         .createdAt(now)
-                        .answeredAt(null)
                         .build()
         );
 
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(1))
-                        .admin(null)
                         .title("기능 제안")
                         .content("AI 추천 기능에 이력서 분석 기능을 추가해주셨으면 합니다.")
                         .answerContent(null)
                         .status(InquiryStatus.WAITING)
                         .createdAt(now)
-                        .answeredAt(null)
                         .build()
         );
 
         inquiryRepository.save(
                 Inquiry.builder()
                         .user(users.get(2))
-                        .admin(null)
                         .title("AI 답변 지연시간")
                         .content("답변 지연 시간이 긴 것 같습니다.저만 그런걸까요ㅠㅠ")
                         .answerContent(null)
                         .status(InquiryStatus.WAITING)
                         .createdAt(now)
-                        .answeredAt(null)
                         .build()
         );
         System.out.println("기본 문의 3건 생성 완료되었습니다.");

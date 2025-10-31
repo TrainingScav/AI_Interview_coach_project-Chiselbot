@@ -125,30 +125,30 @@ public class InquiryService {
         return inquiryRepository.save(inq);
     }
 
-    // 관리자 답변 (임시)
-    public void answerInquiry(Long inquiryId, String answerContent, String adminEmail) {
-        if (answerContent == null || answerContent.isBlank()) {
-            throw new Exception400("답변 내용을 입력하세요.");
-        }
-        Inquiry inq = inquiryRepository.findById(inquiryId)
-                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
-
-        if (inq.getStatus() != InquiryStatus.WAITING) {
-            throw new Exception400("대기 상태의 문의만 답변할 수 있습니다.");
-        }
-
-        // 개발용: adminEmail 없으면 고정 유저(id=1) 사용 or 아예 admin 세팅 생략
-        User admin = null;
-        if (adminEmail != null) {
-            admin = userJpaRepository.findByEmail(adminEmail)
-                    .orElseThrow(() -> new Exception404("관리자를 찾을 수 없습니다."));
-        } else {
-            admin = userJpaRepository.findById(1L).orElse(null);
-        }
-
-        if (admin != null) inq.setAdmin(admin);
-        inq.setAnswerContent(answerContent);
-        inq.setAnsweredAt(new Timestamp(System.currentTimeMillis()));
-        inq.setStatus(InquiryStatus.ANSWERED);
-    }
+//    // 관리자 답변 (임시)
+//    public void answerInquiry(Long inquiryId, String answerContent, String adminEmail) {
+//        if (answerContent == null || answerContent.isBlank()) {
+//            throw new Exception400("답변 내용을 입력하세요.");
+//        }
+//        Inquiry inq = inquiryRepository.findById(inquiryId)
+//                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
+//
+//        if (inq.getStatus() != InquiryStatus.WAITING) {
+//            throw new Exception400("대기 상태의 문의만 답변할 수 있습니다.");
+//        }
+//
+//        // 개발용: adminEmail 없으면 고정 유저(id=1) 사용 or 아예 admin 세팅 생략
+//        User admin = null;
+//        if (adminEmail != null) {
+//            admin = userJpaRepository.findByEmail(adminEmail)
+//                    .orElseThrow(() -> new Exception404("관리자를 찾을 수 없습니다."));
+//        } else {
+//            admin = userJpaRepository.findById(1L).orElse(null);
+//        }
+//
+//        if (admin != null) inq.setAdmin(admin);
+//        inq.setAnswerContent(answerContent);
+//        inq.setAnsweredAt(new Timestamp(System.currentTimeMillis()));
+//        inq.setStatus(InquiryStatus.ANSWERED);
+//    }
 }
