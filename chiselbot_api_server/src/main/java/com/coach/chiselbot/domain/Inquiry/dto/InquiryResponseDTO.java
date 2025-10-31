@@ -59,7 +59,7 @@ public class InquiryResponseDTO {
                     .createdAt(inquiry.getCreatedAt())
                     // 추가
                     .userId(inquiry.getUser() != null ? inquiry.getUser().getId() : null)
-                    .answerContent(inquiry.getAnswerContent())
+                    .answerContent(inquiry.getAnswer().getContent())
                     .answeredAt(inquiry.getAnswer().getCreatedAt())
                     .updatedAt(inquiry.getModifiedAt())
                     .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)

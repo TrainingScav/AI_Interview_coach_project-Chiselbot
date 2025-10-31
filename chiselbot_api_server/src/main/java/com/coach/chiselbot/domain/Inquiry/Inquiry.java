@@ -32,9 +32,6 @@ public class Inquiry extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(columnDefinition = "TEXT")
-    private String answerContent;
-
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
