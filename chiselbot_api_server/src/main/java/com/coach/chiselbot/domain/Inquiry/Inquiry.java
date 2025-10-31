@@ -1,23 +1,22 @@
 package com.coach.chiselbot.domain.Inquiry;
 
+import com.coach.chiselbot._global.entity.BaseEntity;
 import com.coach.chiselbot.domain.answer.Answer;
 import com.coach.chiselbot.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Inquiry {
+public class Inquiry extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,19 +35,12 @@ public class Inquiry {
     @Column(columnDefinition = "TEXT")
     private String answerContent;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InquiryStatus status = InquiryStatus.WAITING;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Timestamp createdAt;
-
     @OneToOne(mappedBy = "inquiry",cascade = CascadeType.ALL, orphanRemoval = true)
     private Answer answer;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private Timestamp updatedAt;
 
 }
