@@ -45,6 +45,11 @@ public class InterviewQuestionController {
     }
 
 
+    /**
+     * <p>Question 상세보기</p>
+     * @param questionId
+     * @return questionId에 대한 question의 정보
+     * */
     @GetMapping("detail/{questionId}")
     public String questionDetail(@PathVariable(name = "questionId") Long questionId,
                                  Model model){
