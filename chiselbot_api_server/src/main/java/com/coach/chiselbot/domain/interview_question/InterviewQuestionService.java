@@ -57,7 +57,6 @@ public class InterviewQuestionService {
 
         InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리를 찾을 수 없습니다"));
-        // admin Entity 생성 시 admin 검증 로직 추가 예정
 
         Admin admin = adminRepository.findById(request.getAdminId())
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 관리자를 찾을 수 없습니다"));
