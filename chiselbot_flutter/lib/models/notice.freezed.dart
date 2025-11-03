@@ -20,11 +20,17 @@ Notice _$NoticeFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Notice {
+  @JsonKey(name: 'noticeId')
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
+  @JsonKey(name: 'createdAt')
   String get date => throw _privateConstructorUsedError;
-  bool get isNew => throw _privateConstructorUsedError;
+  int get viewCount => throw _privateConstructorUsedError; // ← 기본값 추가
+  bool get isVisible => throw _privateConstructorUsedError; // ← 기본값 추가
+  String? get modifiedAt =>
+      throw _privateConstructorUsedError; // ← nullable로 변경
+  String? get authorName => throw _privateConstructorUsedError;
 
   /// Serializes this Notice to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +46,15 @@ abstract class $NoticeCopyWith<$Res> {
   factory $NoticeCopyWith(Notice value, $Res Function(Notice) then) =
       _$NoticeCopyWithImpl<$Res, Notice>;
   @useResult
-  $Res call({int id, String title, String content, String date, bool isNew});
+  $Res call(
+      {@JsonKey(name: 'noticeId') int id,
+      String title,
+      String content,
+      @JsonKey(name: 'createdAt') String date,
+      int viewCount,
+      bool isVisible,
+      String? modifiedAt,
+      String? authorName});
 }
 
 /// @nodoc
@@ -62,7 +76,10 @@ class _$NoticeCopyWithImpl<$Res, $Val extends Notice>
     Object? title = null,
     Object? content = null,
     Object? date = null,
-    Object? isNew = null,
+    Object? viewCount = null,
+    Object? isVisible = null,
+    Object? modifiedAt = freezed,
+    Object? authorName = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -81,10 +98,22 @@ class _$NoticeCopyWithImpl<$Res, $Val extends Notice>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      isNew: null == isNew
-          ? _value.isNew
-          : isNew // ignore: cast_nullable_to_non_nullable
+      viewCount: null == viewCount
+          ? _value.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      isVisible: null == isVisible
+          ? _value.isVisible
+          : isVisible // ignore: cast_nullable_to_non_nullable
               as bool,
+      modifiedAt: freezed == modifiedAt
+          ? _value.modifiedAt
+          : modifiedAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -96,7 +125,15 @@ abstract class _$$NoticeImplCopyWith<$Res> implements $NoticeCopyWith<$Res> {
       __$$NoticeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String title, String content, String date, bool isNew});
+  $Res call(
+      {@JsonKey(name: 'noticeId') int id,
+      String title,
+      String content,
+      @JsonKey(name: 'createdAt') String date,
+      int viewCount,
+      bool isVisible,
+      String? modifiedAt,
+      String? authorName});
 }
 
 /// @nodoc
@@ -116,7 +153,10 @@ class __$$NoticeImplCopyWithImpl<$Res>
     Object? title = null,
     Object? content = null,
     Object? date = null,
-    Object? isNew = null,
+    Object? viewCount = null,
+    Object? isVisible = null,
+    Object? modifiedAt = freezed,
+    Object? authorName = freezed,
   }) {
     return _then(_$NoticeImpl(
       id: null == id
@@ -135,41 +175,72 @@ class __$$NoticeImplCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      isNew: null == isNew
-          ? _value.isNew
-          : isNew // ignore: cast_nullable_to_non_nullable
+      viewCount: null == viewCount
+          ? _value.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      isVisible: null == isVisible
+          ? _value.isVisible
+          : isVisible // ignore: cast_nullable_to_non_nullable
               as bool,
+      modifiedAt: freezed == modifiedAt
+          ? _value.modifiedAt
+          : modifiedAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$NoticeImpl implements _Notice {
-  _$NoticeImpl(
-      {required this.id,
+class _$NoticeImpl extends _Notice {
+  const _$NoticeImpl(
+      {@JsonKey(name: 'noticeId') required this.id,
       required this.title,
       required this.content,
-      required this.date,
-      required this.isNew});
+      @JsonKey(name: 'createdAt') required this.date,
+      this.viewCount = 0,
+      this.isVisible = true,
+      this.modifiedAt = '',
+      this.authorName = ''})
+      : super._();
 
   factory _$NoticeImpl.fromJson(Map<String, dynamic> json) =>
       _$$NoticeImplFromJson(json);
 
   @override
+  @JsonKey(name: 'noticeId')
   final int id;
   @override
   final String title;
   @override
   final String content;
   @override
+  @JsonKey(name: 'createdAt')
   final String date;
   @override
-  final bool isNew;
+  @JsonKey()
+  final int viewCount;
+// ← 기본값 추가
+  @override
+  @JsonKey()
+  final bool isVisible;
+// ← 기본값 추가
+  @override
+  @JsonKey()
+  final String? modifiedAt;
+// ← nullable로 변경
+  @override
+  @JsonKey()
+  final String? authorName;
 
   @override
   String toString() {
-    return 'Notice(id: $id, title: $title, content: $content, date: $date, isNew: $isNew)';
+    return 'Notice(id: $id, title: $title, content: $content, date: $date, viewCount: $viewCount, isVisible: $isVisible, modifiedAt: $modifiedAt, authorName: $authorName)';
   }
 
   @override
@@ -181,12 +252,20 @@ class _$NoticeImpl implements _Notice {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.isNew, isNew) || other.isNew == isNew));
+            (identical(other.viewCount, viewCount) ||
+                other.viewCount == viewCount) &&
+            (identical(other.isVisible, isVisible) ||
+                other.isVisible == isVisible) &&
+            (identical(other.modifiedAt, modifiedAt) ||
+                other.modifiedAt == modifiedAt) &&
+            (identical(other.authorName, authorName) ||
+                other.authorName == authorName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, content, date, isNew);
+  int get hashCode => Object.hash(runtimeType, id, title, content, date,
+      viewCount, isVisible, modifiedAt, authorName);
 
   /// Create a copy of Notice
   /// with the given fields replaced by the non-null parameter values.
@@ -204,26 +283,38 @@ class _$NoticeImpl implements _Notice {
   }
 }
 
-abstract class _Notice implements Notice {
-  factory _Notice(
-      {required final int id,
+abstract class _Notice extends Notice {
+  const factory _Notice(
+      {@JsonKey(name: 'noticeId') required final int id,
       required final String title,
       required final String content,
-      required final String date,
-      required final bool isNew}) = _$NoticeImpl;
+      @JsonKey(name: 'createdAt') required final String date,
+      final int viewCount,
+      final bool isVisible,
+      final String? modifiedAt,
+      final String? authorName}) = _$NoticeImpl;
+  const _Notice._() : super._();
 
   factory _Notice.fromJson(Map<String, dynamic> json) = _$NoticeImpl.fromJson;
 
   @override
+  @JsonKey(name: 'noticeId')
   int get id;
   @override
   String get title;
   @override
   String get content;
   @override
+  @JsonKey(name: 'createdAt')
   String get date;
   @override
-  bool get isNew;
+  int get viewCount; // ← 기본값 추가
+  @override
+  bool get isVisible; // ← 기본값 추가
+  @override
+  String? get modifiedAt; // ← nullable로 변경
+  @override
+  String? get authorName;
 
   /// Create a copy of Notice
   /// with the given fields replaced by the non-null parameter values.
