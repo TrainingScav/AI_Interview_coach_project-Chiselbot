@@ -1,17 +1,13 @@
-package com.coach.chiselbot.domain.notice;
+package com.coach.chiselbot.domain.notice.controller;
 
 import com.coach.chiselbot._global.dto.CommonResponseDto;
-import com.coach.chiselbot.domain.notice.dto.NoticeRequest;
+import com.coach.chiselbot.domain.notice.NoticeService;
 import com.coach.chiselbot.domain.notice.dto.NoticeResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RestController
 @RequiredArgsConstructor
