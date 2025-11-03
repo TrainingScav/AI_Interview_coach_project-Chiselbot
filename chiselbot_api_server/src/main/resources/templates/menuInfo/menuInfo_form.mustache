@@ -1,0 +1,140 @@
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+
+            <!-- 레이아웃 작업 시작 -->
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center fw-bold">새 메뉴 등록</h2>
+
+                <div class="form-container">
+                    <form id="menuForm" method="post" action="/admin/menus/create">
+                        <!-- 메뉴 순서 -->
+                        <div class="mb-3">
+                            <label for="menuOrder" class="form-label fw-semibold">메뉴 순서</label>
+                            <input type="number" class="form-control" id="menuOrder" name="menuOrder"
+                                   placeholder="예: 1" required>
+                            <small class="text-muted">중복된 순서가 있을 경우 이후 메뉴들이 자동으로 밀립니다.</small>
+                        </div>
+
+                        <!-- 상위 메뉴 -->
+                        <div class="mb-3">
+                            <label for="parent" class="form-label fw-semibold">상위 메뉴</label>
+                            <select class="form-select" id="parent" name="parent">
+                                <option value="">(루트 메뉴)</option>
+                                {{#menus}}
+                                    <option value="{{id}}">{{menuName}}</option>
+                                {{/menus}}
+                            </select>
+                        </div>
+
+                        <!-- 메뉴 이름 -->
+                        <div class="mb-3">
+                            <label for="menuName" class="form-label fw-semibold">메뉴 이름</label>
+                            <input type="text" class="form-control" id="menuName" name="menuName"
+                                   placeholder="메뉴 이름을 입력하세요" required>
+                        </div>
+
+                        <!-- 메뉴 코드 -->
+                        <div class="mb-3">
+                            <label for="menuCode" class="form-label fw-semibold">메뉴 코드</label>
+                            <input type="text" class="form-control" id="menuCode" name="menuCode"
+                                   placeholder="예: DASHBOARD, USER_MANAGE" required>
+                            <small class="text-muted">중복되지 않도록 영문 대문자 또는 언더스코어(_)로 작성하세요.</small>
+                        </div>
+
+                        <!-- URL 경로 -->
+                        <div class="mb-3">
+                            <label for="urlPath" class="form-label fw-semibold">URL 경로</label>
+                            <input type="text" class="form-control" id="urlPath" name="urlPath"
+                                   placeholder="예: /admin/dashboard" required>
+                        </div>
+
+                        <!-- 공개 여부 -->
+                        <div class="mb-3">
+                            <label for="visible" class="form-label fw-semibold">공개 여부</label>
+                            <select class="form-select" id="visible" name="visible">
+                                <option value="true">공개</option>
+                                <option value="false">비공개</option>
+                            </select>
+                        </div>
+
+                        <!-- 설명 -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-semibold">설명</label>
+                            <textarea class="form-control" id="description" name="description"
+                                      rows="3" placeholder="이 메뉴의 역할이나 설명을 입력하세요"></textarea>
+                        </div>
+
+                        <!-- 버튼 -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary px-4">등록하기</button>
+                            <a href="/admin/menus" class="btn btn-secondary px-4 ms-2">취소</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- 레이아웃 작업 종료 -->
+        </div>
+        {{> layout/footer }}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .form-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 30px;
+        margin-top: 40px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn-primary {
+        background-color: #4e73df;
+        border-color: #4e73df;
+    }
+    textarea {
+    resize: none;
+    }
+</style>
+
+<script>
+    document.getElementById("menuForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // 기본 제출 막기
+
+        const orderInput = document.getElementById("menuOrder");
+        const orderValue = orderInput.value;
+
+        if (!orderValue) {
+            alert("메뉴 순서를 입력해주세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/admin/menus/checkOrder?menuOrder=${orderValue}`);
+            const result = await response.json();
+
+            if (result.data === true) {
+                const confirmProceed = confirm("이미 존재하는 순서입니다. 이후 메뉴들이 밀리게 됩니다.\n등록을 계속하시겠습니까?");
+                if (!confirmProceed) return;
+            }
+
+            // 확인되면 폼 제출
+            this.submit();
+        } catch (e) {
+            alert("중복 검사를 진행할 수 없습니다. 잠시 후 다시 시도해주세요.");
+            console.error(e);
+        }
+    });
+</script>
+
+</body>
+</html>
