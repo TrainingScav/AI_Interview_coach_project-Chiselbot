@@ -1,0 +1,122 @@
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+            <!-- 레이아웃 작업 부분 -->
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center fw-bold">공지사항 목록</h2>
+
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="page-info">
+                            총 {{totalElements}}개의 공지사항
+                        </div>
+                        <a href="/admin/notice/form" class="btn btn-sm btn-primary">새 공지사항 추가</a>
+                    </div>
+                    <table class="table table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">순번</th>
+                            <th style="width: 20%;">제목</th>
+                            <th style="width: 5%;">공개여부</th>
+                            <th style="width: 5%;">조회수</th>
+                            <th style="width: 10%;">작성일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#notices}}
+                            <tr onclick="location.href='/admin/notice/{{noticeId}}'" style="cursor:pointer;">
+                                <td>{{noticeId}}</td>
+                                <td>{{title}}</td>
+                                {{#isVisible}}
+                                    <td class="text-success fw-semibold">공개</td>
+                                {{/isVisible}}
+                                {{^isVisible}}
+                                    <td class="text-danger fw-semibold">비공개</td>
+                                {{/isVisible}}
+                                <td>{{viewCount}}</td>
+                                <td>{{createdAt}}</td>
+                            </tr>
+                        {{/notices}}
+                        {{^notices}}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">등록된 질문이 없습니다.</td>
+                            </tr>
+                        {{/notices}}
+                        </tbody>
+                    </table>
+
+                    <!-- 페이지네이션 -->
+                    <nav>
+                        <ul class="pagination">
+                            {{#hasPrevious}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/notice?page={{prevPage}}">이전</a>
+                                </li>
+                            {{/hasPrevious}}
+
+                            {{#pageInfos}}
+                                <li class="page-item {{#current}}active{{/current}}">
+                                    {{#current}}
+                                        <a class="page-link text-white bg-primary border-primary"
+                                           tabindex="-1"
+                                           style="pointer-events: none; opacity: 0.85; cursor: default;">
+                                            {{number}}
+                                        </a>
+                                    {{/current}}
+
+                                    {{^current}}
+                                        <a class="page-link"
+                                           href="/admin/notice?page={{index}}"
+                                        style="cursor: pointer;">
+                                        {{number}}
+                                        </a>
+                                    {{/current}}
+                                </li>
+                            {{/pageInfos}}
+
+                            {{#hasNext}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/notice?page={{nextPage}}">다음</a>
+                                </li>
+                            {{/hasNext}}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {{> layout/footer }}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 20px;
+        margin-top: 40px;
+    }
+    .table th {
+        background-color: #f1f3f5;
+    }
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .page-info {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+</style>
+
+</body>
+</html>
