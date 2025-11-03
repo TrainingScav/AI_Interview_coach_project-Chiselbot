@@ -6,79 +6,71 @@ import '../models/inquiry.dart'; // Inquiry 모델
 import '../services/api_service.dart';
 
 /// ===============================
-/// (A) 면접 코칭용 - 기존 ChangeNotifier 유지
+/// 면접 코칭용 - 기존 ChangeNotifier 유지
 /// ===============================
 class QnaProvider extends ChangeNotifier {
   final ApiService api;
+
   QnaProvider(this.api);
 
-  List<InterviewCategory> categories = [];
   InterviewQuestion? currentQuestion;
   CoachFeedback? lastFeedback;
-
   bool loading = false;
   String? error;
 
-  Future<void> loadCategories() async {
+  // 질문 불러오기
+  Future<void> loadQuestion({
+    required int categoryId,
+    required String level,
+  }) async {
     loading = true;
     error = null;
     notifyListeners();
-    try {
-      categories = await api.fetchCategories();
-    } catch (e) {
-      error = e.toString();
-    } finally {
-      loading = false;
-      notifyListeners();
-    }
-  }
 
-  Future<void> loadQuestion(
-      {required int categoryId, required String level, String? skill}) async {
-    error = null;
-    loading = true;
-    notifyListeners();
     try {
-      currentQuestion =
+      print('질문 요청 categoryId=$categoryId, level=$level');
+      final q =
           await api.fetchOneQuestion(categoryId: categoryId, level: level);
+      print('질문 수신: ${q.questionText}');
+      currentQuestion = q;
     } catch (e) {
       error = e.toString();
+      currentQuestion = null;
     } finally {
       loading = false;
       notifyListeners();
     }
   }
 
+  // 사용자 답변 제출 + 코칭 요청
   Future<void> submitAnswer(String userAnswer) async {
-    if (currentQuestion == null) return;
+    if (currentQuestion == null) {
+      error = '질문이 없습니다.';
+      notifyListeners();
+      return;
+    }
+
     loading = true;
     error = null;
-    lastFeedback = null;
     notifyListeners();
+
     try {
-      lastFeedback = await api.coach(
+      final feedback = await api.coach(
         questionId: currentQuestion!.questionId,
         userAnswer: userAnswer,
       );
+      lastFeedback = feedback;
     } catch (e) {
       error = e.toString();
     } finally {
       loading = false;
       notifyListeners();
     }
-  }
-
-  // 프론트 더미 질문을 직접 세팅할 때 사용
-  void setLocalQuestion(InterviewQuestion q) {
-    currentQuestion = q; // 코드의 필드명 유지
-    error = null; // 있다면 초기화
-    loading = false; // 있다면 초기화
-    notifyListeners();
   }
 }
 
 /// ===============================
-/// (B) QnA(1:1 문의)용 - Riverpod 프로바이더 추가
+/// QnA(1:1 문의)용 - Riverpod 프로바이더 추가
 /// ===============================
 
 /// ApiService를 Riverpod에서도 쓰기 위한 Provider (baseUrl은 실제 환경에 맞게)

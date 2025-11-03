@@ -25,20 +25,22 @@ class _MainViewState extends State<MainView> {
   bool _isLoading = true;
   final double _cardRatio = .15;
 
-  // 선택된 카드 인덱스(하이라이트 용)
-  int _selectedIndex = -1;
+  int _selectedIndex = -1; // 카드 선택 인덱스
 
-  // (DataLoader가 1L=Java, 2L=Oracle, 3L=CSS로 넣는다는 전제)
+  // 백엔드 DB categoryId와 맞게 실제 매핑 수정
   Map<String, int> _nameToId = const {
     'java': 1,
-    'oracle': 2,
-    'css': 3,
+    'python': 2,
+    'c': 3,
+    'html/css': 4,
+    'javascript': 5,
+    'mysql': 6,
   };
 
-  // 화면 라벨 보정 (UI 카드명 ↔ 카테고리명 차이 흡수)
+  // 카드 제목별 별칭 보정 (UI → 백 카테고리명)
   final Map<String, String> _aliases = const {
     'html/css': 'css',
-    'mysql': 'oracle', // 화면엔 MySQL로 보여도 백은 Oracle로 관리 중
+    'mysql': 'oracle',
   };
 
   // 문자열 정규화 함수(공백제거+소문자)
@@ -153,36 +155,25 @@ class _MainViewState extends State<MainView> {
     );
   }
 
-  Widget _buildCategorySection(
-    BuildContext context,
-    MediaQueryData mediaQuery,
-    String categoryTitle,
-    List<CardData> cards,
-  ) {
+  Widget _buildCategorySection(BuildContext context, MediaQueryData mediaQuery,
+      String categoryTitle, List<CardData> cards) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Divider(color: Colors.grey.shade800, height: 32),
         Padding(
-          padding: EdgeInsets.only(
-            left: mediaQuery.size.width * .1,
-            top: 1,
-            bottom: 1,
-          ),
-          child: Text(
-            categoryTitle,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white70,
-            ),
-          ),
+          padding: EdgeInsets.only(left: mediaQuery.size.width * .1),
+          child: Text(categoryTitle,
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70)),
         ),
         SizedBox(
           height: mediaQuery.size.height * _cardRatio,
           child: CardView(
             items: cards,
-            onCardTap: (i) => _onCardTap(i, cards), // ← 인덱스는 하이라이트용
+            onCardTap: (i) => _onCardTap(i, cards),
             selectedIndex: _selectedIndex,
           ),
         ),
@@ -191,40 +182,19 @@ class _MainViewState extends State<MainView> {
   }
 
   Widget _buildTitles(BuildContext context, MediaQueryData mediaQuery) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            top: mediaQuery.padding.top,
-            left: mediaQuery.size.width * .05,
-          ),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                Constants.logoAddress,
-                height: 24,
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                "안녕하세요, ",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "개발자님",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(
+        top: mediaQuery.padding.top + 10,
+        left: mediaQuery.size.width * .05,
+      ),
+      child: Row(
+        children: const [
+          Text("안녕하세요, ",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text("개발자님",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 }
