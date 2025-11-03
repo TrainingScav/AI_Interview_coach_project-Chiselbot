@@ -7,7 +7,7 @@ import com.coach.chiselbot.domain.interview_category.InterviewCategoryRepository
 import com.coach.chiselbot.domain.interview_coach.EmbeddingService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
-import jdk.jfr.Category;
+
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,8 +64,10 @@ public class InterviewQuestionService {
 
         Optional<InterviewQuestion> questionOpt =
                 interviewQuestionRepository.findFirstByCategoryId_CategoryIdAndInterviewLevel(category.getCategoryId(), level);
+
         return questionOpt.map(QuestionResponse.FindById::fromEntity).orElse(null);
-    // Admin - 질문등록 기능
+    }
+        // Admin - 질문등록 기능
     public QuestionResponse.FindById createQuestion(QuestionRequest.CreateQuestion request) {
 
         InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
