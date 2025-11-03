@@ -1,9 +1,8 @@
-import 'package:ai_interview/widgets/main_appbar.dart';
-import 'package:ai_interview/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../widgets/main_appbar.dart';
+import '../widgets/main_drawer.dart';
 import '../widgets/main_view.dart';
-import 'package:ai_interview/providers/app_providers.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});

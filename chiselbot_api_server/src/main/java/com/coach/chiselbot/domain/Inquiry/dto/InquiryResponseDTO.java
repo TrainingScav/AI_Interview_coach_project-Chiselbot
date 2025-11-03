@@ -2,12 +2,9 @@ package com.coach.chiselbot.domain.Inquiry.dto;
 
 import com.coach.chiselbot.domain.Inquiry.Inquiry;
 import com.coach.chiselbot.domain.Inquiry.InquiryStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class InquiryResponseDTO {
 
@@ -15,15 +12,15 @@ public class InquiryResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ListDTO {
+    public static class UserInquiryList {
         private Long inquiryId;
         private String title;
         private InquiryStatus status;
         private String author;
-        private Timestamp createdAt;
+        private LocalDateTime createdAt;
 
-        public static ListDTO from(Inquiry inquiry) {
-            return ListDTO.builder()
+        public static UserInquiryList from(Inquiry inquiry) {
+            return UserInquiryList.builder()
                     .inquiryId(inquiry.getId())
                     .title(inquiry.getTitle())
                     .status(inquiry.getStatus())
@@ -37,23 +34,45 @@ public class InquiryResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DetailDTO {
+    public static class AdminInquiryList {
+        private Long inquiryId;
+        private String title;
+        private String userName;
+        private InquiryStatus status;
+        private LocalDateTime createdAt;
+        private LocalDateTime answeredAt;
+
+        public static AdminInquiryList from(Inquiry inquiry) {
+            return AdminInquiryList.builder()
+                    .inquiryId(inquiry.getId())
+                    .title(inquiry.getTitle())
+                    .userName(inquiry.getUser().getName())
+                    .status(inquiry.getStatus())
+                    .createdAt(inquiry.getCreatedAt())
+                    .answeredAt(inquiry.getAnswer().getCreatedAt())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInquiryDetail {
         private Long inquiryId;
         private String title;
         private String content;
         private InquiryStatus status;
         private String author;
-        private String adminName;
-        private Timestamp createdAt;
+        private LocalDateTime createdAt;
         // 추가
         private Long userId;
-        private Long adminId;
         private String answerContent;
-        private Timestamp answeredAt;
-        private Timestamp updatedAt;
+        private LocalDateTime answeredAt;
+        private LocalDateTime updatedAt;
 
-        public static DetailDTO from(Inquiry inquiry) {
-            return DetailDTO.builder()
+        public static UserInquiryDetail from(Inquiry inquiry) {
+            return UserInquiryDetail.builder()
                     .inquiryId(inquiry.getId())
                     .title(inquiry.getTitle())
                     .content(inquiry.getContent())
@@ -61,12 +80,37 @@ public class InquiryResponseDTO {
                     .createdAt(inquiry.getCreatedAt())
                     // 추가
                     .userId(inquiry.getUser() != null ? inquiry.getUser().getId() : null)
-                    .adminId(inquiry.getAdmin() != null ? inquiry.getAdmin().getId() : null)
-                    .answerContent(inquiry.getAnswerContent())
-                    .answeredAt(inquiry.getAnsweredAt())
-                    .updatedAt(inquiry.getUpdatedAt())
+                    .answerContent(inquiry.getAnswer().getContent())
+                    .answeredAt(inquiry.getAnswer().getCreatedAt())
+                    .updatedAt(inquiry.getModifiedAt())
                     .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)
-                    .adminName(inquiry.getAdmin() != null ? inquiry.getAdmin().getName() : null)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AdminInquiryDetail {
+        private Long inquiryId;
+        private String title;
+        private InquiryStatus status;
+        private String userName;
+        private String answerContent;
+        private LocalDateTime createdAt;
+        private LocalDateTime answeredAt;
+        private LocalDateTime modifiedAt;
+
+        public static AdminInquiryDetail from(Inquiry inquiry) {
+            return AdminInquiryDetail.builder()
+                    .inquiryId(inquiry.getId())
+                    .title(inquiry.getTitle())
+                    .status(inquiry.getStatus())
+                    .userName(inquiry.getUser().getName())
+                    .answerContent(inquiry.getAnswer().getContent())
+                    .createdAt(inquiry.getCreatedAt())
+                    .answeredAt(inquiry.getAnswer().getModifiedAt())
                     .build();
         }
     }

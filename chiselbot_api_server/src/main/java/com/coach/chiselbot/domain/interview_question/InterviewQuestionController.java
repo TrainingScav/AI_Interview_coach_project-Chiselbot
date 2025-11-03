@@ -2,7 +2,6 @@ package com.coach.chiselbot.domain.interview_question;
 
 import com.coach.chiselbot._global.common.Define;
 import com.coach.chiselbot.domain.admin.Admin;
-import com.coach.chiselbot.domain.interview_coach.InterviewCoachService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ import java.util.List;
 public class InterviewQuestionController {
 
     private final InterviewQuestionService interviewQuestionService;
-    private final InterviewCoachService interviewCoachService;
 
     /**
      * <p>Question List 화면으로 이동</p>
@@ -46,6 +45,11 @@ public class InterviewQuestionController {
     }
 
 
+    /**
+     * <p>Question 상세보기</p>
+     * @param questionId
+     * @return questionId에 대한 question의 정보
+     * */
     @GetMapping("detail/{questionId}")
     public String questionDetail(@PathVariable(name = "questionId") Long questionId,
                                  Model model){
@@ -64,20 +68,21 @@ public class InterviewQuestionController {
     @PostMapping("/create")
     public String createQuestion(
             @ModelAttribute("question") QuestionRequest.CreateQuestion request,
-            Model model,
+            RedirectAttributes rttr,
             HttpSession session) {
 
         Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
-        System.out.println("세션 유저: " + session.getAttribute(Define.SESSION_USER));
         request.setAdminId(admin.getId());
-        QuestionResponse.FindById createdQuestion = interviewCoachService.createQuestion(request);
+        QuestionResponse.FindById createdQuestion = interviewQuestionService.createQuestion(request);
 
-        model.addAttribute("question", createdQuestion);
-        model.addAttribute("message", "Question 저장 성공");
+        rttr.addFlashAttribute("message", Define.SUCCESS);
 
         return "redirect:/admin/questions";
     }
 
+    /**
+     * <p>Question 등록 페이지 이동</p>
+     * */
     @GetMapping("/create")
     public String createQuestionPg(Model model){
         model.addAttribute("categories", interviewQuestionService.getAllCategories());
@@ -85,4 +90,33 @@ public class InterviewQuestionController {
         model.addAttribute("question", new QuestionRequest.CreateQuestion());
         return "question/question_create";
     }
+
+    /**
+     * <p>Question 수정</p>
+     * */
+    @PostMapping("/update")
+    public String updateQuestion(RedirectAttributes rttr,
+                                 HttpSession session,
+                                 @ModelAttribute("question") QuestionRequest.UpdateQuestion request){
+        Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
+        request.setAdminId(admin.getId());
+        QuestionResponse.FindById updateQuestion = interviewQuestionService.updateQuestion(request);
+
+        rttr.addFlashAttribute("message", Define.SUCCESS);
+
+        return "redirect:/admin/questions";
+    }
+
+    /**
+     * <p>Question 삭제</p>
+     * */
+
+    @PostMapping("/{questionId}/delete")
+    public String deleteQuestion(RedirectAttributes rttr,
+                                 @PathVariable("questionId") Long questionId){
+        interviewQuestionService.deleteQuestion(questionId);
+        rttr.addFlashAttribute("message", Define.SUCCESS);
+        return "redirect:/admin/questions";
+    }
+
 }

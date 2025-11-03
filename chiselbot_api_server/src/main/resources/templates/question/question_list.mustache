@@ -1,103 +1,119 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>면접 질문 목록</title>
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+            <!-- 레이아웃 작업 부분 -->
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center fw-bold">면접 질문 목록</h2>
 
-    <!-- ✅ Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="page-info">
+                            총 {{totalElements}}개의 질문
+                        </div>
+                        <a href="/admin/questions/create" class="btn btn-sm btn-primary">새 질문 추가</a>
+                    </div>
+                    <table class="table table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th style="width: 8%;">순번</th>
+                            <th style="width: 32%;">질문</th>
+                            <th style="width: 15%;">카테고리</th>
+                            <th style="width: 12%;">작성자</th>
+                            <th style="width: 15%;">작성일</th>
+                            <th style="width: 15%;">수정일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#questions}}
+                            <tr onclick="location.href='/admin/questions/detail/{{questionId}}'" style="cursor:pointer;">
+                                <td>{{questionId}}</td>
+                                <td class="text-ellipsis">{{questionText}}</td>
+                                <td>{{categoryName}}</td>
+                                <td>{{adminName}}</td>
+                                <td>{{createdAt}}</td>
+                                <td>{{modifiedAt}}</td>
+                            </tr>
+                        {{/questions}}
+                        {{^questions}}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">등록된 질문이 없습니다.</td>
+                            </tr>
+                        {{/questions}}
+                        </tbody>
+                    </table>
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .table-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            padding: 20px;
-            margin-top: 40px;
-        }
-        .table th {
-            background-color: #f1f3f5;
-        }
-        .pagination {
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .page-info {
-            text-align: center;
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
+                    <!-- 페이지네이션 -->
+                    <nav>
+                        <ul class="pagination">
+                            {{#hasPrevious}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/questions?page={{prevPage}}">이전</a>
+                                </li>
+                            {{/hasPrevious}}
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center fw-bold">면접 질문 목록</h2>
+                            <li class="page-item active">
+                                <a class="page-link">{{currentPage}}</a>
+                            </li>
 
-    <div class="table-container">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <div class="page-info">
-                총 {{totalElements}}개의 질문
+                            {{#hasNext}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/questions?page={{nextPage}}">다음</a>
+                                </li>
+                            {{/hasNext}}
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <a href="/admin/questions/create" class="btn btn-sm btn-primary">새 질문 추가</a>
         </div>
-        <table class="table table-hover align-middle">
-            <thead>
-            <tr>
-                <th style="width: 10%;">순번</th>
-                <th style="width: 40%;">질문</th>
-                <th style="width: 20%;">카테고리</th>
-                <th style="width: 15%;">작성자</th>
-                <th style="width: 15%;">작성일</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#questions}}
-                <tr onclick="location.href='/admin/questions/detail/{{questionId}}'" style="cursor:pointer;">
-                    <td>{{questionId}}</td>
-                    <td>{{questionText}}</td>
-                    <td>{{categoryName}}</td>
-                    <td>{{adminName}}</td>
-                    <td>{{createdAt}}</td>
-                </tr>
-            {{/questions}}
-            {{^questions}}
-                <tr>
-                    <td colspan="5" class="text-center text-muted">등록된 질문이 없습니다.</td>
-                </tr>
-            {{/questions}}
-            </tbody>
-        </table>
-
-        <!-- 페이지네이션 -->
-        <nav>
-            <ul class="pagination">
-                {{#hasPrevious}}
-                    <li class="page-item">
-                        <a class="page-link" href="/admin/questions?page={{prevPage}}">이전</a>
-                    </li>
-                {{/hasPrevious}}
-
-                <li class="page-item active">
-                    <a class="page-link">{{currentPage}}</a>
-                </li>
-
-                {{#hasNext}}
-                    <li class="page-item">
-                        <a class="page-link" href="/admin/questions?page={{nextPage}}">다음</a>
-                    </li>
-                {{/hasNext}}
-            </ul>
-        </nav>
+        {{> layout/footer }}
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 20px;
+        margin-top: 40px;
+    }
+    .table th {
+        background-color: #f1f3f5;
+    }
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .page-info {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+    .text-ellipsis {
+    max-width: 350px;
+    white-space: nowrap;      /* 줄바꿈 방지 */
+    overflow: hidden;         /* 넘친 텍스트 숨김 */
+    text-overflow: ellipsis;  /* ... 표시 */
+    }
+</style>
 
+{{#message}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          alert("{{{message}}}");
+  });
+    </script>
+{{/message}}
+{{^message}}
+    <!-- message가 없을 경우 아무 것도 안 함 -->
+{{/message}}
 </body>
 </html>

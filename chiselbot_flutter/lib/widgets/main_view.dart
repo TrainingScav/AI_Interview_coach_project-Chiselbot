@@ -6,6 +6,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../providers/app_providers.dart';
 
 import '../models/api_models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../core/constants.dart';
+import '../models/cards.dart';
+import 'card_view.dart';
+import 'notice_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -105,9 +112,13 @@ class _MainViewState extends State<MainView> {
     var mediaQuery = MediaQuery.of(context);
 
     return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTitles(context, mediaQuery),
+        Divider(color: Colors.grey.shade800),
+        NoticeView(),
         if (_isLoading)
           SizedBox(
             height: mediaQuery.size.height * _cardRatio * 3,
@@ -137,7 +148,6 @@ class _MainViewState extends State<MainView> {
             "데이터베이스",
             CardDataFactory.createDatabaseCards(),
           ),
-          const QnaQuickCard(),
         ],
       ],
     );
@@ -152,10 +162,11 @@ class _MainViewState extends State<MainView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Divider(color: Colors.grey.shade800, height: 32),
         Padding(
           padding: EdgeInsets.only(
             left: mediaQuery.size.width * .1,
-            top: 32,
+            top: 1,
             bottom: 1,
           ),
           child: Text(
@@ -186,24 +197,31 @@ class _MainViewState extends State<MainView> {
         Padding(
           padding: EdgeInsets.only(
             top: mediaQuery.padding.top,
-            left: mediaQuery.size.width * .1,
+            left: mediaQuery.size.width * .05,
           ),
-          child: const Text(
-            "WELCOME BACK,",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: mediaQuery.size.width * .1),
-          child: const Text(
-            "(USERNAME)",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                Constants.logoAddress,
+                height: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                "안녕하세요, ",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "개발자님",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ],

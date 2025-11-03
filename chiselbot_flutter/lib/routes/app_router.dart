@@ -12,6 +12,14 @@
 // import 'package:ai_interview/screens/qna/qna_detail_screen.dart';
 //
 // // --- 라우트 상수 ---
+// import 'package:ai_interview/screens/chat/chat_screen.dart';
+// import 'package:ai_interview/screens/main_screen.dart';
+// import 'package:ai_interview/screens/qna/qna_detail_screen.dart';
+// import 'package:ai_interview/screens/qna/qna_form_screen.dart';
+// import 'package:ai_interview/screens/qna/qna_list_screen.dart';
+// import 'package:ai_interview/screens/splash_screen.dart';
+// import 'package:flutter/material.dart';
+//
 // class RoutePaths {
 //   static const root = '/';
 //   static const main = '/main';

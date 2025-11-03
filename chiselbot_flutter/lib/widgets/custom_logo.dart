@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../core/constants.dart';
+
 class CustomLogo extends StatelessWidget {
   const CustomLogo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final logoAddress = 'assets/images/chisel.png';
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(logoAddress),
+        Image.asset(Constants.logoAddress),
         SizedBox(height: 16),
         const Text(
           "ChiselBot",

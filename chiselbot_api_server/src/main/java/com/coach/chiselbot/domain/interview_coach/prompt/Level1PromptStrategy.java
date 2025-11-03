@@ -25,7 +25,7 @@ public class Level1PromptStrategy implements PromptStrategy{
                 - "similarity": 입력받은 유사도 값 그대로 출력.
             3. 유사도(similarity)가 높을수록 칭찬 위주로, 낮을수록 보완점 위주로 작성한다.
             4. 불필요한 설명, JSON 밖의 문장은 절대 포함하지 마라.
-            5. "feedback"과 "hint" 문장은 모두 **'~요'로 끝나는 공손한 해요체 말투**로 작성한다.
+            5. "feedback"과 "hint" 문장은 모두 **'~요'로 끝나는 해요체 말투**로 작성한다.
 
             ---
             문제: %s

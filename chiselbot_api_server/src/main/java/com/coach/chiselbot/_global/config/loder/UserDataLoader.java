@@ -14,7 +14,7 @@ import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile("local")
 @Order(1)
 public class UserDataLoader implements CommandLineRunner {
 
