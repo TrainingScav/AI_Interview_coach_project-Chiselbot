@@ -1,7 +1,10 @@
 package com.coach.chiselbot.domain.answer;
 
 import com.coach.chiselbot._global.common.Define;
+import com.coach.chiselbot.domain.Inquiry.InquiryService;
+import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
 import com.coach.chiselbot.domain.answer.dto.AnswerRequestDTO;
+import com.coach.chiselbot.domain.answer.dto.AnswerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final InquiryService inquiryService;
 
     /**
      * 문의 답변 수정 화면 이동 API
@@ -21,8 +25,9 @@ public class AnswerController {
     @GetMapping("/{answerId}/update-form")
     public String updateForm(@PathVariable(name = "answerId") Long id,
                              Model model) {
-        Answer answer = answerService.findByIdWithInquiry(id);
-        return "";
+        AnswerResponseDTO.UpdateForm dto = answerService.getUpdateForm(id);
+        model.addAttribute("answer",dto);
+        return "auth/inquiry-answer-update";
     }
 
     /**
@@ -35,7 +40,7 @@ public class AnswerController {
             @ModelAttribute AnswerRequestDTO.Update dto,
             @SessionAttribute(Define.SESSION_USER) String adminEmail) {
         Long inquiryId = answerService.updateAnswer(id, adminEmail, dto);
-        return "redirect:/admin/inquiry/" + inquiryId;
+        return "redirect:/admin/inquiries/" + inquiryId;
     }
 
     /**
@@ -43,8 +48,11 @@ public class AnswerController {
      * GET/admin/inquiry/1/answer-form
      */
     @GetMapping("/{inquiryId}/answer-form")
-    public String answerForm(@PathVariable(name = "{inquiryId}") Long id, Model model) {
-        return "";
+    public String answerForm(@PathVariable(name = "inquiryId") Long id, Model model) {
+
+        InquiryResponseDTO.AdminInquiryDetail dto = inquiryService.getAdminInquiryDetail(id);
+        model.addAttribute("inquiry",dto);
+        return "auth/inquiry-answer";
     }
 
     /**
@@ -52,11 +60,10 @@ public class AnswerController {
      * POST/admin/inquiry/1/answer
      */
     @PostMapping("/{inquiryId}/answer")
-    public String createAnswer(@PathVariable(name = "{inquiryId}") Long id,
+    public String createAnswer(@PathVariable(name = "inquiryId") Long id,
                                @ModelAttribute AnswerRequestDTO.Create dto,
                                @SessionAttribute(Define.SESSION_USER) String adminEmail) {
         answerService.createAnswer(id, adminEmail, dto);
-
-        return "redirect:/admin/inquiry/" + id + "answer-form";
+        return "redirect:/admin/inquiries/" + id;
     }
 }

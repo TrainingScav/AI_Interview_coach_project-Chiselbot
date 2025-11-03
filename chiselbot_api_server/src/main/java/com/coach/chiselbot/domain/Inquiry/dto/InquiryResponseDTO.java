@@ -2,6 +2,7 @@ package com.coach.chiselbot.domain.Inquiry.dto;
 
 import com.coach.chiselbot.domain.Inquiry.Inquiry;
 import com.coach.chiselbot.domain.Inquiry.InquiryStatus;
+import com.coach.chiselbot.domain.answer.Answer;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class InquiryResponseDTO {
         private String userName;
         private InquiryStatus status;
         private LocalDateTime createdAt;
-        private LocalDateTime answeredAt;
+        private LocalDateTime modifiedAt;
 
         public static AdminInquiryList from(Inquiry inquiry) {
             return AdminInquiryList.builder()
@@ -49,8 +50,24 @@ public class InquiryResponseDTO {
                     .userName(inquiry.getUser().getName())
                     .status(inquiry.getStatus())
                     .createdAt(inquiry.getCreatedAt())
-                    .answeredAt(inquiry.getAnswer().getCreatedAt())
+                    .modifiedAt(inquiry.getModifiedAt())
                     .build();
+        }
+
+        public boolean isWaiting() {
+            return status == InquiryStatus.WAITING;
+        }
+
+        public boolean isAnswered() {
+            return status == InquiryStatus.ANSWERED;
+        }
+
+        public boolean isClosed() {
+            return status == InquiryStatus.CLOSED;
+        }
+
+        public boolean isUpdated() {
+            return modifiedAt != null && !modifiedAt.equals(createdAt);
         }
     }
 
@@ -86,6 +103,7 @@ public class InquiryResponseDTO {
                     .author(inquiry.getUser() != null ? inquiry.getUser().getName() : null)
                     .build();
         }
+
     }
 
     @Getter
@@ -94,7 +112,9 @@ public class InquiryResponseDTO {
     @AllArgsConstructor
     public static class AdminInquiryDetail {
         private Long inquiryId;
+        private Long answerId;
         private String title;
+        private String content;
         private InquiryStatus status;
         private String userName;
         private String answerContent;
@@ -103,15 +123,31 @@ public class InquiryResponseDTO {
         private LocalDateTime modifiedAt;
 
         public static AdminInquiryDetail from(Inquiry inquiry) {
+            Answer answer = inquiry.getAnswer();
             return AdminInquiryDetail.builder()
                     .inquiryId(inquiry.getId())
+                    .answerId(answer != null ? answer.getId() : null)
                     .title(inquiry.getTitle())
+                    .content(inquiry.getContent())
                     .status(inquiry.getStatus())
                     .userName(inquiry.getUser().getName())
-                    .answerContent(inquiry.getAnswer().getContent())
+                    .answerContent(answer != null ? answer.getContent() : "답변이 없습니다.")
                     .createdAt(inquiry.getCreatedAt())
-                    .answeredAt(inquiry.getAnswer().getModifiedAt())
+                    .answeredAt(answer != null ? answer.getCreatedAt() : null)
                     .build();
         }
+
+        public boolean isWaiting() {
+            return status == InquiryStatus.WAITING;
+        }
+
+        public boolean isAnswered() {
+            return status == InquiryStatus.ANSWERED;
+        }
+
+        public boolean isClosed() {
+            return status == InquiryStatus.CLOSED;
+        }
+
     }
 }
