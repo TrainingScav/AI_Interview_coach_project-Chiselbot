@@ -15,6 +15,6 @@ public class GlobalControllerAdvice {
 
     @ModelAttribute("menus")
     public List<MenuInfo> menus() {
-        return menuInfoService.getAllMenus();
+        return menuInfoService.getVisibleTrueAllMenus();
     }
 }
