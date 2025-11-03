@@ -122,16 +122,6 @@ public class AdminDataLoader implements CommandLineRunner {
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
 
-            // 추가하고자 하는 메뉴관리 추가 (위 코드 활용)
-            MenuInfo promptMenu = menuInfoRepository.save(MenuInfo.builder()
-                    .menuName("프롬프트 관리")
-                    .menuCode("ADMIN_PROMPT")
-                    .urlPath("/admin/prompts")
-                    .menuOrder(3)
-                    .description("코칭 AI 프롬프트 설정 관리 ")
-                    //.parent(dashboard) // 부모 연결 가능
-                    .build());
-
             MenuInfo inquiryMenu = menuInfoRepository.save(MenuInfo.builder()
                     .menuName("1:1문의 관리")
                     .menuCode("ADMIN_INQUIRY")

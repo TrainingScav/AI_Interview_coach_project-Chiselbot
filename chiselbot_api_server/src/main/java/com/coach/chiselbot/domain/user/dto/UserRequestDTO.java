@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class UserRequestDTO {
 
@@ -25,7 +25,7 @@ public class UserRequestDTO {
         @Size(min = 4, max = 20)
         private String password;
 
-        private Timestamp createdAt;
+        private LocalDateTime createdAt;
     }
 
     @Getter
@@ -52,7 +52,7 @@ public class UserRequestDTO {
         @Size(min = 4, max = 20, message = "비밀번호는 4자 이상 필수입니다")
         private String password;
 
-        private Timestamp updatedAt;
+        private LocalDateTime updatedAt;
     }
 
 

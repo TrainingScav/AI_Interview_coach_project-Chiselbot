@@ -1,6 +1,5 @@
 package com.coach.chiselbot.domain.user;
 
-import com.coach.chiselbot.domain.emailverification.EmailVerificationJpaRepository;
 import com.coach.chiselbot.domain.emailverification.EmailVerificationService;
 import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
 import com.coach.chiselbot.domain.user.login.LoginStrategy;
@@ -11,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 
 @Service
@@ -51,10 +48,6 @@ public class UserService {
         newUser.setEmail(email);
         newUser.setPassword(encodedPassword);
 
-        Timestamp now = Timestamp.from(Instant.now());
-        newUser.setCreatedAt(now);
-        newUser.setUpdatedAt(now);
-
         return userJpaRepository.save(newUser);
     }
 
@@ -74,7 +67,6 @@ public class UserService {
 
         user.setName(dto.getName());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
 
         return userJpaRepository.save(user);
     }
@@ -90,9 +82,7 @@ public class UserService {
         return Map.of(
                 "id", user.getId(),
                 "name", user.getName(),
-                "email", user.getEmail(),
-                "createdAt", user.getCreatedAt(),
-                "updatedAt", user.getUpdatedAt()
+                "email", user.getEmail()
         );
     }
 
