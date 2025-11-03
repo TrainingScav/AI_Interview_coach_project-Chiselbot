@@ -9,7 +9,6 @@ import com.coach.chiselbot.domain.userStorage.dto.StorageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -46,7 +45,7 @@ public class UserStorageService {
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다"));
 
         UserStorage storage = storageRepository.findById(storageId)
-                .orElseThrow(() -> new RuntimeException("보관함 데이터를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("보관함 데이터를 찾을 수 없습니다"));
 
         if(!storage.getUser().getId().equals(user.getId())){
             throw new SecurityException("본인 보관함만 삭제 할 수 있습니다");
@@ -55,20 +54,24 @@ public class UserStorageService {
         storageRepository.delete(storage);
     }
 
-    public List<StorageResponse.FindById> getStorageList(String userEmail){
+    public List<StorageResponse.FindAll> getStorageList(String userEmail){
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다"));
 
-        // 최신순 조회(CrreatedAt 기준)
+        // 최신순 조회(CreatedAt 기준)
         List<UserStorage> storageList = storageRepository.findByUserOrderByCreatedAtDesc(user);
 
-        // DTO로 변환
-        List<StorageResponse.FindById> dtoList = new ArrayList<>();
-        for(UserStorage storage : storageList){
-            StorageResponse.FindById dto = new StorageResponse.FindById(storage);
-            dtoList.add(dto);
-        }
-        return dtoList;
+        return StorageResponse.FindAll.from(storageList);
+    }
+
+    public StorageResponse.FindById getStorageDetail(Long storageId, String userEmail){
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다"));
+
+        UserStorage storage =  storageRepository.findById(storageId)
+                .orElseThrow(() -> new NoSuchElementException("보관함 데이터를 찾을 수 없습니다"));
+
+        return new StorageResponse.FindById(storage);
     }
 
 }
