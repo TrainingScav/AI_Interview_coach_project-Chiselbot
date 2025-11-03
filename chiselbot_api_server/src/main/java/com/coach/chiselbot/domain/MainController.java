@@ -13,7 +13,7 @@ public class MainController {
     private final MenuInfoService menuInfoService;
 
     @GetMapping("/")
-    public String mainPage(Model model) {
+    public String mainPage() {
         return "index";
     }
 

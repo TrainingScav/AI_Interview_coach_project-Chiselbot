@@ -24,9 +24,10 @@
             {{#sessionUser}}
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
 
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{sessionUser.adminName}}</span>
-                    <img class="img-profile rounded-circle" src="bootstrap/img/undraw_profile.svg">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><strong>{{sessionUser.adminName}}</strong> 님 오늘도 화이팅하세요!</span>
                 </a>
+
+
             {{/sessionUser}}
 
             {{^sessionUser}}
@@ -35,13 +36,12 @@
                 </a>
             {{/sessionUser}}
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>Profile</a>
-                <a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>Settings</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout
                 </a>
             </div>
+
+            {{> fragments/logout }}
         </li>
     </ul>
 </nav>
