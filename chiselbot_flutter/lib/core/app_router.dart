@@ -1,3 +1,4 @@
+import 'package:ai_interview/screens/notice/notice_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/chat/chat_screen.dart';
@@ -5,6 +6,7 @@ import '../screens/email_login_screen.dart';
 import '../screens/find_id_pw_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/main_screen.dart';
+import '../screens/notice/notice_detail_screen.dart';
 import '../screens/onboarding_screen.dart';
 import '../screens/qna/qna_detail_screen.dart';
 import '../screens/qna/qna_form_screen.dart';
@@ -18,6 +20,8 @@ class RoutePaths {
   static const chat = '/chat';
   static const login = '/login';
   static const settings = '/settings';
+  static const notice = '/notice';
+  static const noticeDetail = '/notice/detail';
   static const qna = '/qna';
   static const qnaNew = '/qna/new';
   static const qnaDetail = '/qna/detail';
@@ -37,6 +41,7 @@ class AppRouter {
     switch (settings.name) {
       case RoutePaths.root:
         // return MaterialPageRoute(builder: (_) => const SplashScreen());
+        // return MaterialPageRoute(builder: (_) => const SettingsScreen());
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case RoutePaths.main:
         return MaterialPageRoute(builder: (_) => const MainScreen());
@@ -50,6 +55,17 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case RoutePaths.settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
+      case RoutePaths.notice:
+        return MaterialPageRoute(builder: (_) => const NoticeListScreen());
+      case RoutePaths.noticeDetail:
+        final args = settings.arguments;
+        if (args is int) {
+          return MaterialPageRoute(
+            builder: (_) => NoticeDetailScreen(noticeId: args),
+          );
+        } else {
+          return _error('Invalid arguments for /notice/detail');
+        }
       case RoutePaths.chat:
         return MaterialPageRoute(builder: (_) => const ChatScreen());
       case RoutePaths.qna:

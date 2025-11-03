@@ -38,4 +38,8 @@ public class Notice extends BaseEntity {
     // 작성자 (관리자)
     @ManyToOne(fetch = FetchType.LAZY)
     private Admin admin;
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }

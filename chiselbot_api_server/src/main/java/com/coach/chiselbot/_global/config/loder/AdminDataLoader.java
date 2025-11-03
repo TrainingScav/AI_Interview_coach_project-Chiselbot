@@ -140,6 +140,15 @@ public class AdminDataLoader implements CommandLineRunner {
                     .description("1:1 문의 관리 ")
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
+
+            MenuInfo noticeMenu = menuInfoRepository.save(MenuInfo.builder()
+                    .menuName("공지사항 관리")
+                    .menuCode("NOTICE")
+                    .urlPath("/admin/notice")
+                    .menuOrder(4)
+                    .description("공지사항 관리")
+                    //.parent(dashboard) // 부모 연결 가능
+                    .build());
         }
     }
 }

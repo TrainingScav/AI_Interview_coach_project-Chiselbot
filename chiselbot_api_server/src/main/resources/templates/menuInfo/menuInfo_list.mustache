@@ -5,101 +5,56 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             {{> layout/topbar }}
+
             <!-- 레이아웃 작업 시작 부분 -->
-            <div class="container-fluid">
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center fw-bold">메뉴 관리</h2>
 
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                </div>
-
-                <!-- Content Row -->
-                <div class="row">
-
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Earnings (Monthly)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="page-info">
+                            총 {{menuInfo.size}}개의 메뉴
                         </div>
+                        <a href="/admin/menus/create" class="btn btn-sm btn-primary">새 메뉴 등록</a>
                     </div>
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Earnings (Annual)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="progress progress-sm mr-2">
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                         style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                         aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pending Requests Card Example -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Pending Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">순서</th>
+                            <th style="width: 30%;">상위 메뉴</th>
+                            <th style="width: 30%;">메뉴 이름</th>
+                            <th style="width: 15%;">공개 여부</th>
+                            <th style="width: 15%;">관리</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#menuInfo}}
+                            <tr>
+                                <td>{{menuOrder}}</td>
+                                <td>
+                                    {{#parent}}{{parent.menuName}}{{/parent}}
+                                    {{^parent}}-{{/parent}}
+                                </td>
+                                <td>{{menuName}}</td>
+                                {{#visible}}
+                                    <td><span class="badge bg-success">공개</span></td>
+                                {{/visible}}
+                                {{^visible}}
+                                    <td><span class="badge bg-secondary">비공개</span></td>
+                                {{/visible}}
+                                <td>
+                                    <a href="/admin/menus/update/{{id}}" class="btn btn-sm btn-primary">상세보기</a>
+                                </td>
+                            </tr>
+                        {{/menuInfo}}
+                        {{^menuInfo}}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">등록된 메뉴가 없습니다.</td>
+                            </tr>
+                        {{/menuInfo}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- 레이아웃 작업 종료 부분 -->
@@ -107,5 +62,41 @@
         {{> layout/footer }}
     </div>
 </div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 20px;
+        margin-top: 40px;
+    }
+    .table th {
+        background-color: #f1f3f5;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .page-info {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .btn-primary {
+        background-color: #4e73df;
+        border-color: #4e73df;
+    }
+</style>
+
+{{#message}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          alert("{{{message}}}");
+  });
+    </script>
+{{/message}}
+
 </body>
 </html>

@@ -23,7 +23,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   bool _isLoading = true;
-  final double _cardRatio = .15;
+  final double _cardRatio = .17;
 
   int _selectedIndex = -1; // 카드 선택 인덱스
 
@@ -203,7 +203,6 @@ class _MainViewState extends State<MainView> {
           child: CardView(
             items: cards,
             onCardTap: (i) => _onCardTap(i, cards),
-            selectedIndex: _selectedIndex,
           ),
         ),
       ],

@@ -1,8 +1,6 @@
 package com.coach.chiselbot.domain.notice;
 
 import com.coach.chiselbot.domain.admin.Admin;
-import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
 import com.coach.chiselbot.domain.notice.dto.NoticeRequest;
 import com.coach.chiselbot.domain.notice.dto.NoticeResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -32,9 +32,30 @@ public class NoticeService {
         return noticeRepository.findAll(pageable).map(NoticeResponse.FindAll::new);
     }
 
+    public List<NoticeResponse.FindAll> getNoticeList(){
+
+        //List<NoticeResponse.FindAll> noticeList = noticeRepository.findAll();
+        List<Notice> noticeList = noticeRepository.findByIsVisibleTrue();
+        NoticeResponse.FindAll.from(noticeList);
+
+        return NoticeResponse.FindAll.from(noticeList);
+    }
+
     public NoticeResponse.FindById getNoticeDetail(Long noticeId){
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(()-> new NoSuchElementException("해당 공지사항이 없습니다"));
+
+
+        return new NoticeResponse.FindById(notice);
+    }
+
+    @Transactional
+    public NoticeResponse.FindById getNoticeDetailWithViewCount(Long noticeId){
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(()-> new NoSuchElementException("해당 공지사항이 없습니다"));
+
+        notice.increaseViewCount();
+
         return new NoticeResponse.FindById(notice);
     }
 

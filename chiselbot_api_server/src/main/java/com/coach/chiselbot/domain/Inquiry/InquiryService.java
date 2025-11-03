@@ -117,6 +117,7 @@ public class InquiryService {
 
         Inquiry newInquiry = new Inquiry();
         newInquiry.setTitle(dto.getTitle());
+        newInquiry.setUser(author);
         newInquiry.setContent(dto.getContent());
         newInquiry.setStatus(InquiryStatus.WAITING);
         return inquiryRepository.save(newInquiry);

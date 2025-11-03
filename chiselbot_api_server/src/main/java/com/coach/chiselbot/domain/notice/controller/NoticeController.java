@@ -1,11 +1,10 @@
-package com.coach.chiselbot.domain.notice;
+package com.coach.chiselbot.domain.notice.controller;
 
 import com.coach.chiselbot._global.common.Define;
 import com.coach.chiselbot.domain.admin.Admin;
-import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
+import com.coach.chiselbot.domain.notice.NoticeService;
 import com.coach.chiselbot.domain.notice.dto.NoticeRequest;
 import com.coach.chiselbot.domain.notice.dto.NoticeResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
