@@ -28,14 +28,16 @@ class _MainViewState extends State<MainView> {
   int _selectedIndex = -1; // 카드 선택 인덱스
 
   // 백엔드 DB categoryId와 맞게 실제 매핑 수정
-  Map<String, int> _nameToId = const {
-    'java': 1,
-    'python': 2,
-    'c': 3,
-    'html/css': 4,
-    'javascript': 5,
-    'mysql': 6,
-  };
+  // Map<String, int> _nameToId = const {
+  //   'java': 1,
+  //   'python': 2,
+  //   'c': 3,
+  //   'html/css': 4,
+  //   'javascript': 5,
+  //   'mysql': 6,
+  // };
+  // 서버에서 받아 채울 카테고리 이름→ID 매핑
+  Map<String, int> _nameToId = {};
 
   // 카드 제목별 별칭 보정 (UI → 백 카테고리명)
   final Map<String, String> _aliases = const {
@@ -49,13 +51,40 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    // 화면이 완전히 빌드된 후 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+    });
   }
 
-  void _loadData() async {
-    // 최초 UI 스켈레톤 보여주기 용
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (mounted) setState(() => _isLoading = false);
+  Future<void> _loadData() async {
+    print('[MainView] _loadData start');
+    try {
+      final api = AppProviders.of(context).api;
+      final cats = await api.fetchCategories();
+      print(
+          '[MainView] categories fetched: ${cats.map((e) => '${e.categoryId}:${e.name}').toList()}');
+
+      final map = <String, int>{};
+      for (final c in cats) {
+        map[_norm(c.name)] = c.categoryId;
+      }
+
+      if (mounted) setState(() => _nameToId = map);
+    } catch (e) {
+      print('[MainView] fetchCategories error: $e');
+      if (mounted) {
+        // ScaffoldMessenger 직접 호출 X
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('카테고리 목록을 불러오지 못했어요.')),
+          );
+        });
+      }
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   // ---- 카드 제목을 받아 카테고리 id로 변환 ----

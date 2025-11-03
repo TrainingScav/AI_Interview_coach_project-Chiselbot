@@ -3,6 +3,7 @@ package com.coach.chiselbot._global.config;
 import com.coach.chiselbot._global.config.jwt.JwtInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,5 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/auth/email/**",
                                      "/api/inquiries/**", "/api/interview/**"
                 );
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*");
     }
 }

@@ -61,8 +61,10 @@ class ApiService {
   }) async {
     final uri = Uri.parse('$baseUrl/api/interview/questions/one').replace(
         queryParameters: {'categoryId': '$categoryId', 'level': level});
+
     final res = await http.get(uri, headers: _headers(jsonBody: false));
     final m = jsonDecode(res.body);
+
     if (res.statusCode == 200) {
       if (m is Map && m['success'] == true) {
         return InterviewQuestion.fromJson(m['data']);
