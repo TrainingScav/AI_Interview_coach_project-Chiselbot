@@ -44,6 +44,18 @@ public class NoticeService {
     public NoticeResponse.FindById getNoticeDetail(Long noticeId){
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(()-> new NoSuchElementException("해당 공지사항이 없습니다"));
+
+
+        return new NoticeResponse.FindById(notice);
+    }
+
+    @Transactional
+    public NoticeResponse.FindById getNoticeDetailWithViewCount(Long noticeId){
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(()-> new NoSuchElementException("해당 공지사항이 없습니다"));
+
+        notice.increaseViewCount();
+
         return new NoticeResponse.FindById(notice);
     }
 

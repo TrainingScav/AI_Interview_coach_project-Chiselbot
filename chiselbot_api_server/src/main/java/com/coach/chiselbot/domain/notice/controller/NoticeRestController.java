@@ -26,7 +26,7 @@ public class NoticeRestController {
     @GetMapping("/{noticeId}")
     public ResponseEntity<?> noticeDetail(@PathVariable(name = "noticeId") Long noticeId){
 
-        NoticeResponse.FindById notice = noticeService.getNoticeDetail(noticeId);
+        NoticeResponse.FindById notice = noticeService.getNoticeDetailWithViewCount(noticeId);
 
         return ResponseEntity.ok(CommonResponseDto.success(notice));
 
