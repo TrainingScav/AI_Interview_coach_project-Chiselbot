@@ -1,12 +1,11 @@
 package com.coach.chiselbot.domain.user;
 
+import com.coach.chiselbot._global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_table")
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,12 +26,6 @@ public class User {
 
     @Column
     private String password;
-
-    @Column
-    private Timestamp createdAt;
-
-    @Column
-    private Timestamp updatedAt;
 
     /*
     @Enumerated(EnumType.STRING)

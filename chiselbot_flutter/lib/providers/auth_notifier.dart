@@ -59,7 +59,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         email: email,
         password: '', // 보안상 저장하지 않음
         phoneNumber: '', // 서버에서 받아온 정보로 채워야 함
-        name: '', // 서버에서 받아온 정보로 채워야 함
+        name: result.name ?? email, // 서버에서 받아온 정보로 채워야 함
         userId: result.userId,
       );
 

@@ -25,11 +25,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Earnings (Monthly)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                            전체 회원 수</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{dashboardStat.totalUsers}}</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -43,11 +43,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Earnings (Annual)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                            금일 가입자 수</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{dashboardStat.todayUsers}}</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        <i class="fas fa-user-plus fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -60,23 +60,17 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            금일 문의 수
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="progress progress-sm mr-2">
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                         style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                         aria-valuemax="100"></div>
-                                                </div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{dashboardStat.todayInquiries}}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -90,11 +84,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Pending Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            문의 대기 건 수</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{dashboardStat.pendingInquiries}}</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        <i class="fas fa-hourglass-half fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +106,7 @@
                             <!-- Card Header - Dropdown -->
                             <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">서비스 실행 건수</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -143,7 +137,7 @@
                             <!-- Card Header - Dropdown -->
                             <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">카테고리별 질문 통계&nbsp;&nbsp;&nbsp;&nbsp;[Total:  {{questionCountAll}}건]</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -164,17 +158,6 @@
                                 <div class="chart-pie pt-4 pb-2">
                                     <canvas id="myPieChart"></canvas>
                                 </div>
-                                <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                    <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                    <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -189,7 +172,71 @@
 
 <script src="/bootstrap/vendor/chart.js/Chart.min.js"></script>
 <script src="/bootstrap/js/demo/chart-area-demo.js"></script>
-<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>
+<!--<script src="/bootstrap/js/demo/chart-pie-demo.js"></script>-->
+
+<script>
+    const donutLabels = [
+    {{#donutChartStat}}
+        "{{categoryName}}",
+    {{/donutChartStat}}
+    ];
+
+    const donutData = [
+    {{#donutChartStat}}
+        {{questionCount}},
+    {{/donutChartStat}}
+    ];
+
+    const pieCtx = document.getElementById("myPieChart");
+
+    // 색상 세트
+    const colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
+
+    // 차트 생성
+    new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+            labels: donutLabels,
+            datasets: [{
+                data: donutData,
+                backgroundColor: colors.slice(0, donutLabels.length),
+                hoverOffset: 8,
+            }],
+        },
+        options: {
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              cutoutPercentage: 70,
+            }
+    });
+
+    //커스텀 legend 생성
+    const legendContainer = document.querySelector(".chart-pie").insertAdjacentHTML(
+        'afterend',
+        `
+        <div id="categoryLegend" class="mt-3 text-center small">
+            ${donutLabels.map((label, i) => `
+                <span class="mr-3 d-inline-flex align-items-center">
+                    <span class="legend-dot" style="background-color:${colors[i]};"></span>
+                    ${label}
+                </span>
+            `).join('')}
+        </div>
+        `
+    );
+</script>
+
+<style>
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+    }
+</style>
 
 </body>
 </html>

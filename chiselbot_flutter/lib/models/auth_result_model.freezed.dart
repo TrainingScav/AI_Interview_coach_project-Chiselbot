@@ -23,6 +23,7 @@ mixin _$AuthResultModel {
 // 로그인/인증 성공 시
   String? get token => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError; // 아이디 찾기 성공 시
+  String? get name => throw _privateConstructorUsedError;
   String? get foundId => throw _privateConstructorUsedError; // 비밀번호 찾기 성공 시
   String? get resetToken => throw _privateConstructorUsedError;
 
@@ -43,7 +44,11 @@ abstract class $AuthResultModelCopyWith<$Res> {
       _$AuthResultModelCopyWithImpl<$Res, AuthResultModel>;
   @useResult
   $Res call(
-      {String? token, String? userId, String? foundId, String? resetToken});
+      {String? token,
+      String? userId,
+      String? name,
+      String? foundId,
+      String? resetToken});
 }
 
 /// @nodoc
@@ -63,6 +68,7 @@ class _$AuthResultModelCopyWithImpl<$Res, $Val extends AuthResultModel>
   $Res call({
     Object? token = freezed,
     Object? userId = freezed,
+    Object? name = freezed,
     Object? foundId = freezed,
     Object? resetToken = freezed,
   }) {
@@ -74,6 +80,10 @@ class _$AuthResultModelCopyWithImpl<$Res, $Val extends AuthResultModel>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String?,
       foundId: freezed == foundId
           ? _value.foundId
@@ -96,7 +106,11 @@ abstract class _$$AuthResultModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? token, String? userId, String? foundId, String? resetToken});
+      {String? token,
+      String? userId,
+      String? name,
+      String? foundId,
+      String? resetToken});
 }
 
 /// @nodoc
@@ -114,6 +128,7 @@ class __$$AuthResultModelImplCopyWithImpl<$Res>
   $Res call({
     Object? token = freezed,
     Object? userId = freezed,
+    Object? name = freezed,
     Object? foundId = freezed,
     Object? resetToken = freezed,
   }) {
@@ -125,6 +140,10 @@ class __$$AuthResultModelImplCopyWithImpl<$Res>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String?,
       foundId: freezed == foundId
           ? _value.foundId
@@ -142,7 +161,7 @@ class __$$AuthResultModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthResultModelImpl implements _AuthResultModel {
   const _$AuthResultModelImpl(
-      {this.token, this.userId, this.foundId, this.resetToken});
+      {this.token, this.userId, this.name, this.foundId, this.resetToken});
 
   factory _$AuthResultModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthResultModelImplFromJson(json);
@@ -154,6 +173,8 @@ class _$AuthResultModelImpl implements _AuthResultModel {
   final String? userId;
 // 아이디 찾기 성공 시
   @override
+  final String? name;
+  @override
   final String? foundId;
 // 비밀번호 찾기 성공 시
   @override
@@ -161,7 +182,7 @@ class _$AuthResultModelImpl implements _AuthResultModel {
 
   @override
   String toString() {
-    return 'AuthResultModel(token: $token, userId: $userId, foundId: $foundId, resetToken: $resetToken)';
+    return 'AuthResultModel(token: $token, userId: $userId, name: $name, foundId: $foundId, resetToken: $resetToken)';
   }
 
   @override
@@ -171,6 +192,7 @@ class _$AuthResultModelImpl implements _AuthResultModel {
             other is _$AuthResultModelImpl &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.foundId, foundId) || other.foundId == foundId) &&
             (identical(other.resetToken, resetToken) ||
                 other.resetToken == resetToken));
@@ -179,7 +201,7 @@ class _$AuthResultModelImpl implements _AuthResultModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, token, userId, foundId, resetToken);
+      Object.hash(runtimeType, token, userId, name, foundId, resetToken);
 
   /// Create a copy of AuthResultModel
   /// with the given fields replaced by the non-null parameter values.
@@ -202,6 +224,7 @@ abstract class _AuthResultModel implements AuthResultModel {
   const factory _AuthResultModel(
       {final String? token,
       final String? userId,
+      final String? name,
       final String? foundId,
       final String? resetToken}) = _$AuthResultModelImpl;
 
@@ -213,6 +236,8 @@ abstract class _AuthResultModel implements AuthResultModel {
   String? get token;
   @override
   String? get userId; // 아이디 찾기 성공 시
+  @override
+  String? get name;
   @override
   String? get foundId; // 비밀번호 찾기 성공 시
   @override

@@ -34,6 +34,7 @@ class InterviewQuestion {
   final String interviewLevel; // "LEVEL_1", "LEVEL_2" ...
   final String categoryName;
   final String? answerText; // LEVEL_1에서만 채움(백엔드에서 내려줄 때)
+  final int categoryId;
 
   InterviewQuestion({
     required this.questionId,
@@ -41,6 +42,7 @@ class InterviewQuestion {
     required this.interviewLevel,
     required this.categoryName,
     this.answerText,
+    required this.categoryId,
   });
 
   factory InterviewQuestion.fromJson(Map<String, dynamic> j) =>
@@ -50,6 +52,7 @@ class InterviewQuestion {
         interviewLevel: j['interviewLevel'],
         categoryName: j['categoryName'],
         answerText: j['answerText'],
+        categoryId: j['categoryId'],
       );
 }
 

@@ -3,6 +3,7 @@ package com.coach.chiselbot.domain.user;
 import com.coach.chiselbot._global.config.jwt.JwtTokenProvider;
 import com.coach.chiselbot._global.dto.CommonResponseDto;
 import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
+import com.coach.chiselbot.domain.user.dto.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,21 @@ public class UserRestController {
 
     // 로그인
 
-    @PostMapping("/login/{type}")
-    public ResponseEntity<CommonResponseDto<?>> login(@PathVariable String type,
-                                                      @Valid @RequestBody UserRequestDTO.Login dto) {
-        User user = userService.login(type, dto);
+	@PostMapping("/login/{type}")
+	public ResponseEntity<CommonResponseDto<?>> login(@PathVariable String type,
+													  @Valid @RequestBody UserRequestDTO.Login dto) {
+		User user = userService.login(type, dto);
 
-        String token = jwtTokenProvider.createToken(user);
-        return ResponseEntity.ok(CommonResponseDto.success(token, "로그인에 성공했습니다"));
+		String token = jwtTokenProvider.createToken(user);
 
-    }
+		UserResponseDTO response = UserResponseDTO.builder()
+				.userId(String.valueOf(user.getId())) // User 엔티티의 ID 사용
+				.name(user.getName()) // User 엔티티의 Name 사용
+				.token(token)
+				.build();
 
+		return ResponseEntity.ok(CommonResponseDto.success(response, "로그인에 성공했습니다"));
+	}
     // 회원수정
 
     @PatchMapping("/update")
