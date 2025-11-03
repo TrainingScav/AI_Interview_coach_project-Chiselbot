@@ -1,0 +1,135 @@
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+
+            <div class="container py-5">
+                <h2 class="fw-bold text-center mb-5 text-secondary">공지사항 상세</h2>
+
+                <div class="card border-0 shadow-sm rounded-3 p-4" style="max-width: 880px; margin: 0 auto;">
+                    <div class="card-body">
+                        <h4 class="fw-bold mb-4">{{notice.title}}</h4>
+
+                        <!-- 상단 정보 -->
+                        <table class="table table-sm mb-3 border-top border-bottom align-middle notice-meta">
+                            <tbody>
+                            <tr>
+                                <th scope="row" style="width: 15%;">작성자</th>
+                                <td style="width: 35%;">{{notice.authorName}}</td>
+                                <th scope="row" style="width: 15%;">작성일</th>
+                                <td style="width: 35%;">{{notice.createdAt}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">조회수</th>
+                                <td>{{notice.viewCount}}</td>
+                                <th scope="row">공개여부</th>
+                                <td>
+                                    {{#notice.isVisible}}<span class="text-success fw-semibold">공개</span>{{/notice.isVisible}}
+                                    {{^notice.isVisible}}<span class="text-danger fw-semibold">비공개</span>{{/notice.isVisible}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 내용 영역 -->
+                        <div class="notice-box mt-4">
+                            <div class="notice-content">
+                                {{{notice.content}}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 하단 버튼 -->
+                <div class="d-flex justify-content-between align-items-center mt-4" style="max-width: 880px; margin: 0 auto;">
+                    <a href="/admin/notice" class="btn btn-outline-secondary px-4">목록</a>
+                    <div>
+                        <a href="/admin/notice/update/{{notice.noticeId}}" class="btn btn-primary me-2 px-4">수정</a>
+                        <button class="btn btn-danger px-4" onclick="deleteNotice({{notice.noticeId}})">삭제</button>
+                    </div>
+                </div>
+
+                <!-- 이전/다음글 -->
+                <div class="d-flex justify-content-between text-muted small mt-5" style="max-width: 880px; margin: 0 auto;">
+                    {{#prevNotice}}
+                        <a href="/admin/notice/{{prevNotice.noticeId}}" class="text-decoration-none text-secondary">
+                            ← 이전글: {{prevNotice.title}}
+                        </a>
+                    {{/prevNotice}}
+                    {{^prevNotice}}<span></span>{{/prevNotice}}
+
+                    {{#nextNotice}}
+                        <a href="/admin/notice/{{nextNotice.noticeId}}" class="text-decoration-none text-secondary">
+                            다음글: {{nextNotice.title}} →
+                        </a>
+                    {{/nextNotice}}
+                    {{^nextNotice}}<span></span>{{/nextNotice}}
+                </div>
+            </div>
+        </div>
+        {{> layout/footer }}
+    </div>
+</div>
+
+<script>
+    function deleteNotice(noticeId) {
+        if (!confirm("정말 공지사항을 삭제하시겠습니까?")) return;
+        fetch(`/admin/notice/${noticeId}`, { method: "DELETE" })
+            .then(res => {
+                if (res.ok) {
+                    alert("삭제되었습니다.");
+                    location.href = "/admin/notice";
+                } else {
+                    alert("삭제 실패");
+                }
+            });
+    }
+</script>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* 메타정보 테이블 */
+    .notice-meta th {
+        font-weight: 600;
+        color: #495057;
+        border: none;
+    }
+    .notice-meta td {
+        color: #333;
+        border: none;
+    }
+
+    /* 본문 박스 */
+    .notice-box {
+        white-space: pre-line;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background-color: #fff;
+        text-align: left !important;
+        padding-left: 20px;
+        padding-bottom: 20px;
+    }
+
+    /* 실제 내용 */
+    .notice-content {
+        color: #212529;
+        font-size: 0.96rem;
+        text-align: left !important;
+        word-break: keep-all;
+        margin: 0;
+    }
+
+    /* 카드 제목 */
+    .card h4 {
+        color: #212529;
+    }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+
+            <div class="container py-5">
+                <h2 class="fw-bold text-center mb-5 text-secondary">공지사항 수정</h2>
+
+                <div class="card border-0 shadow-sm rounded-3 p-4" style="max-width: 880px; margin: 0 auto;">
+                    <form id="noticeForm">
+                        <input type="hidden" id="noticeId" value="{{notice.noticeId}}">
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-semibold">제목</label>
+                            <input type="text" id="title" class="form-control"
+                                   value="{{notice.title}}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="noticeContent" class="form-label fw-semibold">내용</label>
+                            <textarea id="noticeContent" class="form-control" rows="10" required>{{notice.content}}</textarea>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="isVisible" class="form-label fw-semibold">공개 여부</label>
+                                <select id="isVisible" class="form-select">
+                                    <option value="true" {{#notice.isVisible}}selected{{/notice.isVisible}}>공개</option>
+                                    <option value="false" {{^notice.isVisible}}selected{{/notice.isVisible}}>비공개</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">조회수</label>
+                                <input type="number" id="viewCount" class="form-control"
+                                       value="{{notice.viewCount}}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary px-5">수정하기</button>
+                            <a href="/admin/notice/{{notice.noticeId}}" class="btn btn-outline-secondary px-4 ms-2">취소</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{> layout/footer }}
+    </div>
+</div>
+
+<script>
+    document.getElementById("noticeForm").addEventListener("submit", async (e) => {
+
+      if (!confirm("정말 수정하시겠습니까?")) return;
+      e.preventDefault();
+
+      const id = document.getElementById("noticeId").value;
+      const payload = {
+        title: document.getElementById("title").value,
+        noticeContent: document.getElementById("noticeContent").value,
+        isVisible: document.getElementById("isVisible").value === "true"
+      };
+
+      const res = await fetch(`/admin/notice/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("수정되었습니다.");
+        location.href = `/admin/notice/${id}`;
+      } else {
+        alert("수정 중 오류가 발생했습니다.");
+      }
+    });
+</script>
+
+<style>
+    body { background-color: #f8f9fa; }
+    label { color: #495057; }
+</style>
+</body>
+</html>

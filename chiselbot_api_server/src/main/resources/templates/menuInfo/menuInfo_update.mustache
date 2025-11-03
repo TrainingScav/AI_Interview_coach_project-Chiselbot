@@ -1,0 +1,145 @@
+{{> layout/header }}
+<body id="page-top">
+<div id="wrapper">
+    {{> layout/sidebar }}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            {{> layout/topbar }}
+
+            <!-- 레이아웃 작업 시작 -->
+            <div class="container mt-5">
+                <h2 class="mb-4 text-center fw-bold">메뉴 수정</h2>
+
+                <div class="form-container">
+                    <form id="menuUpdateForm" method="post" action="/admin/menus/update/{{menu.id}}">
+                        <!-- 메뉴 순서 -->
+                        <div class="mb-3">
+                            <label for="menuOrder" class="form-label fw-semibold">메뉴 순서</label>
+                            <input type="number" class="form-control" id="menuOrder" name="menuOrder"
+                                   value="{{menu.menuOrder}}" required>
+                        </div>
+
+                        <!-- 상위 메뉴 (표시만, 수정 불가) -->
+                        <div class="mb-3">
+                            <label for="parent" class="form-label fw-semibold">상위 메뉴</label>
+                            <input type="text" class="form-control" id="parent" name="parent"
+                                   value="{{#menu.parent}}{{menu.parent.menuName}}{{/menu.parent}}{{^menu.parent}}(루트 메뉴){{/menu.parent}}"
+                                   disabled>
+                        </div>
+
+                        <!-- 메뉴 이름 -->
+                        <div class="mb-3">
+                            <label for="menuName" class="form-label fw-semibold">메뉴 이름</label>
+                            <input type="text" class="form-control" id="menuName" name="menuName"
+                                   value="{{menu.menuName}}" required>
+                        </div>
+
+                        <!-- 메뉴 코드 -->
+                        <div class="mb-3">
+                            <label for="menuCode" class="form-label fw-semibold">메뉴 코드</label>
+                            <input type="text" class="form-control" id="menuCode" name="menuCode"
+                                   value="{{menu.menuCode}}" required>
+                        </div>
+
+                        <!-- URL 경로 -->
+                        <div class="mb-3">
+                            <label for="urlPath" class="form-label fw-semibold">URL 경로</label>
+                            <input type="text" class="form-control" id="urlPath" name="urlPath"
+                                   value="{{menu.urlPath}}" required>
+                        </div>
+
+                        <!-- 공개 여부 -->
+                        <div class="mb-3">
+                            <label for="visible" class="form-label fw-semibold">공개 여부</label>
+                            <select class="form-select" id="visible" name="visible">
+                                <option value="true" {{#menu.visible}}selected{{/menu.visible}}>공개</option>
+                                <option value="false" {{^menu.visible}}selected{{/menu.visible}}>비공개</option>
+                            </select>
+                        </div>
+
+                        <!-- 설명 -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-semibold">설명</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{menu.description}}</textarea>
+                        </div>
+
+                        <!-- 버튼 영역 -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success px-4">수정하기</button>
+                            <a href="/admin/menus" class="btn btn-secondary px-4 ms-2">목록으로</a>
+                            <a href="/admin/menus/delete/{{menu.id}}"
+                               class="btn btn-danger px-4 ms-2"
+                               onclick="return confirm('정말로 삭제하시겠습니까?');">
+                                삭제하기
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- 레이아웃 작업 종료 -->
+        </div>
+        {{> layout/footer }}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .form-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 30px;
+        margin-top: 40px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn-success {
+        background-color: #1cc88a;
+        border-color: #1cc88a;
+    }
+    .btn-danger {
+        background-color: #e74a3b;
+        border-color: #e74a3b;
+    }
+    textarea {
+        resize: none;
+    }
+</style>
+
+<script>
+    const originalOrder = {{menu.menuOrder}};
+
+// 수정 시 중복검사
+document.getElementById("menuUpdateForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const orderValue = parseInt(document.getElementById("menuOrder").value);
+
+    // 순서 안 바뀌면 중복검사 없이 바로 제출
+    if (orderValue === originalOrder) {
+        this.submit();
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/menus/checkOrder?menuOrder=${orderValue}`);
+        const result = await response.json();
+
+        if (result.data === true) {
+            const confirmProceed = confirm("이미 존재하는 순서입니다. 이후 메뉴들이 밀리게 됩니다.\n수정을 계속하시겠습니까?");
+            if (!confirmProceed) return;
+        }
+
+        this.submit();
+    } catch (e) {
+        alert("중복 검사를 진행할 수 없습니다. 잠시 후 다시 시도해주세요.");
+    }
+});
+
+</script>
+
+</body>
+</html>
