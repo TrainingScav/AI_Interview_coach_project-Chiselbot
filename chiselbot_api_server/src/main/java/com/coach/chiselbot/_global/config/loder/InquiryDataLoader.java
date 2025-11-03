@@ -49,7 +49,7 @@ public class InquiryDataLoader implements CommandLineRunner {
                         .user(users.get(0))
                         .title("결제 환불 요청")
                         .content("결제 후 사용하지 않아 환불 요청드립니다.")
-                        .status(InquiryStatus.WAITING)
+                        .status(InquiryStatus.ANSWERED)
                         .build()
         );
 
@@ -58,7 +58,7 @@ public class InquiryDataLoader implements CommandLineRunner {
                         .user(users.get(1))
                         .title("기능 제안")
                         .content("AI 추천 기능에 이력서 분석 기능을 추가해주셨으면 합니다.")
-                        .status(InquiryStatus.WAITING)
+                        .status(InquiryStatus.ANSWERED)
                         .build()
         );
 
@@ -67,34 +67,36 @@ public class InquiryDataLoader implements CommandLineRunner {
                         .user(users.get(2))
                         .title("AI 답변 지연시간")
                         .content("답변 지연 시간이 긴 것 같습니다.저만 그런걸까요ㅠㅠ")
-                        .status(InquiryStatus.WAITING)
-                        .build()
-        );
-
-        answerRepository.save(
-                Answer.builder()
-                        .inquiry(inquiry)
-                        .admin(admin)
-                        .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
-                        .build()
-        );
-
-        answerRepository.save(
-                Answer.builder()
-                        .inquiry(inquiry2)
-                        .admin(admin)
-                        .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
-                        .build()
-        );
-
-        answerRepository.save(
-                Answer.builder()
-                        .inquiry(inquiry3)
-                        .admin(admin)
-                        .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
+                        .status(InquiryStatus.ANSWERED)
                         .build()
         );
 
 
+        Answer answer1 = Answer.builder()
+                .inquiry(inquiry)
+                .admin(admin)
+                .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
+                .build();
+
+        inquiry.setAnswer(answer1);
+        answerRepository.save(answer1);
+
+        Answer answer2 = Answer.builder()
+                .inquiry(inquiry2)
+                .admin(admin)
+                .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
+                .build();
+
+        inquiry2.setAnswer(answer2);
+        answerRepository.save(answer2);
+
+        Answer answer3 = Answer.builder()
+                .inquiry(inquiry3)
+                .admin(admin)
+                .content("좋은 제안 감사합니다. 다음 업데이트에 검토 예정입니다 🙏")
+                .build();
+
+        inquiry3.setAnswer(answer3);
+        answerRepository.save(answer3);
     }
 }

@@ -9,6 +9,7 @@ import com.coach.chiselbot.domain.Inquiry.InquiryStatus;
 import com.coach.chiselbot.domain.admin.Admin;
 import com.coach.chiselbot.domain.admin.AdminRepository;
 import com.coach.chiselbot.domain.answer.dto.AnswerRequestDTO;
+import com.coach.chiselbot.domain.answer.dto.AnswerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +26,11 @@ public class AnswerService {
     /**
      * 수정 폼용 조회 처리 (inquiry 함께 조회)
      */
-    public Answer findByIdWithInquiry(Long answerId) {
-        return answerRepository.findByIdWithInquiry(answerId)
-                .orElseThrow(() -> new Exception404("답변이 존재하지 않습니다."));
+    public AnswerResponseDTO.UpdateForm getUpdateForm(Long answerId) {
+        Answer answer = answerRepository.findByIdWithInquiry(answerId)
+                .orElseThrow(() -> new Exception404("답변을 찾을 수 없습니다."));
+
+         return AnswerResponseDTO.UpdateForm.from(answer);
     }
 
     /**

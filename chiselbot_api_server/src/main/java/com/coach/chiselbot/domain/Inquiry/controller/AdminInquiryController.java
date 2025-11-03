@@ -21,14 +21,14 @@ public class AdminInquiryController {
 
     /**
      * 문의 상세 조회 API
-     * POST/admin/inquiries/1
+     * GET/admin/inquiries/1
      */
-    @PostMapping("/{inquiryId}")
+    @GetMapping("/{inquiryId}")
     public String adminInquiryDetail(@PathVariable(name = "inquiryId") Long id,
                                      Model model) {
         InquiryResponseDTO.AdminInquiryDetail inquiryDetail = inquiryService.getAdminInquiryDetail(id);
         model.addAttribute("inquiry",inquiryDetail);
-        return "";
+        return "auth/inquiry-detail";
     }
 
     /**
@@ -39,7 +39,7 @@ public class AdminInquiryController {
     public String adminInquiries(Model model) {
         List<InquiryResponseDTO.AdminInquiryList> inquiries = inquiryService.adminInquiryList();
         model.addAttribute("inquiries",inquiries);
-        return "auth/inquiry";
+        return "auth/inquiry-list";
     }
 
 }

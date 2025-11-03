@@ -81,11 +81,10 @@ public class UserInquiryRestController {
      * 사용자 문의 생성 API
      * POST/api/inquiries
      */
-    // 수정 : @RequestAttribute("userEmail") String email
     @PostMapping
     public ResponseEntity<?> createInquiry(
             @RequestBody InquiryRequestDTO.Create dto,
-            @RequestAttribute(value = "userEmail", required = false) String email
+            @RequestAttribute(value = "userEmail") String email
     ) {
 
         Inquiry createdInquiry = inquiryService.createInquiry(dto, email);
