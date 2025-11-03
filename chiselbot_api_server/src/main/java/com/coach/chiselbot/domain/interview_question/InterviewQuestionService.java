@@ -7,6 +7,7 @@ import com.coach.chiselbot.domain.interview_category.InterviewCategoryRepository
 import com.coach.chiselbot.domain.interview_coach.EmbeddingService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
+import jdk.jfr.Category;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,12 +54,22 @@ public class InterviewQuestionService {
         return new QuestionResponse.FindById(interviewQuestion);
     }
 
+    /**
+     * 카테고리 ID와 레벨을 기준으로 질문 한 건을 랜덤 조회
+     */
+    @Transactional(readOnly = true)
+    public QuestionResponse.FindById getOneQuestion(Long categoryId, InterviewLevel level) {
+        InterviewCategory category = interviewCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리를 찾을 수 없습니다"));
+
+        Optional<InterviewQuestion> questionOpt =
+                interviewQuestionRepository.findFirstByCategoryId_CategoryIdAndInterviewLevel(category.getCategoryId(), level);
+        return questionOpt.map(QuestionResponse.FindById::fromEntity).orElse(null);
     // Admin - 질문등록 기능
     public QuestionResponse.FindById createQuestion(QuestionRequest.CreateQuestion request) {
 
         InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리를 찾을 수 없습니다"));
-        // admin Entity 생성 시 admin 검증 로직 추가 예정
 
         Admin admin = adminRepository.findById(request.getAdminId())
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 관리자를 찾을 수 없습니다"));

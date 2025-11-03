@@ -1,3 +1,17 @@
+// import 'package:flutter/material.dart';
+//
+// // --- 스크린 임포트 (여기만 관리) ---
+// import 'package:ai_interview/screens/splash_screen.dart';
+// import 'package:ai_interview/screens/onboarding_screen.dart';
+// import 'package:ai_interview/screens/main_screen.dart';
+// import 'package:ai_interview/screens/chat/chat_screen.dart';
+//
+// // QnA
+// import 'package:ai_interview/screens/qna/qna_list_screen.dart';
+// import 'package:ai_interview/screens/qna/qna_form_screen.dart';
+// import 'package:ai_interview/screens/qna/qna_detail_screen.dart';
+//
+// // --- 라우트 상수 ---
 // import 'package:ai_interview/screens/chat/chat_screen.dart';
 // import 'package:ai_interview/screens/main_screen.dart';
 // import 'package:ai_interview/screens/qna/qna_detail_screen.dart';
@@ -16,11 +30,13 @@
 //   static const qnaDetail = '/qna/detail';
 // }
 //
+// // --- 인자 객체 (타입 안전) ---
 // class QnaDetailArgs {
 //   final int inquiryId;
 //   QnaDetailArgs(this.inquiryId);
 // }
 //
+// // --- 라우트 생성기 ---
 // class AppRouter {
 //   static Route<dynamic>? generateRoute(RouteSettings settings) {
 //     switch (settings.name) {
@@ -40,6 +56,7 @@
 //         return MaterialPageRoute(builder: (_) => const QnaFormScreen());
 //
 //       case RoutePaths.qnaDetail:
+//         // 인자 검증 (int 또는 QnaDetailArgs 모두 허용)
 //         final args = settings.arguments;
 //         if (args is int) {
 //           return MaterialPageRoute(
