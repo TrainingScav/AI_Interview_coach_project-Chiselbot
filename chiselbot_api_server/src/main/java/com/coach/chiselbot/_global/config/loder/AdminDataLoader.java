@@ -113,6 +113,15 @@ public class AdminDataLoader implements CommandLineRunner {
                     .description("코칭 AI 프롬프트 설정 관리 ")
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
+
+            MenuInfo inquiryMenu = menuInfoRepository.save(MenuInfo.builder()
+                    .menuName("1:1문의 관리")
+                    .menuCode("ADMIN_INQUIRY")
+                    .urlPath("/admin/inquiries")
+                    .menuOrder(3)
+                    .description("1:1 문의 관리 ")
+                    //.parent(dashboard) // 부모 연결 가능
+                    .build());
         }
     }
 }

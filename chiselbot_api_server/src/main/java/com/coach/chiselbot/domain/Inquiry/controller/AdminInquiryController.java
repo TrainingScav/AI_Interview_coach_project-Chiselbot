@@ -39,7 +39,7 @@ public class AdminInquiryController {
     public String adminInquiries(Model model) {
         List<InquiryResponseDTO.AdminInquiryList> inquiries = inquiryService.adminInquiryList();
         model.addAttribute("inquiries",inquiries);
-        return "";
+        return "auth/inquiry";
     }
 
 }
