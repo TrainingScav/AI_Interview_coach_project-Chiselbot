@@ -175,9 +175,64 @@ public class UserStorageRestController {
     @GetMapping
     public ResponseEntity<?> getStorages(@RequestAttribute("userEmail") String userEmail){
 
-        List<StorageResponse.FindById> list = storageService.getStorageList(userEmail);
+        List<StorageResponse.FindAll> list = storageService.getStorageList(userEmail);
 
         return ResponseEntity.ok(CommonResponseDto.success(list, Define.SUCCESS));
+    }
+
+
+    /**
+     * <p>보관함 상세 정보를 조회합니다.</p>
+     *
+     * <pre><code class="http">
+     * 요청 예시:
+     * GET /api/storages/12
+     * Authorization: Bearer {JWT_ACCESS_TOKEN}
+     * </code></pre>
+     *
+     * <pre><code class="json">
+     * 응답 예시:
+     * {
+     *   "success": true,
+     *   "data": {
+     *     "storageId": 12,
+     *     "questionId": 5,
+     *     "questionText": "TCP는 무엇인가요?",
+     *     "userAnswer": "TCP는 연결 기반의 프로토콜입니다.",
+     *     "feedback": "핵심 개념은 맞지만, 신뢰성 언급이 빠졌습니다.",
+     *     "hint": "TCP는 순서 보장과 재전송 기능을 제공합니다.",
+     *     "similarity": 0.82,
+     *     "interviewLevel": "LEVEL_1",
+     *     "categoryName": "네트워크",
+     *     "createdAt": "2025-10-31T13:20:45"
+     *   },
+     *   "message": "SUCCESS"
+     * }
+     * </code></pre>
+     *
+     * <p><b>동작 규칙:</b></p>
+     * <ul>
+     *   <li>JWT 토큰에서 추출한 <code>userEmail</code>을 통해 로그인된 사용자를 식별합니다.</li>
+     *   <li>요청한 <code>storageId</code>의 상세 정보를 반환합니다.</li>
+     * </ul>
+     *
+     * <p><b>예외 발생 시:</b></p>
+     * <ul>
+     *   <li>존재하지 않는 storageId → "보관함 데이터를 찾을 수 없습니다."</li>
+     * </ul>
+     *
+     * @param storageId 조회할 보관함의 ID (PK)
+     * @param userEmail JWT에서 추출된 로그인 사용자 이메일
+     * @return 해당 보관함(StorageResponse.FindById)의 상세 정보를 포함한 공통 응답 객체
+     */
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getStorageDetail(@PathVariable(name = "id") Long storageId,
+                                              @RequestAttribute("userEmail") String userEmail){
+
+        StorageResponse.FindById storage = storageService.getStorageDetail(storageId, userEmail);
+
+        return ResponseEntity.ok(CommonResponseDto.success(storage, Define.SUCCESS));
     }
 
 }
