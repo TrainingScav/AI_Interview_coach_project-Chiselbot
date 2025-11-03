@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 
-// 자동 스크롤 기능을 가진 PageView 위젯입니다.
-class NoticeView extends StatefulWidget {
+import '../core/app_router.dart';
+import '../providers/notice_provider.dart';
+
+class NoticeView extends ConsumerStatefulWidget {
   const NoticeView({super.key});
 
   @override
-  State<NoticeView> createState() => _NoticeViewState();
+  ConsumerState<NoticeView> createState() => _NoticeViewState();
 }
 
-class _NoticeViewState extends State<NoticeView> {
+class _NoticeViewState extends ConsumerState<NoticeView> {
   // 1. PageController: PageView의 위치를 제어합니다.
   late PageController _pageController;
   // 2. Timer: 일정한 간격으로 페이지 전환을 발생시킵니다.
   Timer? _timer;
 
-  // 배너에 표시될 데이터 목록
-  final List<Map<String, dynamic>> _bannerItems = const [
-    {'title': ' 🎄 ✨ ✨ ✨ ✨ ✨ ✨  Merry Christmas ✨ ✨ ✨ ✨ ✨ ✨ 🎄 '},
-    {'title': '[공지] 11월 6일(목) 개발 1차 마감 기한입니다!'},
-    {'title': '[요청] UI 피드백 언제든지 자유롭게 부탁드립니다!'},
-    {'title': '[필독] ChiselBot V1.5.0 대규모 업데이트 및 서비스 정책 변경 안내!!!!!!!!!!!!!!!'},
-  ];
+  // // 배너에 표시될 데이터 목록
+  // final List<Map<String, dynamic>> _bannerItems = const [
+  //   {'title': ' 🎄 ✨ ✨ ✨ ✨ ✨ ✨  Merry Christmas ✨ ✨ ✨ ✨ ✨ ✨ 🎄 '},
+  //   {'title': '[공지] 11월 6일(목) 개발 1차 마감 기한입니다!'},
+  //   {'title': '[요청] UI 피드백 언제든지 자유롭게 부탁드립니다!'},
+  //   {'title': '[필독] ChiselBot V1.5.0 대규모 업데이트 및 서비스 정책 변경 안내!!!!!!!!!!!!!!!'},
+  // ];
 
   // 현재 페이지 인덱스를 저장합니다.
   int _currentPage = 10000;
@@ -64,40 +67,79 @@ class _NoticeViewState extends State<NoticeView> {
 
   @override
   Widget build(BuildContext context) {
-    // 배너 높이 지정
+    final noticesAsync = ref.watch(noticesProvider);
     final double bannerHeight = 16.0;
 
-    return Center(
-      child: SizedBox(
-        height: bannerHeight,
-        child: PageView.builder(
-          controller: _pageController,
-          scrollDirection: Axis.vertical,
-          // itemCount: _bannerItems.length,
-          itemCount: _infiniteItemCount,
-          itemBuilder: (context, index) {
-            final actualIndex = index % _bannerItems.length;
-            // final item = _bannerItems[index];
-            final item = _bannerItems[actualIndex];
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, RoutePaths.notice);
+      },
+      child: Center(
+        child: SizedBox(
+          height: bannerHeight,
+          child: noticesAsync.when(
+            data: (notices) {
+              if (notices.isEmpty) {
+                return const Center(
+                  child: Text(
+                    '공지사항이 없습니다.',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                );
+              }
+
+              return PageView.builder(
+                controller: _pageController,
+                scrollDirection: Axis.vertical,
+                itemCount: _infiniteItemCount,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final actualIndex = index % notices.length;
+                  final notice = notices[actualIndex];
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        if (notice.isNew)
+                          const Text(
+                            '[NEW] ',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        Expanded(
+                          child: Text(
+                            '[공지] ${notice.title}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+              );
+            },
+            loading: () => const SizedBox(),
+            error: (_, __) => const Center(
               child: Text(
-                item['title'] as String,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis, // 넘치면 ...
-                style: TextStyle(
-                  color: Colors.grey.shade500,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal,
-                ),
+                '공지를 불러올 수 없습니다.',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
-            );
-          },
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
+            ),
+          ),
         ),
       ),
     );

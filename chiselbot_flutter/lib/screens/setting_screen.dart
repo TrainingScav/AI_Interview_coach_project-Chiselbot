@@ -41,19 +41,27 @@ class SettingsScreen extends ConsumerWidget {
             },
           ),
           Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
+          // 공지사항
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.bullhorn, size: 16),
+            title: const Text('공지사항'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Navigator.of(context).pushNamed('/notice');
+            },
+          ),
+          Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
           // 문의하기 (Q&A)
           ListTile(
             leading: const Icon(FontAwesomeIcons.circleQuestion, size: 16),
             title: const Text('문의하기(Q&A)'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                '/qna',
-              );
+              Navigator.of(context).pushNamed('/qna');
             },
           ),
           Divider(color: Colors.grey.shade800, indent: 16, endIndent: 16),
-          const SizedBox(height: 440),
+          const SizedBox(height: 320),
           // 로그아웃
           ListTile(
             leading: const Icon(
