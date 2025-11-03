@@ -1,10 +1,9 @@
-import 'package:ai_interview/screens/find_id_pw_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+import '../core/app_router.dart';
 import '../providers/auth_notifier.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
@@ -24,17 +23,35 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
     final state = ref.watch(authNotifierProvider);
 
     ref.listen(authNotifierProvider, (previous, next) {
-      if (next.errorMessage != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.errorMessage!)),
-        );
-        ref.read(authNotifierProvider.notifier).clearError();
-      }
+      next.when(
+        (isLoading, isLoggedIn, user, token, errorMessage) {
+          // 에러 메시지 표시
+          if (errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorMessage)),
+            );
+            ref.read(authNotifierProvider.notifier).clearError();
+          }
 
-      if (next.isLoggedIn && (previous == null || !previous.isLoggedIn)) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MainScreen()));
-      }
+          // 로그인 성공 시 메인 화면으로 이동
+          final wasLoggedIn = previous?.maybeWhen(
+            (prevLoading, prevLoggedIn, prevUser, prevToken, prevError) =>
+                prevLoggedIn,
+            orElse: () => false,
+            unauthenticated: () => false,
+          );
+
+          if (isLoggedIn && (previous == null || wasLoggedIn == false)) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MainScreen()),
+            );
+          }
+        },
+        unauthenticated: () {
+          // 로그아웃 상태 (필요시 처리)
+        },
+      );
     });
 
     return Scaffold(
@@ -47,11 +64,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // const Text("이메일 로그인"),
               const SizedBox(height: 40),
               FormBuilderTextField(
                 name: 'email',
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '이메일',
                 ),
                 validator: FormBuilderValidators.required(
@@ -62,7 +78,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               FormBuilderTextField(
                 name: 'password',
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '비밀번호',
                 ),
                 validator: FormBuilderValidators.required(
@@ -70,66 +86,99 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    side: const BorderSide(color: Colors.grey),
-                  ),
-                  onPressed: state.isLoading
-                      ? null
-                      : () async {
-                          // 1. 폼 검증
-                          if (_formKey.currentState?.validate() != true) return;
-                          _formKey.currentState?.save();
-                          final formData = _formKey.currentState?.value;
-                          final email = formData?['email'] as String?;
-                          final password = formData?['password'] as String?;
+              state.when(
+                (isLoading, isLoggedIn, user, token, errorMessage) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      side: const BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            if (_formKey.currentState?.validate() != true) {
+                              return;
+                            }
+                            _formKey.currentState?.save();
+                            final formData = _formKey.currentState?.value;
+                            final email = formData?['email'] as String?;
+                            final password = formData?['password'] as String?;
 
-                          if (email == null || password == null) return;
+                            if (email == null || password == null) return;
 
-                          // 2. 로그인 시도
-                          await ref.read(authNotifierProvider.notifier).login(
-                                email: email,
-                                password: password,
-                              );
-                        },
-                  child: state.isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 3.0),
-                        )
-                      : Text(
-                          "로그인",
-                          style: TextStyle(color: Colors.white),
-                        )),
+                            await ref.read(authNotifierProvider.notifier).login(
+                                  email: email,
+                                  password: password,
+                                );
+                          },
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 3.0),
+                          )
+                        : const Text(
+                            "로그인",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  );
+                },
+                unauthenticated: () {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      side: const BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() != true) return;
+                      _formKey.currentState?.save();
+                      final formData = _formKey.currentState?.value;
+                      final email = formData?['email'] as String?;
+                      final password = formData?['password'] as String?;
+
+                      if (email == null || password == null) return;
+
+                      await ref.read(authNotifierProvider.notifier).login(
+                            email: email,
+                            password: password,
+                          );
+                    },
+                    child: const Text(
+                      "로그인",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 16),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignupScreen()));
-                      },
-                      child: Text(
-                        "회원가입",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  Text(" | "),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "회원가입",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const Text(" | "),
                   TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FindIdPwScreen()));
-                      },
-                      child: Text(
-                        "아이디 · 비밀번호 찾기",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        RoutePaths.findIdPw, // AppRouter에 정의된 경로 사용
+                      );
+                    },
+                    child: const Text(
+                      "아이디 · 비밀번호 찾기",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 100),

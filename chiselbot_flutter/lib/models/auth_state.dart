@@ -16,6 +16,8 @@ class AuthState with _$AuthState {
     String? errorMessage,
   }) = _AuthState;
 
+  const factory AuthState.unauthenticated() = _Unauthenticated;
+
   factory AuthState.fromJson(Map<String, dynamic> json) =>
       _$AuthStateFromJson(json);
 }

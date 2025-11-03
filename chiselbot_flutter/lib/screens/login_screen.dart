@@ -1,6 +1,7 @@
-import 'package:ai_interview/screens/email_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../core/app_router.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -97,8 +98,10 @@ class LoginScreen extends StatelessWidget {
   Widget _buildEmailLoginButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => EmailLoginScreen()));
+        Navigator.pushNamed(
+          context,
+          RoutePaths.emailLogin,
+        );
       },
       child: Container(
         height: 40,

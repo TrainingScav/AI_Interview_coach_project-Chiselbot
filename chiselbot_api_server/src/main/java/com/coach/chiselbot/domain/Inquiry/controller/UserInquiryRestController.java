@@ -1,6 +1,8 @@
-package com.coach.chiselbot.domain.Inquiry;
+package com.coach.chiselbot.domain.Inquiry.controller;
 
 import com.coach.chiselbot._global.dto.CommonResponseDto;
+import com.coach.chiselbot.domain.Inquiry.Inquiry;
+import com.coach.chiselbot.domain.Inquiry.InquiryService;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryRequestDTO;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -12,18 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/inquiries")
-public class InquiryController {
+public class UserInquiryRestController {
 
     private final InquiryService inquiryService;
 
 
     /**
      * 사용자 문의 삭제 API
+     * DELETE/api/inquiries/1
      */
     @DeleteMapping("/{inquiryId}")
     public ResponseEntity<?> deleteInquiry(
@@ -36,6 +37,7 @@ public class InquiryController {
 
     /**
      * 사용자 문의 수정 API
+     * PUT/api/inquiries/1
      */
     @PutMapping("/{inquiryId}")
     public ResponseEntity<?> updateInquiry(
@@ -50,31 +52,34 @@ public class InquiryController {
 
     /**
      * 사용자 문의 상세 조회 API
+     * GET/api/inquiries/1
      */
     @GetMapping("/{inquiryId}")
-    public ResponseEntity<CommonResponseDto<InquiryResponseDTO.DetailDTO>> detail(
+    public ResponseEntity<CommonResponseDto<InquiryResponseDTO.UserInquiryDetail>> detail(
             @PathVariable Long inquiryId
     ) {
-        InquiryResponseDTO.DetailDTO inquiry = inquiryService.finById(inquiryId);
+        InquiryResponseDTO.UserInquiryDetail inquiry = inquiryService.finById(inquiryId);
 
         return ResponseEntity.ok(CommonResponseDto.success(inquiry));
     }
 
     /**
      * 사용자 문의 목록 조회 API
+     * GET/api/inquiries
      */
     @GetMapping
-    public ResponseEntity<CommonResponseDto<Page<InquiryResponseDTO.ListDTO>>> list(
+    public ResponseEntity<CommonResponseDto<Page<InquiryResponseDTO.UserInquiryList>>> list(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        Page<InquiryResponseDTO.ListDTO> inquiries = inquiryService.findInquiries(pageable);
+        Page<InquiryResponseDTO.UserInquiryList> inquiries = inquiryService.findInquiries(pageable);
         return ResponseEntity.ok(CommonResponseDto.success(inquiries));
     }
 
 
     /**
      * 사용자 문의 생성 API
+     * POST/api/inquiries
      */
     // 수정 : @RequestAttribute("userEmail") String email
     @PostMapping
@@ -89,15 +94,15 @@ public class InquiryController {
                 .body(CommonResponseDto.success(createdInquiry, "문의 등록이 완료되었습니다"));
     }
 
-    // 임시 관리자 답변 API
-    @PostMapping("/{inquiryId}/answer")
-    public ResponseEntity<?> answerInquiry(
-            @PathVariable Long inquiryId,
-            @RequestBody Map<String, Object> body,// DTO 미스매치 방지
-            @RequestAttribute(value = "userEmail", required = false) String adminEmail // optional 지금은 관리자 이메일로 식별
-    ) {
-        String answerContent = body != null ? String.valueOf(body.getOrDefault("answerContent", "")).trim() : "";
-        inquiryService.answerInquiry(inquiryId, answerContent, adminEmail);
-        return ResponseEntity.ok(CommonResponseDto.success(null, "답변 등록 완료"));
-    }
+//    // 임시 관리자 답변 API
+//    @PostMapping("/{inquiryId}/answer")
+//    public ResponseEntity<?> answerInquiry(
+//            @PathVariable Long inquiryId,
+//            @RequestBody Map<String, Object> body,// DTO 미스매치 방지
+//            @RequestAttribute(value = "userEmail", required = false) String adminEmail // optional 지금은 관리자 이메일로 식별
+//    ) {
+//        String answerContent = body != null ? String.valueOf(body.getOrDefault("answerContent", "")).trim() : "";
+//        inquiryService.answerInquiry(inquiryId, answerContent, adminEmail);
+//        return ResponseEntity.ok(CommonResponseDto.success(null, "답변 등록 완료"));
+//    }
 }

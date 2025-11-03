@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:ai_interview/models/ask_cards.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_interview/screens/chat/chat_screen.dart';
+
+import '../models/ask_cards.dart';
 
 class AskCardView extends StatefulWidget {
   const AskCardView({super.key});

@@ -13,7 +13,11 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(Icons.menu)),
           Text(
             "ChiselBot",
             style: GoogleFonts.poppins(fontSize: 16),

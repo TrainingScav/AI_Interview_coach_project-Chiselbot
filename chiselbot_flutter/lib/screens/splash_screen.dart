@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:ai_interview/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_logo.dart';
+import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
