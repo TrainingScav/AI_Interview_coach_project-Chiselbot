@@ -14,4 +14,6 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Long> {
 
     List<MenuInfo> findAllByVisibleTrueOrderByMenuOrderAsc();
 
+    List<MenuInfo> findByMenuOrderGreaterThan(Integer menuOrder);
+
 }
