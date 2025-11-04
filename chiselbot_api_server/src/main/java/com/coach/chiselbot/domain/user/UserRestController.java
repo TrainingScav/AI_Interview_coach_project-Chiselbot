@@ -17,8 +17,10 @@ public class UserRestController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // 회원가입
-
+    /**
+     * 회원가입 API
+     * POST/api/users/signup
+     */
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDto<?>> signup(@Valid @RequestBody UserRequestDTO.SignUp dto) {
 
@@ -26,25 +28,30 @@ public class UserRestController {
         return ResponseEntity.ok(CommonResponseDto.success(null, "회원가입이 완료되었습니다"));
     }
 
-    // 로그인
+    /**
+     * 로그인 API
+     * POST/api/users/login/{type}
+     */
+    @PostMapping("/login/{type}")
+    public ResponseEntity<CommonResponseDto<?>> login(@PathVariable String type,
+                                                      @Valid @RequestBody UserRequestDTO.Login dto) {
+        User user = userService.login(type, dto);
 
-	@PostMapping("/login/{type}")
-	public ResponseEntity<CommonResponseDto<?>> login(@PathVariable String type,
-													  @Valid @RequestBody UserRequestDTO.Login dto) {
-		User user = userService.login(type, dto);
+        String token = jwtTokenProvider.createToken(user);
 
-		String token = jwtTokenProvider.createToken(user);
+        UserResponseDTO response = UserResponseDTO.builder()
+                .userId(String.valueOf(user.getId())) // User 엔티티의 ID 사용
+                .name(user.getName()) // User 엔티티의 Name 사용
+                .token(token)
+                .build();
 
-		UserResponseDTO response = UserResponseDTO.builder()
-				.userId(String.valueOf(user.getId())) // User 엔티티의 ID 사용
-				.name(user.getName()) // User 엔티티의 Name 사용
-				.token(token)
-				.build();
+        return ResponseEntity.ok(CommonResponseDto.success(response, "로그인에 성공했습니다"));
+    }
 
-		return ResponseEntity.ok(CommonResponseDto.success(response, "로그인에 성공했습니다"));
-	}
-    // 회원수정
-
+    /**
+     * 회원정보 수정 API
+     * Patch/api/users/update
+     */
     @PatchMapping("/update")
     public ResponseEntity<CommonResponseDto<?>> updateMe(
             @RequestAttribute("userEmail") String userEmail,
@@ -54,16 +61,17 @@ public class UserRestController {
         return ResponseEntity.ok(CommonResponseDto.success(null, "수정되었습니다."));
     }
 
-
-    // 로그아웃
+    /**
+     * 로그아웃 API
+     * POST/api/users/api
+     */
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
-        return ResponseEntity.ok(CommonResponseDto.success(null,"로그아웃 되었습니다"));
+        return ResponseEntity.ok(CommonResponseDto.success(null, "로그아웃 되었습니다"));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponseDto<?>> findOne(@PathVariable String userEmail) {
         return ResponseEntity.ok(CommonResponseDto.success(userService.findOne(userEmail), "조회되었습니다."));
     }
-
 }

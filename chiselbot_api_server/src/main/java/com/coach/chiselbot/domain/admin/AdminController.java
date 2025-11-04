@@ -15,6 +15,7 @@ public class AdminController {
 
     /**
      * 관리자 로그인 화면 연결 API
+     * GET/login-form
      */
     @GetMapping("/login-form")
     public String loginForm() {
@@ -23,6 +24,7 @@ public class AdminController {
 
     /**
      * 관리자 로그인 API
+     * GET/login
      */
     @PostMapping("/login")
     public String login(AdminRequestDto.Login request, HttpSession session) {
@@ -34,6 +36,7 @@ public class AdminController {
 
     /**
      * 관리자 로그아웃 API
+     * GET/logout
      */
     @GetMapping("/logout")
     public String logout(HttpSession session) {

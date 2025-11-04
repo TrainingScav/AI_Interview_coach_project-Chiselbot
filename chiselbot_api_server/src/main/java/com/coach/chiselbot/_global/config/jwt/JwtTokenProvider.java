@@ -72,6 +72,4 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
-
-
 }

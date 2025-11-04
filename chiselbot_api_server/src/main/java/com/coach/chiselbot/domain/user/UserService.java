@@ -25,6 +25,9 @@ public class UserService {
     @Value("${app.auth.require-email-verification}")
     private boolean requireEmailVerification;
 
+    /**
+     * 회원가입 처리
+     */
     public User signUp(UserRequestDTO.SignUp dto) {
 
         String email = dto.getEmail().trim().toLowerCase();
@@ -51,6 +54,9 @@ public class UserService {
         return userJpaRepository.save(newUser);
     }
 
+    /**
+     * 로그인 처리
+     */
     @Transactional(readOnly = true)
     public User login(String type, UserRequestDTO.Login dto) {
 
@@ -60,7 +66,9 @@ public class UserService {
 
     }
 
-    // 회원 수정
+    /**
+     * 회원 정보 수정 처리
+     */
     public User update(String id, UserRequestDTO.Update dto) {
         User user = userJpaRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
@@ -73,7 +81,9 @@ public class UserService {
 
     // 회원 전체 조회
 
-    // 회원 단건 조회
+    /**
+     * 회원 단건 조회 처리
+     */
     @Transactional(readOnly = true)
     public Map<String,Object> findOne(String userEmail) {
         User user = userJpaRepository.findByEmail(userEmail)
@@ -85,6 +95,4 @@ public class UserService {
                 "email", user.getEmail()
         );
     }
-
-
 }
