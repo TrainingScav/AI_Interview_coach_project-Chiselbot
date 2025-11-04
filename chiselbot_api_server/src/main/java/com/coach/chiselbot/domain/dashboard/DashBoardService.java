@@ -19,6 +19,7 @@ public class DashBoardService {
     private final InquiryRepository inquiryRepository;
     private final InterviewQuestionRepository questionRepository;
 
+    // 대시보드 4개 카드 통계
     public DashBoardResponse.DashBoardStat getDashBoardStat(){
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
 
@@ -30,12 +31,20 @@ public class DashBoardService {
                 .build();
     }
 
+    // 카테고리별 질문 수
     public List<CategoryQuestionCount> getCategoryQuestion(){
 
         return questionRepository.countQuestionsByCategory();
     }
 
+    // 전체 질문 수
     public long getQuestionCount(){
         return questionRepository.count();
     }
+
+    // 연도선택 - 월별 문의 통계
+    public List<MonthlyInquiryStats> getMonthlyStatsByYear(int year) {
+        return inquiryRepository.countInquiriesByYear(year);
+    }
+
 }
