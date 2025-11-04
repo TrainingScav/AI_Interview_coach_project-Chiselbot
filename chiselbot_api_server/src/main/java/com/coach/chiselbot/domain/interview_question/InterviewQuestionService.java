@@ -1,5 +1,6 @@
 package com.coach.chiselbot.domain.interview_question;
 
+import com.coach.chiselbot._global.errors.adminException.AdminException404;
 import com.coach.chiselbot.domain.admin.Admin;
 import com.coach.chiselbot.domain.admin.AdminRepository;
 import com.coach.chiselbot.domain.interview_category.InterviewCategory;
@@ -7,7 +8,6 @@ import com.coach.chiselbot.domain.interview_category.InterviewCategoryRepository
 import com.coach.chiselbot.domain.interview_coach.EmbeddingService;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.interview_question.dto.QuestionResponse;
-
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -50,7 +49,7 @@ public class InterviewQuestionService {
     @Transactional(readOnly = true)
     public QuestionResponse.FindById getQuestionDetail(Long questionId){
         InterviewQuestion interviewQuestion = interviewQuestionRepository.findById(questionId)
-                .orElseThrow(()-> new NoSuchElementException(" 해당 질문이 없습니다"));
+                .orElseThrow(()-> new AdminException404(" 해당 질문이 없습니다"));
         return new QuestionResponse.FindById(interviewQuestion);
     }
 
@@ -60,7 +59,7 @@ public class InterviewQuestionService {
     @Transactional(readOnly = true)
     public QuestionResponse.FindById getOneQuestion(Long categoryId, InterviewLevel level) {
         InterviewCategory category = interviewCategoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("해당 카테고리를 찾을 수 없습니다"));
+                .orElseThrow(() -> new AdminException404("해당 카테고리를 찾을 수 없습니다"));
 
         Optional<InterviewQuestion> questionOpt =
                 interviewQuestionRepository.findFirstByCategoryId_CategoryIdAndInterviewLevel(
@@ -74,10 +73,10 @@ public class InterviewQuestionService {
         public QuestionResponse.FindById createQuestion (QuestionRequest.CreateQuestion request){
 
             InterviewCategory category = interviewCategoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new AdminException404("해당 ID의 카테고리를 찾을 수 없습니다"));
 
             Admin admin = adminRepository.findById(request.getAdminId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 ID의 관리자를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new AdminException404("해당 ID의 관리자를 찾을 수 없습니다"));
 
             InterviewQuestion newQuestion = new InterviewQuestion();
 
@@ -127,13 +126,13 @@ public class InterviewQuestionService {
         @Transactional
         public QuestionResponse.FindById updateQuestion (QuestionRequest.UpdateQuestion request){
             InterviewQuestion newQuestion = questionRepository.findById(request.getQuestionId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 질문을 찾을 수 없습니다"));
+                    .orElseThrow(() -> new AdminException404("해당 질문을 찾을 수 없습니다"));
 
             Admin newAdmin = adminRepository.findById(request.getAdminId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 관리자를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new AdminException404("해당 관리자를 찾을 수 없습니다"));
 
             InterviewCategory newCategory = interviewCategoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 카테고리를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new AdminException404("해당 카테고리를 찾을 수 없습니다"));
 
             boolean intentChanged = isTextChanged(
                     newQuestion.getIntentText(),

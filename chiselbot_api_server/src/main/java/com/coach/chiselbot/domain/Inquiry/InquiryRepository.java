@@ -1,5 +1,6 @@
 package com.coach.chiselbot.domain.Inquiry;
 
+import com.coach.chiselbot.domain.dashboard.MonthlyInquiryStats;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +25,16 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     // 대기 상태(답변 미완료) 문의 수
     @Query("SELECT COUNT(i) FROM Inquiry i WHERE i.status = 'WAITING'")
     long countWaitingInquiries();
+
+
+    // 연도별 문의 통계
+    @Query(value = """
+    SELECT EXTRACT(MONTH FROM i.regdate) AS "month",
+           COUNT(*) AS "count"
+    FROM inquiry i
+    WHERE EXTRACT(YEAR FROM i.regdate) = :year
+    GROUP BY EXTRACT(MONTH FROM i.regdate)
+    ORDER BY EXTRACT(MONTH FROM i.regdate)
+""", nativeQuery = true)
+    List<MonthlyInquiryStats> countInquiriesByYear(@Param("year") int year);
 }

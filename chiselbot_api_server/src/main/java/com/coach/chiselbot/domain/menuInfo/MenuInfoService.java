@@ -1,5 +1,6 @@
 package com.coach.chiselbot.domain.menuInfo;
 
+import com.coach.chiselbot._global.errors.adminException.AdminException404;
 import com.coach.chiselbot.domain.menuInfo.dto.MenuInfoRequest;
 import com.coach.chiselbot.domain.menuInfo.dto.MenuInfoResponse;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +70,7 @@ public class MenuInfoService {
     @Transactional
     public MenuInfoResponse.FindById updateMenu(Long menuId ,MenuInfoRequest.UpdateMenu request){
         MenuInfo updateMenuInfo = menuInfoRepository.findById(menuId)
-                .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다"));
+                .orElseThrow(() -> new AdminException404("해당 메뉴를 찾을 수 없습니다"));
 
         Integer newOrder = request.getMenuOrder();
 
@@ -96,15 +96,22 @@ public class MenuInfoService {
 
     @Transactional
     public void deleteMenu(Long menuId){
-        MenuInfo updateMenuInfo = menuInfoRepository.findById(menuId)
-                .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다"));
+        MenuInfo menuInfo= menuInfoRepository.findById(menuId)
+                .orElseThrow(() -> new AdminException404("해당 메뉴를 찾을 수 없습니다"));
+
+        if (menuInfoRepository.existsByMenuOrder(menuInfo.getMenuOrder())) {
+            List<MenuInfo> conflictMenus = menuInfoRepository.findByMenuOrderGreaterThan(menuInfo.getMenuOrder());
+            for (MenuInfo menu : conflictMenus) {
+                menu.setMenuOrder(menu.getMenuOrder() - 1);
+            }
+        }
 
         menuInfoRepository.deleteById(menuId);
     }
 
     public MenuInfoResponse.FindById findById(Long id){
         MenuInfo menuInfo = menuInfoRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다"));
+                .orElseThrow(() -> new AdminException404("해당 메뉴를 찾을 수 없습니다"));
 
         return new MenuInfoResponse.FindById(menuInfo);
     }
