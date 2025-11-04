@@ -3,8 +3,10 @@ package com.coach.chiselbot.domain.answer;
 import com.coach.chiselbot._global.common.Define;
 import com.coach.chiselbot.domain.Inquiry.InquiryService;
 import com.coach.chiselbot.domain.Inquiry.dto.InquiryResponseDTO;
+import com.coach.chiselbot.domain.admin.Admin;
 import com.coach.chiselbot.domain.answer.dto.AnswerRequestDTO;
 import com.coach.chiselbot.domain.answer.dto.AnswerResponseDTO;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +40,9 @@ public class AnswerController {
     public String updateAnswer(
             @PathVariable(name = "answerId") Long id,
             @ModelAttribute AnswerRequestDTO.Update dto,
-            @SessionAttribute(Define.SESSION_USER) String adminEmail) {
-        Long inquiryId = answerService.updateAnswer(id, adminEmail, dto);
+            HttpSession session) {
+        Admin admin = (Admin) session.getAttribute(Define.SESSION_USER);
+        Long inquiryId = answerService.updateAnswer(id,admin.getId(),dto);
         return "redirect:/admin/inquiries/" + inquiryId;
     }
 
@@ -62,8 +65,8 @@ public class AnswerController {
     @PostMapping("/{inquiryId}/answer")
     public String createAnswer(@PathVariable(name = "inquiryId") Long id,
                                @ModelAttribute AnswerRequestDTO.Create dto,
-                               @SessionAttribute(Define.SESSION_USER) String adminEmail) {
-        answerService.createAnswer(id, adminEmail, dto);
+                               @SessionAttribute(Define.SESSION_USER) Admin admin) {
+        answerService.createAnswer(id, admin.getId(),dto);
         return "redirect:/admin/inquiries/" + id;
     }
 }

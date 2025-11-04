@@ -1,5 +1,6 @@
 package com.coach.chiselbot.domain.Inquiry;
 
+import com.coach.chiselbot._global.errors.adminException.AdminException404;
 import com.coach.chiselbot._global.errors.exception.Exception400;
 import com.coach.chiselbot._global.errors.exception.Exception403;
 import com.coach.chiselbot._global.errors.exception.Exception404;
@@ -28,7 +29,7 @@ public class InquiryService {
      */
     public InquiryResponseDTO.AdminInquiryDetail getAdminInquiryDetail(Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findByIdWithAnswer(inquiryId)
-                .orElseThrow(() -> new Exception404("해당 문의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new AdminException404("해당 문의를 찾을 수 없습니다."));
 
         return InquiryResponseDTO.AdminInquiryDetail.from(inquiry);
     }
