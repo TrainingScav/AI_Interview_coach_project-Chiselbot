@@ -92,9 +92,8 @@ public class NoticeController {
     /** 공지사항 등록 **/
     @PostMapping
     public ResponseEntity<Long> createNotice(@RequestBody NoticeRequest.CreateNotice reqDTO,
-                                             @SessionAttribute(value = Define.SESSION_USER) Admin admin) {
+                                             @ModelAttribute(value = Define.SESSION_USER) Admin admin) {
 
-        log.info("session값 확인 : {}", admin.toString());
         Long id = noticeService.createNotice(reqDTO, admin);
         return ResponseEntity.ok(id);
     }

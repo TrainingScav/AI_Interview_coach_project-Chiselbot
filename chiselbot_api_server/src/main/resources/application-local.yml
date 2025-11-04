@@ -1,3 +1,8 @@
+logging:
+  level:
+    root: INFO                # 최소 WARN 이상이어야 log.warn() 표시
+    com.coach.chiselbot: DEBUG
+
 spring:
   mustache:
     # 템플릿 파일의 확장자를 .mustache로 지정하여 Mustache
@@ -55,7 +60,7 @@ spring:
         default_batch_fetch_size: 10
         format_sql: true # SQL 쿼리를 보기 좋게 줄바꿈하여 포맷팅
     show-sql: true # 실행되는 SQL 쿼리를 콘솔에 출력
-    open-in-view: true
+    open-in-view: false
 
   mail:
     host: smtp.gmail.com

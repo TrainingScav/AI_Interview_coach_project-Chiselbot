@@ -8,6 +8,20 @@ class MainDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authNotifierProvider);
+
+    final (userName, userEmail) = authState.maybeWhen(
+      (isLoading, isLoggedIn, user, token, errorMessage) {
+        if (isLoggedIn && user != null) {
+          // 이름이 null이 아니면서 비어있지 않은 경우에만 사용
+          final name = user.name?.isNotEmpty == true ? user.name! : '개발자';
+          return (name, user.email);
+        }
+        // 로그아웃 상태일 때 기본값
+        return ('개발자', '로그인해주세요');
+      },
+      orElse: () => ('개발자', '로그인해주세요'),
+    );
     final screenWidth = MediaQuery.of(context).size.width;
     return Drawer(
       backgroundColor: Colors.grey[900],
@@ -29,8 +43,8 @@ class MainDrawer extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
-                        '개발자',
+                      Text(
+                        userName,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -38,8 +52,8 @@ class MainDrawer extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'test1@naver.com',
+                      Text(
+                        userEmail,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,

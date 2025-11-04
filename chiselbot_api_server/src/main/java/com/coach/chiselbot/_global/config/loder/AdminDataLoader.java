@@ -7,6 +7,8 @@ import com.coach.chiselbot.domain.interview_category.InterviewCategoryRepository
 import com.coach.chiselbot.domain.interview_question.InterviewLevel;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestion;
 import com.coach.chiselbot.domain.interview_question.InterviewQuestionRepository;
+import com.coach.chiselbot.domain.interview_question.InterviewQuestionService;
+import com.coach.chiselbot.domain.interview_question.dto.QuestionRequest;
 import com.coach.chiselbot.domain.menuInfo.MenuInfo;
 import com.coach.chiselbot.domain.menuInfo.MenuInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class AdminDataLoader implements CommandLineRunner {
     private final InterviewQuestionRepository questionRepository;
     private final MenuInfoRepository menuInfoRepository;
     private final PasswordEncoder passwordEncoder;
+    // 서비스 주입
+    private final InterviewQuestionService interviewQuestionService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -73,17 +77,31 @@ public class AdminDataLoader implements CommandLineRunner {
                     return adminRepository.save(newAdmin);
                 });
 
-        // 2. InterviewQuestion 더미 데이터
-        InterviewQuestion question = new InterviewQuestion();
-        question.setCategoryId(category);
-        question.setInterviewLevel(InterviewLevel.LEVEL_1);
-        question.setAdminId(admin);
-        question.setQuestionText("JDBC는 무엇인가요");
-        question.setAnswerText("자바에서 DB에 접근하여 데이터를 조회, 삽입, 수정, 삭제할 수 있도록 자바와 DB를 연결해 주는 인터페이스");
-        question.setAnswerVector("[0.0123, -0.0345, 0.0567, -0.0789, 0.0912, -0.0456, 0.0678, -0.0123, 0.0345, -0.0567]");
+//        // 2. InterviewQuestion 더미 데이터
+//        InterviewQuestion question = new InterviewQuestion();
+//        question.setCategoryId(category);
+//        question.setInterviewLevel(InterviewLevel.LEVEL_1);
+//        question.setAdminId(admin);
+//        question.setQuestionText("JDBC는 무엇인가요");
+//        question.setAnswerText("자바에서 DB에 접근하여 데이터를 조회, 삽입, 수정, 삭제할 수 있도록 자바와 DB를 연결해 주는 인터페이스");
+//        question.setAnswerVector("[0.0123, -0.0345, 0.0567, -0.0789, 0.0912, -0.0456, 0.0678, -0.0123, 0.0345, -0.0567]");
+//
+//        // 3. 저장
+//        questionRepository.save(question);
 
-        // 3. 저장
-        questionRepository.save(question);
+        // 2. InterviewQuestion 더미 데이터 (서비스를 통해 임베딩까지 저장)
+        QuestionRequest.CreateQuestion req = new QuestionRequest.CreateQuestion();
+        req.setCategoryId(category.getCategoryId());               // 1L (Java)
+        req.setInterviewLevel(InterviewLevel.LEVEL_1);
+        req.setAdminId(admin.getId());
+        req.setQuestionText("JDBC는 무엇인가요");
+        req.setAnswerText("자바에서 DB에 접근하여 데이터를 조회, 삽입, 수정, 삭제할 수 있도록 자바와 DB를 연결해 주는 인터페이스");
+
+        // 이미 같은 카테고리/레벨 질문이 없다면 하나 생성 (중복 방지 - 선택)
+        if (questionRepository.findFirstByCategoryId_CategoryIdAndInterviewLevel(
+                category.getCategoryId(), InterviewLevel.LEVEL_1).isEmpty()) {
+            interviewQuestionService.createQuestion(req); // 임베딩(벡터) 생성/저장
+        }
 
         // --- 메뉴 더미 데이터 추가 ---
         if (menuInfoRepository.count() == 0) {
@@ -104,22 +122,21 @@ public class AdminDataLoader implements CommandLineRunner {
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
 
-            // 추가하고자 하는 메뉴관리 추가 (위 코드 활용)
-            MenuInfo promptMenu = menuInfoRepository.save(MenuInfo.builder()
-                    .menuName("프롬프트 관리")
-                    .menuCode("ADMIN_PROMPT")
-                    .urlPath("/admin/prompts")
-                    .menuOrder(3)
-                    .description("코칭 AI 프롬프트 설정 관리 ")
-                    //.parent(dashboard) // 부모 연결 가능
-                    .build());
-
             MenuInfo inquiryMenu = menuInfoRepository.save(MenuInfo.builder()
                     .menuName("1:1문의 관리")
                     .menuCode("ADMIN_INQUIRY")
                     .urlPath("/admin/inquiries")
                     .menuOrder(3)
                     .description("1:1 문의 관리 ")
+                    //.parent(dashboard) // 부모 연결 가능
+                    .build());
+
+            MenuInfo noticeMenu = menuInfoRepository.save(MenuInfo.builder()
+                    .menuName("공지사항 관리")
+                    .menuCode("NOTICE")
+                    .urlPath("/admin/notice")
+                    .menuOrder(4)
+                    .description("공지사항 관리")
                     //.parent(dashboard) // 부모 연결 가능
                     .build());
         }

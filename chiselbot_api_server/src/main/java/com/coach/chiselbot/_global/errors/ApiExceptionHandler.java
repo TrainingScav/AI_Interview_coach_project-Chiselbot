@@ -9,16 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Order(1)
+@Order(2)
 @RestControllerAdvice
-public class ExceptionHandler {
+public class ApiExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception400.class)
+    @ExceptionHandler(Exception400.class)
     public ResponseEntity<?> ex400(Exception400 e, HttpServletRequest request) {
         log.warn("=== 400 Bad Request 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());
@@ -31,7 +32,7 @@ public class ExceptionHandler {
         );
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception401.class)
+    @ExceptionHandler(Exception401.class)
     public ResponseEntity<?> ex401(Exception401 e, HttpServletRequest request) {
         log.warn("=== 401 UnAuthorized 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());
@@ -46,7 +47,7 @@ public class ExceptionHandler {
 
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception403.class)
+    @ExceptionHandler(Exception403.class)
     public ResponseEntity<?> ex403(Exception403 e, HttpServletRequest request) {
         log.warn("=== 403 Forbidden 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());
@@ -58,7 +59,7 @@ public class ExceptionHandler {
         );
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception404.class)
+    @ExceptionHandler(Exception404.class)
     public ResponseEntity<?> ex404(Exception404 e, HttpServletRequest request) {
         log.warn("=== 404 Not Found 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());
@@ -70,7 +71,7 @@ public class ExceptionHandler {
         );
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception500.class)
+    @ExceptionHandler(Exception500.class)
     public ResponseEntity ex500(Exception500 e, HttpServletRequest request) {
         log.warn("=== 500 Internal Server Error 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());
@@ -84,7 +85,7 @@ public class ExceptionHandler {
     }
 
     // 기타 모든 RuntimeException 처리
-    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         log.warn("=== 예상 못한 런타임 에러 발생 ===");
         log.warn("요청 URL : {}", request.getRequestURL());

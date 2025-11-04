@@ -19,22 +19,6 @@ class ApiService {
     return h;
   }
 
-  // ---- 기존 인터뷰 API는 그대로 ----
-  Future<String> login(String email, String password) async {
-    final res = await http.post(
-      Uri.parse('$baseUrl/api/users/login'),
-      headers: _headers(),
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-    final m = jsonDecode(res.body);
-    if (res.statusCode == 200 && m['success'] == true) {
-      final token = m['data']['token'] as String;
-      setToken(token);
-      return token;
-    }
-    throw Exception(m['error'] ?? '로그인 실패');
-  }
-
   Future<List<InterviewCategory>> fetchCategories() async {
     final res = await http.get(
       Uri.parse('$baseUrl/api/interview/categories'),
@@ -61,8 +45,10 @@ class ApiService {
   }) async {
     final uri = Uri.parse('$baseUrl/api/interview/questions/one').replace(
         queryParameters: {'categoryId': '$categoryId', 'level': level});
+
     final res = await http.get(uri, headers: _headers(jsonBody: false));
     final m = jsonDecode(res.body);
+
     if (res.statusCode == 200) {
       if (m is Map && m['success'] == true) {
         return InterviewQuestion.fromJson(m['data']);

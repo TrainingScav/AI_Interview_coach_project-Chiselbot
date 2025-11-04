@@ -11,6 +11,7 @@ _$AuthResultModelImpl _$$AuthResultModelImplFromJson(
     _$AuthResultModelImpl(
       token: json['token'] as String?,
       userId: json['userId'] as String?,
+      name: json['name'] as String?,
       foundId: json['foundId'] as String?,
       resetToken: json['resetToken'] as String?,
     );
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$AuthResultModelImplToJson(
     <String, dynamic>{
       'token': instance.token,
       'userId': instance.userId,
+      'name': instance.name,
       'foundId': instance.foundId,
       'resetToken': instance.resetToken,
     };

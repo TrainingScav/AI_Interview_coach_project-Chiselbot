@@ -8,4 +8,10 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Long> {
 
     List<MenuInfo> findByParentIsNullOrderByMenuOrderAsc();
 
+    boolean existsByMenuOrder(Integer menuOrder);
+
+    List<MenuInfo> findByMenuOrderGreaterThanEqual(Integer menuOrder);
+
+    List<MenuInfo> findAllByVisibleTrueOrderByMenuOrderAsc();
+
 }
