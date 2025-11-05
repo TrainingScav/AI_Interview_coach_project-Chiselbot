@@ -1,7 +1,9 @@
 package com.coach.chiselbot.domain.user.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -30,12 +32,15 @@ public class UserRequestDTO {
 
     @Getter
     @Setter
-    public static class Login{
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Login {
         @NotEmpty
         @Email
         @Pattern(regexp = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$", message = "유효한 이메일 형식이 아닙니다.")
         private String email;
         private String password;
+        private String authCode;
     }
 
     @Getter
