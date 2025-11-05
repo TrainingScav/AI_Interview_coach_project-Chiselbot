@@ -32,7 +32,7 @@ public class KakaoOAuthController {
     private final LoginStrategyFactory loginStrategyFactory;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public void redirectToKakao(HttpServletResponse response) throws IOException {
         String kakaoAuthUrl = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")

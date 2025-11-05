@@ -1,6 +1,5 @@
-package com.coach.chiselbot._global.config.oauth.kakao;
+package com.coach.chiselbot.domain.kakao;
 
-import com.coach.chiselbot.domain.kakao.dto.KakaoUserInfo;
 import com.coach.chiselbot.domain.kakao.dto.KakaoUserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

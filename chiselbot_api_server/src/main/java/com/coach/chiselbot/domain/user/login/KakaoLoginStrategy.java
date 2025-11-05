@@ -1,13 +1,12 @@
 package com.coach.chiselbot.domain.user.login;
 
-import com.coach.chiselbot._global.config.oauth.kakao.KakaOAuthClient;
+import com.coach.chiselbot.domain.kakao.KakaOAuthClient;
 import com.coach.chiselbot.domain.kakao.RedirectRequiredException;
 import com.coach.chiselbot.domain.kakao.dto.KakaoUserInfoResponseDto;
 import com.coach.chiselbot.domain.user.Provider;
 import com.coach.chiselbot.domain.user.User;
 import com.coach.chiselbot.domain.user.UserJpaRepository;
 import com.coach.chiselbot.domain.user.dto.UserRequestDTO;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,9 +25,6 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     private final KakaOAuthClient kakaOAuthClient;
     private final UserJpaRepository userJpaRepository;
-
-    @PostConstruct
-    public void init() { System.out.println("✅ Kakao Client ID: " + clientId); System.out.println("✅ Kakao Redirect URI: " + redirectUri); }
 
     @Override
     public User login(UserRequestDTO.Login dto) {
@@ -66,3 +62,4 @@ public class KakaoLoginStrategy implements LoginStrategy {
         return "kakao" .equalsIgnoreCase(type);
     }
 }
+
